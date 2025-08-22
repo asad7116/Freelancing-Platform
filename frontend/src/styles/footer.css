@@ -1,108 +1,116 @@
+/* ---------- FOOTER AREA ---------- */
 .footer-area {
-  background: #1a1a1a;
+  background-color: #111;
   color: #fff;
-  padding-top: 50px;
-  padding-bottom: 30px;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-.bg-dark-300 {
-  background: #1a1a1a;
+.footer-area .bg-dark-300 {
+  background: #1b1b1b;
+  padding-top: 110px;
+  padding-bottom: 60px;
 }
 
+/* Newsletter */
 .footer-newsletter {
-  border-bottom: 1px solid #333;
-  padding-bottom: 40px;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 }
-
 .footer-newsletter h3 {
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 600;
   margin-bottom: 15px;
 }
-
 .footer-newsletter-desc {
-  color: #aaa;
+  color: #bbb;
   margin-bottom: 20px;
 }
-
 .footer-newsletter-form {
   display: flex;
-  gap: 10px;
+  max-width: 450px;
 }
-
 .footer-newsletter-form input {
   flex: 1;
-  padding: 12px;
-  border-radius: 5px;
+  padding: 12px 15px;
   border: none;
   outline: none;
+  border-radius: 30px 0 0 30px;
+  font-size: 14px;
 }
-
 .footer-newsletter-btn {
   background: #00a86b;
-  color: white;
   border: none;
+  color: #fff;
   padding: 12px 25px;
-  border-radius: 5px;
+  border-radius: 0 30px 30px 0;
   cursor: pointer;
-  transition: background 0.3s;
+  font-weight: 600;
+  transition: 0.3s;
 }
-
 .footer-newsletter-btn:hover {
-  background: #007a52;
+  background: #008c59;
 }
 
 /* Widgets */
-.footer-widgets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-
 .footer-widget-title {
   font-size: 18px;
-  margin-bottom: 15px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #fff;
 }
-
-.footer-info-widget {
-  list-style: none;
-  padding: 0;
-}
-
 .footer-info-widget li {
+  list-style: none;
   margin-bottom: 10px;
   color: #bbb;
 }
+.footer-info-widget li i {
+  margin-right: 10px;
+  color: #00a86b;
+}
 
+/* App store buttons */
 .download-links {
   display: flex;
   gap: 15px;
-  margin-top: 10px;
+  margin-top: 15px;
+}
+.download-links .store-btn {
+  height: 45px;
+  transition: 0.3s;
+}
+.download-links .store-btn:hover {
+  transform: scale(1.05);
 }
 
-.store-btn {
-  height: 40px;
-}
-
+/* ---------- COPYRIGHT BAR ---------- */
 .footer-copyright {
-  background: #111;
-  padding: 15px 0;
-  border-top: 1px solid #333;
-  margin-top: 40px;
+  background: #0c0c0c;
+  padding: 20px 0;
+  border-top: 1px solid #222;
+}
+.footer-copyright p {
+  margin: 0;
+  color: #aaa;
+  font-size: 14px;
 }
 
+/* Social icons */
 .footer-social {
   display: flex;
-  gap: 20px;
+  gap: 12px;
 }
-
 .footer-social-link {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
   color: #bbb;
-  transition: color 0.3s;
-  font-size: 18px;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
-
 .footer-social-link:hover {
-  color: #00a86b;
+  background: #00a86b;
+  color: #fff;
 }
