@@ -1,0 +1,108 @@
+.footer-area {
+  background: #1a1a1a;
+  color: #fff;
+  padding-top: 50px;
+  padding-bottom: 30px;
+  font-family: Arial, sans-serif;
+}
+
+.bg-dark-300 {
+  background: #1a1a1a;
+}
+
+.footer-newsletter {
+  border-bottom: 1px solid #333;
+  padding-bottom: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-newsletter h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.footer-newsletter-desc {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.footer-newsletter-form {
+  display: flex;
+  gap: 10px;
+}
+
+.footer-newsletter-form input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.footer-newsletter-btn {
+  background: #00a86b;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.footer-newsletter-btn:hover {
+  background: #007a52;
+}
+
+/* Widgets */
+.footer-widgets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.footer-widget-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.footer-info-widget {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-info-widget li {
+  margin-bottom: 10px;
+  color: #bbb;
+}
+
+.download-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.store-btn {
+  height: 40px;
+}
+
+.footer-copyright {
+  background: #111;
+  padding: 15px 0;
+  border-top: 1px solid #333;
+  margin-top: 40px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-social-link {
+  color: #bbb;
+  transition: color 0.3s;
+  font-size: 18px;
+}
+
+.footer-social-link:hover {
+  color: #00a86b;
+}
