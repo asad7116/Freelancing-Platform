@@ -1,0 +1,37 @@
+.page-header {
+  position: relative;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 50px;
+}
+
+.overlay h1 {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+.overlay p {
+  font-size: 16px;
+}
+
+.overlay p span {
+  color: #28a745;
+  font-weight: bold;
+}
+.overlay p span:nth-child(2) {
+  color: #007bff;
+}
