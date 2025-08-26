@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import "../styles/homepage.css";
 import Footer from "../components/Footer";
+import SignIn from "../components/Signin";
 
 const Homepage = () => {
   return (
@@ -19,6 +20,7 @@ const Homepage = () => {
         </div>
       </section>
       <Footer />
+      <SignIn />
     </>
   );
 };
