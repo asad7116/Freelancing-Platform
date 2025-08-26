@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import "../styles/homepage.css";
 import Footer from "../components/Footer";
 import SignIn from "../components/Signin";
+import PageHeader from "../components/SingIn_PageHeader";
+import ToggleButtons from "../components/Login_Toggle";
 
 const Homepage = () => {
   return (
@@ -20,6 +22,8 @@ const Homepage = () => {
         </div>
       </section>
       <Footer />
+      <PageHeader title="Sign In" />
+      <ToggleButtons />
       <SignIn />
     </>
   );
