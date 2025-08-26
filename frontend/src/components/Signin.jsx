@@ -61,7 +61,7 @@ export default function SignIn() {
           </p>
         </div>
 
-        {/* Right - Image */}
+        {/* Right - Image of Singup */}
         <div className="signin-image">
           <img
             src="assets/img/Login/1.png"
