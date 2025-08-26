@@ -1,0 +1,161 @@
+/* Container */
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+/* Box layout */
+.signin-box {
+  display: flex;
+  width: 900px;
+  max-width: 95%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Left side form */
+.signin-form {
+  flex: 1;
+  padding: 40px;
+}
+
+.signin-form h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.welcome-text {
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.signin-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.signin-form label {
+  margin: 10px 0 5px;
+  font-size: 14px;
+  color: #444;
+}
+
+.signin-form input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+}
+
+.signin-form input:focus {
+  border-color: #28a745;
+}
+
+/* Options row */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px;
+  font-size: 14px;
+}
+
+.options a {
+  color: #28a745;
+  text-decoration: none;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.signin-btn {
+  padding: 12px;
+  border: none;
+  background: #28a745;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.signin-btn:hover {
+  background: #218838;
+}
+
+/* Divider */
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #888;
+}
+
+/* Social login */
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  width: 45px;
+  height: 45px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.social-btn:hover {
+  background: #f0f0f0;
+}
+
+/* Create account link */
+.create-account {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.create-account a {
+  color: #28a745;
+  text-decoration: none;
+}
+
+.create-account a:hover {
+  text-decoration: underline;
+}
+
+/* Right side image */
+.signin-image {
+  flex: 1;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signin-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 768px) {
+  .signin-box {
+    flex-direction: column;
+  }
+  .signin-image {
+    display: none;
+  }
+}
