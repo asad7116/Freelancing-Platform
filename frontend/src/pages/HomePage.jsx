@@ -2,15 +2,13 @@ import React from "react";
 import Header from "../components/Header";
 import "../styles/homepage.css";
 import Footer from "../components/Footer";
-import SignIn from "../components/Signin";
-import PageHeader from "../components/SingIn_PageHeader";
-import ToggleButtons from "../components/Login_Toggle";
-
+import Hero from "../components/Hero";
 const Homepage = () => {
   return (
     <>
       <Header />
-      <section className="hero">
+      <Hero />
+      {/* <section className="hero">
         <div className="hero-content">
           <h2>Find The Perfect Freelance Services For Your Business</h2>
           <p>Trusted by thousands of businesses and freelancers worldwide.</p>
@@ -20,11 +18,9 @@ const Homepage = () => {
             <button>Search</button>
           </div>
         </div>
-      </section>
+      </section> */}
       <Footer />
-      <PageHeader title="Sign In" />
-      <ToggleButtons />
-      <SignIn />
+     
     </>
   );
 };
