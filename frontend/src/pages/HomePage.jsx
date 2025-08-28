@@ -3,11 +3,14 @@ import Header from "../components/Header";
 import "../styles/homepage.css";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
+import Category from "../components/Category";
+
 const Homepage = () => {
   return (
     <>
       <Header />
       <Hero />
+      <Category />
       {/* <section className="hero">
         <div className="hero-content">
           <h2>Find The Perfect Freelance Services For Your Business</h2>
