@@ -10,9 +10,9 @@ const Header = () => {
         {/* Logo */}
         <div className="logo">
           <img src="/assets/logo/logo.png" alt="logo" />
-          <h1>
+          {/* <h1>
             <span className="green">Work</span>zone
-          </h1>
+          </h1> */}
         </div>
 
         {/* Navigation */}
@@ -22,7 +22,7 @@ const Header = () => {
           <a href="#">Job Post</a>
           <a href="#">Freelancers</a>
           <a href="#">Pages ▾</a>
-          <a href="#">Contact</a>
+          <a href="/Contact">Contact</a>
         </nav>
 
         {/* Right Side */}
