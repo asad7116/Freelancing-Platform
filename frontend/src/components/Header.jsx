@@ -23,6 +23,7 @@ const Header = () => {
           <a href="#">Freelancers</a>
           <a href="#">Pages ▾</a>
           <a href="/Contact">Contact</a>
+          <a href="/about">About Us</a> 
         </nav>
 
         {/* Right Side */}
