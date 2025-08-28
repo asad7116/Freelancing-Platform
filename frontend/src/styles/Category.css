@@ -1,0 +1,80 @@
+/* src/styles/Categories.css */
+.categories-section {
+  padding: 40px 0 60px;
+  background: var(--off-white, #f7f5f0);
+  width: 100vw;
+  height: 60vh;
+}
+
+.categories-inner {
+  width: 92%;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.categories-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.categories-heading h2 {
+  margin: 0;
+  font-size: 26px;
+  color: #111;
+}
+
+.categories-heading .muted {
+  margin: 6px 0 0;
+  color: #6c6c6c;
+  font-size: 13px;
+}
+
+.cats-arrows {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.arrow-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #22be0d;
+  background: transparent;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.arrow-btn:hover { transform: translateY(-3px); background: rgba(34,190,13,0.06); }
+
+.categories-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 1fr);
+  gap: 20px;
+  margin: 30px 0;
+  padding: 20px,0;
+  height: 75%;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.categories-row::-webkit-scrollbar { height: 8px; }
+.categories-row::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+
+/* NOTE: CategoryCard.css controls .category-card visuals (hover border, lift, icon, text). */
+@media (min-width: 1200px) {
+  .categories-row { gap: 28px; }
+}
+
+@media (max-width: 700px) {
+  .categories-inner { padding-right: 12px; padding-left: 12px; }
+  .categories-row { gap: 14px; grid-auto-columns: minmax(170px, 1fr); }
+}
