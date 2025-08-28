@@ -1,14 +1,16 @@
-.hero-one{
-  background: #0b5345; /* dark green background */
-  background-image: url('./hero-bg-1.png'); /* optional background image */
+.hero-one {
+  background: #0b5345; /* dark green */
+  background-image: url("./hero-bg-1.png"); /* optional */
   padding: 80px 0;
   color: #fff;
 }
+
 .hero-container {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .row {
   display: flex;
   align-items: center;
@@ -16,135 +18,120 @@
   gap: 40px;
 }
 
-
-.row .left-col h1 {
+.left-col h1 {
   font-size: 56px;
   font-weight: 700;
   line-height: 1.2;
-  color: white; /* gradient-like highlight */
   margin-bottom: 30px;
 }
-.row .left-col h1 span {
- display: block;
-    color: #22be0d; /* Highlight color */
+.left-col h1 span {
+  display: block;
+  color: #22be0d; /* green highlight */
 }
-.form{
-    width: 100%;
-    display: flex;
 
-    background: #fff;
-    border-radius: 8px;
-    padding: px 3px;
+/* =======================
+   Search Form Styling
+======================= */
+.hero-search-form {
+  max-width: 750px;
+  margin-top: 20px;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-} 
-.hero-form-wrapper {
+.form {
   display: flex;
   align-items: center;
-  justify-content:space-evenly;
-  width: 100%;;
-  height: 100%;
-  background:#fff;
-  border-radius: 8px; 
-  overflow: hidden; 
-}
-.hero-search-form { 
+  background: #fff;
+  border-radius: 50px;
   overflow: hidden;
-  
-  border: 2px solid red;
-  border-radius: 200px;
-} 
-
-.form-select{
-    width: 100%;
-    height: 100%;
-    margin: 10px 0;
-    padding: 0;
-    border: none;
-    /* border-right: 1px solid #ddd; */
-    font-size: 12pt;
+  padding: 5px 10px;
+  width: 100%;
 }
+.hero-form-wrapper{
+  display: flex;
+  
+}
+/* Dropdown */
+.form-select {
+  border: none;
+  outline: none;
+  padding: 12px 15px;
+  font-size: 16px;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 180px; /* fixed width for category */
+}
+
+/* Search bar wrapper */
 .hero-search-bar {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  flex: 1; /* expand to take remaining space */
+  margin: 0 10px;
   border-left: 1px solid #ddd;
-  margin: 10px 0;
-  padding: 0 0 0 40px;
-  
-  
+  padding-left: 15px;
 }
-.hero-search-bar .form-search-input {
-  /* width: 70%; */
+
+/* Input */
+.form-search-input {
+  flex: 1;
   border: none;
-  font-size: 16px;
   outline: none;
+  font-size: 16px;
+  padding: 12px 15px;
 }
+
+/* Search button */
 .hero-form-btn {
   background: #22be0d;
   color: #fff;
   border: none;
-  padding: 14px 24px;
+  padding: 12px 30px;
   cursor: pointer;
   font-weight: bold;
-  border-radius: 200px;
+  border-radius: 50px;
+  transition: background 0.3s ease;
+  flex: 0 0 auto; /* prevent shrinking */
 }
-/* 
-.hero-search input {
-  border: none;
-  padding: 14px 16px;
-  font-size: 16px;
-  outline: none;
+.hero-form-btn:hover {
+  background: #1a9b0a;
 }
 
-.hero-search select {
-  background: #f1f1f1;
-  min-width: 150px;
-}
-
-.hero-search input {
-  flex: 1;
-}
-
-.hero-search button {
-  background: #00c16a;
-  color: #fff;
-  padding: 14px 24px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.hero-search button:hover {
-  background: #009e55;
-}
-
+/* =======================
+   Stats
+======================= */
 .hero-stats {
   display: flex;
   gap: 30px;
   margin-top: 20px;
+  align-items: center;
 }
 
-.hero-stats .stat {
+.stats {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
+}
+.stats h3 {
+  font-weight: bolder;
+  font-size: 36px;
 }
 
-.hero-stats img {
-  width: 32px;
-  height: 32px;
+.rating {
+  padding-left: 40px;
+  border-left: 1px solid #fff;
+}
+.rating p {
+  font-weight: bolder;
+  font-size: 24px;
 }
 
-.hero-right {
-  flex: 1;
-  text-align: right;
-}
-
-.hero-right img {
-  max-width: 30%;
-    height: 100px
-}
-.hero .right img.second-image {
-  max-width: 10%;
+/* =======================
+   Right Column Image
+======================= */
+.right-col img {
+  max-width: 100%;
   height: auto;
-} */
+}
