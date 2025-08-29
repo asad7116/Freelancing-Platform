@@ -19,23 +19,23 @@ export default function About() {
             <h3 className="features-title">Our Latest Features</h3>
             <div className="features-grid">
               <div className="feature-card">
-                <img src="/assets/icons/hourly-jobs.png" alt="Hourly Rated Jobs" />
+                <img src="/assets/about/hourly_rate.webp" alt="Hourly Rated Jobs" />
                 <p className="feature-text">Hourly Rated Jobs</p>
               </div>
               <div className="feature-card">
-                <img src="/assets/icons/project-catalogue.png" alt="Projects Gig Catalogue" />
+                <img src="/assets/about/project_gigs.webp" alt="Projects Gig Catalogue" />
                 <p className="feature-text">Projects Gig Catalogue</p>
               </div>
               <div className="feature-card">
-                <img src="/assets/icons/paid-membership.png" alt="Paid Membership" />
+                <img src="/assets/about/paid _membership.webp" alt="Paid Membership" />
                 <p className="feature-text">Paid Membership</p>
               </div>
               <div className="feature-card">
-                <img src="/assets/icons/custom-order.png" alt="Custom Order" />
+                <img src="/assets/about/custom_order.webp" alt="Custom Order" />
                 <p className="feature-text">Custom Order</p>
               </div>
               <div className="feature-card">
-                <img src="/assets/icons/live-chat.png" alt="Live Chat System" />
+                <img src="/assets/about/live_chat.webp" alt="Live Chat System" />
                 <p className="feature-text">Live Chat System</p>
               </div>
             </div>
@@ -77,12 +77,12 @@ export default function About() {
                 <button className="contact-btn">Contact Us →</button>
                 <div className="about-profile">
                   <img
-                    src="/assets/img/about/profile.jpg"
+                    src="/assets/about/seo_image.webp"
                     alt="Profile"
                     className="profile-img"
                   />
                   <img
-                    src="/assets/img/about/signature.png"
+                    src="/assets/about/signature.webp"
                     alt="Signature"
                     className="signature-img"
                   />
@@ -94,21 +94,12 @@ export default function About() {
             <div className="about-images">
               <div className="top-images">
                 <img
-                  src="/assets/img/about/team1.jpg"
+                  src="/assets/about/about_image.webp"
                   alt="Team Collaboration"
                   className="about-img"
-                />
-                <img
-                  src="/assets/img/about/team2.jpg"
-                  alt="Freelancers Working"
-                  className="about-img"
-                />
+                />          
               </div>
-              <img
-                src="/assets/img/about/team3.jpg"
-                alt="Creative Team"
-                className="about-img large"
-              />
+              
             </div>
           </div>
 
