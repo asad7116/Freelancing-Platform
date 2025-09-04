@@ -10,28 +10,24 @@ const Header = () => {
         {/* Logo */}
         <div className="logo">
           <img src="/assets/logo/logo.png" alt="logo" />
-          {/* <h1>
-            <span className="green">Work</span>zone
-          </h1> */}
         </div>
 
         {/* Navigation */}
         <nav className="nav-links">
-          <a href="/">Home</a>
-          <a href="#">Services</a>
+          <Link to="/">Home</Link>
+          <Link to="/services">Services</Link>   {/* ✅ updated */}
           <a href="#">Job Post</a>
           <a href="#">Freelancers</a>
           <a href="#">Pages ▾</a>
-          <a href="/Contact">Contact</a>
-          <a href="/about">About Us</a> 
+          <Link to="/Contact">Contact</Link>
+          <Link to="/about">About Us</Link>
         </nav>
 
         {/* Right Side */}
         <div className="right-side">
           <span>$ USD</span>
           <span>🌐 English</span>
-          {/* <button className="signin-btn">Sign In</button> */}
-         <Link to="/signin" className="signin-btn">
+          <Link to="/signin" className="signin-btn">
             Sign In
           </Link>
         </div>
