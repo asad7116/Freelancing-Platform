@@ -3,14 +3,19 @@ import HomePage from "./pages/HomePage";
 import SignIn from "./pages/Signin";
 import SignUp from "./pages/signUp";
 import Contact from "./pages/contact";
-import About from "./pages/About";
+import About from "./pages/About_Page";
 import ServicesPage from "./pages/services";  
+import JobsPage from "./pages/Jobs_page";
+// ...
+<Route path="/jobs" element={<JobsPage />} />
+
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/services" element={<ServicesPage />} /> 
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/jobs" element={<JobsPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/Contact" element={<Contact />} />
