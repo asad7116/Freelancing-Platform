@@ -13,9 +13,24 @@ const Header = () => {
         <nav className="nav-links">
           <Link to="/">Home</Link>
           <Link to="/services">Services</Link>
-          <Link to="/jobs">Jobs</Link>            {/* ✅ routable Jobs */}
+          <Link to="/jobs">Jobs</Link>
           <a href="#">Freelancers</a>
-          <a href="#">Pages ▾</a>
+
+          {/* ▼ Pages dropdown (hover) */}
+          <div className="pages-dropdown">
+            <button type="button" className="pages-trigger">
+              Pages <span className="caret">▾</span>
+            </button>
+            <div className="pages-menu">
+              <Link to="/dashboard">User Dashboard</Link>
+              <Link to="/pricing">Pricing</Link>        {/* ✅ route to Pricing */}
+              <Link to="/faq">Faq</Link>
+              <Link to="/signin">Login</Link>
+              <Link to="/signUp">SignUp</Link>
+              <Link to="/not-found">404 Page</Link>
+            </div>
+          </div>
+
           <Link to="/Contact">Contact</Link>
           <Link to="/about">About Us</Link>
         </nav>
