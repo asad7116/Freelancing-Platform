@@ -14,7 +14,7 @@ const Header = () => {
           <Link to="/">Home</Link>
           <Link to="/services">Services</Link>
           <Link to="/jobs">Jobs</Link>
-          <a href="#">Freelancers</a>
+          <a href="/Freelancers">Freelancers</a>
 
           {/* ▼ Pages dropdown (hover) */}
           <div className="pages-dropdown">
