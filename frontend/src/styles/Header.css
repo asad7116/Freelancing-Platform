@@ -26,11 +26,6 @@ header {
   gap: 10px;
 }
 
-/* .logo img {
-  width: 40px;
-  height: 40px;
-} */
-
 .logo h1 {
   font-size: 24px;
   font-weight: bold;
@@ -43,6 +38,7 @@ header {
 .nav-links {
   display: flex;
   gap: 25px;
+  position: relative;
 }
 
 .nav-links a {
@@ -96,4 +92,56 @@ header {
 
 .sub-navbar a:hover {
   color: #00a86b;
+}
+
+/* --- Pages Dropdown --- */
+.pages-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.pages-trigger {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  font-weight: 500;
+}
+
+.pages-trigger .caret {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+.pages-menu {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 180px;
+  background: #fff;
+  color: #111;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.08);
+  padding: 6px 0;
+  display: none;
+  z-index: 1000;
+}
+
+.pages-menu a {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.pages-menu a:hover {
+  background: #f5f7fa;
+  color: #00a86b;
+}
+
+.pages-dropdown:hover .pages-menu {
+  display: block;
 }
