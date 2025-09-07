@@ -8,6 +8,7 @@ import ServicesPage from "./pages/services";
 import JobsPage from "./pages/Jobs_page";
 import PricingPage from "./pages/Pricing_page";
 import Freelancer from "./pages/Freelancer";
+import SellerDetails from "./pages/SellerDetails";
 // ...
 
 
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/Contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/Freelancers" element={<Freelancer />}/>
+        <Route path="/seller/:username" element={<SellerDetails />} />
       </Routes>
     </Router>
   );
