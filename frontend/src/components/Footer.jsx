@@ -9,8 +9,8 @@ const Footer = () => {
           {/* Left: Logo + blurb */}
           <div className="newsletter-left">
             <a href="/" className="footer-logo">
-              <img src="/assets/logo/logo.png" alt="Workzone logo" />
-              <span><b>Work</b><em> zone</em></span>
+              <img src="/assets/logo/" alt="Tixe logo" />
+              <span><b>Tixe</b><em> app</em></span>
             </a>
             <p>
               It is a long established fact that a reader will be distracted by
@@ -66,7 +66,7 @@ const Footer = () => {
               <li><a href="#">Writing & Translation</a></li>
               <li><a href="#">Video & Animation</a></li>
               <li><a href="#">Music & Audio</a></li>
-              <li><a href="#">WorkZone Logo Maker</a></li>
+              <li><a href="#">Tixe Logo Maker</a></li>
               <li><a href="#">Programming & Tech</a></li>
               <li><a href="#">Photography</a></li>
             </ul>
@@ -93,9 +93,9 @@ const Footer = () => {
             <ul className="link-list">
               <li><a href="#">Help & Support</a></li>
               <li><a href="#">Trust & Safety</a></li>
-              <li><a href="#">Selling on Work zones</a></li>
-              <li><a href="#">Buying on Work zones</a></li>
-              <li><a href="#">Work zones Guides</a></li>
+              <li><a href="#">Selling on Tixes</a></li>
+              <li><a href="#">Buying on Tixes</a></li>
+              <li><a href="#">Tixes Guides</a></li>
               <li><a href="#">Workspace</a></li>
             </ul>
           </div>
@@ -105,7 +105,7 @@ const Footer = () => {
       {/* Bottom bar */}
       <div className="footer-bottom">
         <div className="container bottom-inner">
-          <p>Copyright © 2025 WorkZone. All Rights Reserved.</p>
+          <p>Copyright © 2025 Tixe. All Rights Reserved.</p>
           <div className="socials">
             <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><i className="fab fa-facebook-f" /></a>
             <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><i className="fab fa-twitter" /></a>

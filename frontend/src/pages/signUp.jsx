@@ -30,7 +30,7 @@ export default function SignUp() {
           {/* Left - Form */}
           <div className="signup-form">
             <h2>Sign Up</h2>
-            <p className="welcome-text">Welcome to Work Zone</p>
+            <p className="welcome-text">Welcome to Tixe</p>
 
             {/* 🔥 Toggle outside the form */}
             <ToggleButtons onSelect={(role) => setRole(role)} />
