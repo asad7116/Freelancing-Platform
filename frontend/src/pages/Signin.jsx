@@ -23,7 +23,7 @@ export default function SignIn() {
           {/* Left - Form */}
           <div className="signin-form">
             <h2>Sign In</h2>
-            <p className="welcome-text">Welcome to Work Zone</p>
+            <p className="welcome-text">Welcome to Tixe</p>
 
             <form onSubmit={handleSubmit}>
               <label>Email *</label>

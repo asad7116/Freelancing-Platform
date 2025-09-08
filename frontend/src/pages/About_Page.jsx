@@ -10,7 +10,7 @@ export default function About() {
       <PageHeader title="About Us" />
       <div className="about-container">
         <h1>About Us</h1>
-        <p>Welcome to Work Zone! We are a freelancing platform dedicated to connecting clients and freelancers worldwide.</p>
+        <p>Welcome to Tixe! We are a freelancing platform dedicated to connecting clients and freelancers worldwide.</p>
         <p>Our mission is to provide a seamless and efficient platform for collaboration and success.</p>
       </div>
       <Footer />
