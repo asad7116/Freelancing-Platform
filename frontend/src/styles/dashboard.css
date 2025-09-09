@@ -1,0 +1,104 @@
+/* Layout */
+.dz-wrap {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+  background: #f6f4ef;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* Sidebar */
+.dz-sidebar {
+  background: #0f1a12;
+  color: #eaf3ec;
+  padding: 16px 12px;
+}
+.dz-brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 8px 20px;
+}
+.dz-brand img { height: 36px; width: 36px; object-fit: contain; }
+.dz-brand-title { color: #27c07d; font-weight: 900; font-size: 22px; line-height: 1; }
+.dz-brand-sub { display: block; margin-top: -2px; color: #bfe9d2; font-size: 12px; }
+
+.dz-menu { display: grid; gap: 8px; margin-top: 8px; }
+.dz-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  background: transparent; color: #eaf3ec; border: 1px solid transparent;
+  cursor: pointer; text-align: left; transition: 150ms ease;
+}
+.dz-menu-item:hover { background: #112418; border-color: #224e38; }
+.dz-menu-item--active { background: #1f7a52; border-color: #2b9c6a; }
+.dz-icon { width: 20px; text-align: center; }
+
+/* Main Area */
+.dz-main { padding: 24px 28px; }
+
+.dz-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.dz-header h1 { font-size: 28px; font-weight: 800; color: #1b2a22; }
+.dz-breadcrumb { color: #7a8b81; margin-top: 4px; }
+.dz-user { display: flex; align-items: center; gap: 12px; }
+.dz-round {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; border: 1px solid #e5e7eb; cursor: pointer;
+}
+.dz-badge::after {
+  content: "8"; position: relative; left: -10px; top: -10px;
+  background: #1ec47d; color: #0b2517; font-size: 10px; font-weight: 800;
+  border-radius: 999px; padding: 2px 6px;
+}
+.dz-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  object-fit: cover; border: 2px solid #e5e7eb; background: #fff;
+}
+
+/* Cards */
+.dz-cards { display: grid; gap: 16px; }
+.dz-cards--top {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-bottom: 14px;
+}
+.dz-card {
+  background: #fff; border: 1px solid #ecebe7; border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.dz-card--big {
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  padding: 16px 18px;
+}
+.dz-card-body { display: grid; gap: 4px; }
+.dz-value { font-size: 28px; font-weight: 900; color: #15241c; }
+.dz-label { color: #6f7f75; font-weight: 600; }
+.dz-card-icon {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border-radius: 10px; background: #0f4a33; color: #d8fff0; font-size: 18px;
+}
+
+/* Mini cards grid (2nd row) */
+.dz-cards--mini {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.dz-card--mini { padding: 18px; display: grid; gap: 10px; }
+.dz-mini-value { font-size: 30px; font-weight: 900; color: #15241c; }
+.dz-mini-row { display: flex; justify-content: space-between; align-items: center; }
+.dz-mini-label { color: #6f7f75; font-weight: 600; }
+.dz-mini-icon {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  border-radius: 10px; background: #0f4a33; color: #d8fff0;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .dz-wrap { grid-template-columns: 72px 1fr; }
+  .dz-brand-text { display: none; }
+  .dz-menu-item span:not(.dz-icon) { display: none; }
+  .dz-menu-item { justify-content: center; padding: 12px 0; }
+}
+@media (max-width: 560px) {
+  .dz-main { padding: 18px 14px; }
+  .dz-cards--top { grid-template-columns: 1fr; }
+}
