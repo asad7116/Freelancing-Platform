@@ -16,7 +16,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
-        <Link className="navbar-brand" to="/">Workzone</Link>
+        <Link className="navbar-brand" to="/">Tixe</Link>
         <div>
           <Link className="nav-link d-inline me-2" to="/">Home</Link>
           {!token && <Link className="nav-link d-inline me-2" to="/login">Login</Link>}

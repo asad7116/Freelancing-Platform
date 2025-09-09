@@ -7,7 +7,7 @@ const Header = () => {
     <header>
       <div className="navbar">
         <div className="logo">
-          <img src="/assets/logo/logo.png" alt="logo" />
+          <img src="/assets/logo/" alt="tixe-logo" />
         </div>
 
         <nav className="nav-links">
