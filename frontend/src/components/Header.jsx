@@ -7,14 +7,15 @@ const Header = () => {
     <header>
       <div className="navbar">
         <div className="logo">
-          <img src="/assets/logo/" alt="tixe-logo" />
+          <img src="/assets/logo/logo.png" alt="workzone-logo" />
         </div>
 
         <nav className="nav-links">
           <Link to="/">Home</Link>
+          
           <Link to="/services">Services</Link>
           <Link to="/jobs">Jobs</Link>
-          <a href="/Freelancers">Freelancers</a>
+          <Link to="/freelancers">Freelancers</Link>
 
           {/* ▼ Pages dropdown (hover) */}
           <div className="pages-dropdown">
@@ -22,8 +23,8 @@ const Header = () => {
               Pages <span className="caret">▾</span>
             </button>
             <div className="pages-menu">
-              <Link to="/dashboard">User Dashboard</Link>
-              <Link to="/pricing">Pricing</Link>     
+              <Link to="/dashboard">User Dashboard</Link> {/* ✅ routable */}
+              <Link to="/pricing">Pricing</Link>
               <Link to="/faq">Faq</Link>
               <Link to="/signin">Login</Link>
               <Link to="/signUp">SignUp</Link>
@@ -38,7 +39,9 @@ const Header = () => {
         <div className="right-side">
           <span>$ USD</span>
           <span>🌐 English</span>
-          <Link to="/signin" className="signin-btn">Sign In</Link>
+          <Link to="/signin" className="signin-btn">
+            Sign In
+          </Link>
         </div>
       </div>
 
