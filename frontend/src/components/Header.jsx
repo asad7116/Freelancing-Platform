@@ -23,7 +23,7 @@ const Header = () => {
             </button>
             <div className="pages-menu">
               <Link to="/dashboard">User Dashboard</Link>
-              <Link to="/pricing">Pricing</Link>        {/* ✅ route to Pricing */}
+              <Link to="/pricing">Pricing</Link>     
               <Link to="/faq">Faq</Link>
               <Link to="/signin">Login</Link>
               <Link to="/signUp">SignUp</Link>
