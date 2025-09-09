@@ -47,7 +47,7 @@ export default function Contact() {
       <div className="contact-form">
         <h3>Get in Touch</h3>
         <p>
-          Award-winning, family owned dealership of new and pre-owned Workzone
+          Award-winning, family owned dealership of new and pre-owned Tixe
           with several locations across the city.
         </p>
         <form>
