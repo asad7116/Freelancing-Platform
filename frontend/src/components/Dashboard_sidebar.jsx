@@ -9,7 +9,7 @@ const sidebarItems = [
   { key: "myorders",    label: "My Orders",    icon: "🛒", path: "/dashboard/my-orders" },
   // ✅ Updated to route to My Jobs page
   { key: "jobs",        label: "Jobs",         icon: "💼", path: "/dashboard/my-jobs" },
-  { key: "proposals",   label: "My Proposals", icon: "📝", path: "/dashboard/proposals" },
+  { key: "proposals",   label: "My Proposals", icon: "📝", path: "/dashboard/my-proposals" },
   { key: "subscription",label: "Subscription", icon: "🎟️", path: "/dashboard/subscription" },
   { key: "messages",    label: "Messages",     icon: "✉️", path: "/dashboard/messages" },
   { key: "portfolio",   label: "Portfolio",    icon: "🖼️", path: "/dashboard/portfolio" },
