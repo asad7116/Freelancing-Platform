@@ -5,25 +5,15 @@ import "../styles/dashboard.css";
 
 const DUMMY = {
   user: { name: "Alex Johnson", avatar: "/assets/avatar.png" },
-  money: {
-    totalBalance: 516.0,
-    payoutAmount: 1934.0,
-    totalEarnings: 2450.0,
-  },
+  money: { totalBalance: 516.0, payoutAmount: 1934.0, totalEarnings: 2450.0 },
   stats: {
-    totalService: 3,
-    totalJob: 2,
-    averageRating: 4.3,
-    ratingCount: 6,
-    totalOrder: 9,
-    completedOrders: 3,
-    activeOrders: 0,
-    pendingOrders: 6,
+    totalService: 3, totalJob: 2, averageRating: 4.3, ratingCount: 6,
+    totalOrder: 9, completedOrders: 3, activeOrders: 0, pendingOrders: 6,
   },
   sidebar: [
     { key: "dashboard", label: "Dashboard", icon: "🏠", path: "/dashboard" },
-    { key: "orders", label: "Orders", icon: "🧾", path: "/dashboard/orders" }, // ✅ routed
-    { key: "gigs", label: "Gigs", icon: "📦" },
+    { key: "orders", label: "Orders", icon: "🧾", path: "/dashboard/orders" },
+    { key: "gigs", label: "Gigs", icon: "📦", path: "/dashboard/gigs" }, // ✅ added route
     { key: "myorders", label: "My Orders", icon: "🛒" },
     { key: "jobs", label: "Jobs", icon: "💼" },
     { key: "proposals", label: "My Proposals", icon: "📝" },
@@ -36,34 +26,25 @@ const DUMMY = {
 export default function Dashboard() {
   const location = useLocation();
 
-  const topTiles = useMemo(
-    () => [
-      { label: "Total Balance", value: `$${DUMMY.money.totalBalance.toFixed(2)}`, icon: "🤝" },
-      { label: "Payout Amount", value: `$${DUMMY.money.payoutAmount.toFixed(2)}`, icon: "🤝" },
-      { label: "Total Earnings", value: `$${DUMMY.money.totalEarnings.toFixed(2)}`, icon: "🤝" },
-    ],
-    []
-  );
+  const topTiles = useMemo(() => ([
+    { label: "Total Balance", value: `$${DUMMY.money.totalBalance.toFixed(2)}`, icon: "🤝" },
+    { label: "Payout Amount", value: `$${DUMMY.money.payoutAmount.toFixed(2)}`, icon: "🤝" },
+    { label: "Total Earnings", value: `$${DUMMY.money.totalEarnings.toFixed(2)}`, icon: "🤝" },
+  ]), []);
 
-  const miniTiles = useMemo(
-    () => [
-      { label: "Total Service", value: DUMMY.stats.totalService, icon: "📚" },
-      { label: "Total Job", value: DUMMY.stats.totalJob, icon: "🗂️" },
-      { label: "Average Rating", value: DUMMY.stats.averageRating, icon: "⭐" },
-      { label: "Rating Count", value: DUMMY.stats.ratingCount, icon: "🧪" },
-      { label: "Total Order", value: DUMMY.stats.totalOrder, icon: "🛍️" },
-      { label: "Completed Orders", value: DUMMY.stats.completedOrders, icon: "📋" },
-      { label: "Active Orders", value: DUMMY.stats.activeOrders, icon: "👥" },
-      { label: "Pending Orders", value: DUMMY.stats.pendingOrders, icon: "🧑‍🤝‍🧑" },
-    ],
-    []
-  );
+  const miniTiles = useMemo(() => ([
+    { label: "Total Service", value: DUMMY.stats.totalService, icon: "📚" },
+    { label: "Total Job", value: DUMMY.stats.totalJob, icon: "🗂️" },
+    { label: "Average Rating", value: DUMMY.stats.averageRating, icon: "⭐" },
+    { label: "Rating Count", value: DUMMY.stats.ratingCount, icon: "🧪" },
+    { label: "Total Order", value: DUMMY.stats.totalOrder, icon: "🛍️" },
+    { label: "Completed Orders", value: DUMMY.stats.completedOrders, icon: "📋" },
+    { label: "Active Orders", value: DUMMY.stats.activeOrders, icon: "👥" },
+    { label: "Pending Orders", value: DUMMY.stats.pendingOrders, icon: "🧑‍🤝‍🧑" },
+  ]), []);
 
-  const isActive = (pathOrKey) => {
-    // Highlight by path when available, otherwise never active
-    if (!pathOrKey) return false;
-    return location.pathname === pathOrKey || location.pathname.startsWith(pathOrKey + "/");
-  };
+  const isActive = (path) =>
+    !!path && (location.pathname === path || location.pathname.startsWith(path + "/"));
 
   return (
     <div className="dz-wrap">
