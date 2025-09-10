@@ -1,5 +1,6 @@
-// frontend/src/pages/dashboard.jsx
-import React, { useMemo, useState } from "react";
+// src/pages/dashboard.jsx
+import React, { useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "../styles/dashboard.css";
 
 const DUMMY = {
@@ -20,8 +21,8 @@ const DUMMY = {
     pendingOrders: 6,
   },
   sidebar: [
-    { key: "dashboard", label: "Dashboard", icon: "🏠" },
-    { key: "orders", label: "Orders", icon: "🧾" },
+    { key: "dashboard", label: "Dashboard", icon: "🏠", path: "/dashboard" },
+    { key: "orders", label: "Orders", icon: "🧾", path: "/dashboard/orders" }, // ✅ routed
     { key: "gigs", label: "Gigs", icon: "📦" },
     { key: "myorders", label: "My Orders", icon: "🛒" },
     { key: "jobs", label: "Jobs", icon: "💼" },
@@ -33,25 +34,13 @@ const DUMMY = {
 };
 
 export default function Dashboard() {
-  const [active, setActive] = useState("dashboard");
+  const location = useLocation();
 
   const topTiles = useMemo(
     () => [
-      {
-        label: "Total Balance",
-        value: `$${DUMMY.money.totalBalance.toFixed(2)}`,
-        icon: "🤝",
-      },
-      {
-        label: "Payout Amount",
-        value: `$${DUMMY.money.payoutAmount.toFixed(2)}`,
-        icon: "🤝",
-      },
-      {
-        label: "Total Earnings",
-        value: `$${DUMMY.money.totalEarnings.toFixed(2)}`,
-        icon: "🤝",
-      },
+      { label: "Total Balance", value: `$${DUMMY.money.totalBalance.toFixed(2)}`, icon: "🤝" },
+      { label: "Payout Amount", value: `$${DUMMY.money.payoutAmount.toFixed(2)}`, icon: "🤝" },
+      { label: "Total Earnings", value: `$${DUMMY.money.totalEarnings.toFixed(2)}`, icon: "🤝" },
     ],
     []
   );
@@ -70,6 +59,12 @@ export default function Dashboard() {
     []
   );
 
+  const isActive = (pathOrKey) => {
+    // Highlight by path when available, otherwise never active
+    if (!pathOrKey) return false;
+    return location.pathname === pathOrKey || location.pathname.startsWith(pathOrKey + "/");
+  };
+
   return (
     <div className="dz-wrap">
       {/* Sidebar */}
@@ -83,18 +78,23 @@ export default function Dashboard() {
         </div>
 
         <nav className="dz-menu">
-          {DUMMY.sidebar.map((item) => (
-            <button
-              key={item.key}
-              className={`dz-menu-item ${
-                active === item.key ? "dz-menu-item--active" : ""
-              }`}
-              onClick={() => setActive(item.key)}
-            >
-              <span className="dz-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {DUMMY.sidebar.map((item) =>
+            item.path ? (
+              <Link
+                key={item.key}
+                to={item.path}
+                className={`dz-menu-item ${isActive(item.path) ? "dz-menu-item--active" : ""}`}
+              >
+                <span className="dz-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            ) : (
+              <button key={item.key} className="dz-menu-item" type="button">
+                <span className="dz-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </button>
+            )
+          )}
         </nav>
       </aside>
 
@@ -109,11 +109,7 @@ export default function Dashboard() {
             <button title="Favorites" className="dz-round">♡</button>
             <button title="Inbox" className="dz-round dz-badge">✉️</button>
             <button title="Alerts" className="dz-round">🔔</button>
-            <img
-              src={DUMMY.user.avatar || "/assets/img/user.png"}
-              alt="User avatar"
-              className="dz-avatar"
-            />
+            <img src={DUMMY.user.avatar || "/assets/img/user.png"} alt="User avatar" className="dz-avatar" />
           </div>
         </header>
 
