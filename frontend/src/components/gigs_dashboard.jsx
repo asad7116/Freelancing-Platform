@@ -1,6 +1,6 @@
-// src/pages/gigs_dashboard.jsx
 import React from "react";
 import "../styles/gigs_dashboard.css";
+import DashboardSidebar from "./Dashboard_sidebar";
 
 const dummyGigs = [
   {
@@ -37,40 +37,20 @@ const dummyGigs = [
 
 export default function GigsDashboard() {
   return (
-    <div className="gd-wrap">
-      {/* Sidebar */}
-      <aside className="gd-sidebar">
-        <div className="gd-brand">
-          <img src="/assets/logo/logo.png" alt="Workzone" />
-          <div className="gd-brand-text">
-            <span className="gd-brand-title">Work</span>
-            <span className="gd-brand-sub">zone</span>
-          </div>
-        </div>
-        <nav className="gd-menu">
-          <button className="gd-menu-item">🏠 Dashboard</button>
-          <button className="gd-menu-item gd-menu-item--active">📦 Gigs</button>
-          <button className="gd-menu-item">🧾 Orders</button>
-          <button className="gd-menu-item">💼 Jobs</button>
-          <button className="gd-menu-item">🛒 My Orders</button>
-          <button className="gd-menu-item">📝 Proposals</button>
-          <button className="gd-menu-item">🎟️ Subscription</button>
-          <button className="gd-menu-item">✉️ Messages</button>
-          <button className="gd-menu-item">🖼️ Portfolio</button>
-        </nav>
-      </aside>
+    <div className="dz-with-shell">
+      {/* Shared Sidebar + Topbar */}
+      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
 
-      {/* Main Content */}
-      <main className="gd-main">
-        <header className="gd-header">
-          <div>
-            <h1>Manage Gig</h1>
-            <p className="gd-breadcrumb">Dashboard &gt; Manage Gig</p>
-          </div>
+      {/* Main */}
+      <main className="dz-main dz-shell-main-padding">
+        {/* Title band */}
+        <div className="dz-headerband">
+          <h1>Manage Gig</h1>
+          <p className="dz-breadcrumb">Dashboard &gt; Manage Gig</p>
           <button className="gd-new-gig">Create a new Gig</button>
-        </header>
+        </div>
 
-        {/* Gig Cards */}
+        {/* Gig cards */}
         <section className="gd-cards">
           {dummyGigs.map((gig) => (
             <article className="gd-card" key={gig.id}>
@@ -81,14 +61,12 @@ export default function GigsDashboard() {
                   ⭐ {gig.rating.toFixed(1)} ({gig.reviews})
                 </div>
                 <h3 className="gd-title">{gig.title}</h3>
+
                 <div className="gd-seller">
-                  <img
-                    src="/assets/avatar.png"
-                    alt={gig.seller}
-                    className="gd-avatar"
-                  />
+                  <img src="/assets/avatar.png" alt={gig.seller} className="gd-avatar" />
                   <span>{gig.seller}</span>
                 </div>
+
                 <div className="gd-actions">
                   <label className="gd-status">
                     Status:
