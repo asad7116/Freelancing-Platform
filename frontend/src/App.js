@@ -10,6 +10,7 @@ import PricingPage from "./pages/Pricing_page";
 import Freelancer from "./pages/Freelancer";
 import SellerDetails from "./pages/SellerDetails";
 import DashboardPage from "./pages/dashboard_page";
+import OrdersPage from "./pages/orders_dash_page";
 // ...
 
 
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard/orders" element={<OrdersPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
