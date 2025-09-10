@@ -1,6 +1,5 @@
-// src/pages/dashboard.jsx
 import React, { useMemo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import DashboardSidebar from "./Dashboard_sidebar";
 import "../styles/dashboard.css";
 
 const DUMMY = {
@@ -10,91 +9,38 @@ const DUMMY = {
     totalService: 3, totalJob: 2, averageRating: 4.3, ratingCount: 6,
     totalOrder: 9, completedOrders: 3, activeOrders: 0, pendingOrders: 6,
   },
-  sidebar: [
-    { key: "dashboard", label: "Dashboard", icon: "🏠", path: "/dashboard" },
-    { key: "orders", label: "Orders", icon: "🧾", path: "/dashboard/orders" },
-    { key: "gigs", label: "Gigs", icon: "📦", path: "/dashboard/gigs" }, // ✅ added route
-    { key: "myorders", label: "My Orders", icon: "🛒" },
-    { key: "jobs", label: "Jobs", icon: "💼" },
-    { key: "proposals", label: "My Proposals", icon: "📝" },
-    { key: "subscription", label: "Subscription", icon: "🎟️" },
-    { key: "messages", label: "Messages", icon: "✉️" },
-    { key: "portfolio", label: "Portfolio", icon: "🖼️" },
-  ],
 };
 
 export default function Dashboard() {
-  const location = useLocation();
-
   const topTiles = useMemo(() => ([
-    { label: "Total Balance", value: `$${DUMMY.money.totalBalance.toFixed(2)}`, icon: "🤝" },
-    { label: "Payout Amount", value: `$${DUMMY.money.payoutAmount.toFixed(2)}`, icon: "🤝" },
+    { label: "Total Balance",  value: `$${DUMMY.money.totalBalance.toFixed(2)}`,  icon: "🤝" },
+    { label: "Payout Amount",  value: `$${DUMMY.money.payoutAmount.toFixed(2)}`, icon: "🤝" },
     { label: "Total Earnings", value: `$${DUMMY.money.totalEarnings.toFixed(2)}`, icon: "🤝" },
   ]), []);
 
   const miniTiles = useMemo(() => ([
-    { label: "Total Service", value: DUMMY.stats.totalService, icon: "📚" },
-    { label: "Total Job", value: DUMMY.stats.totalJob, icon: "🗂️" },
-    { label: "Average Rating", value: DUMMY.stats.averageRating, icon: "⭐" },
-    { label: "Rating Count", value: DUMMY.stats.ratingCount, icon: "🧪" },
-    { label: "Total Order", value: DUMMY.stats.totalOrder, icon: "🛍️" },
-    { label: "Completed Orders", value: DUMMY.stats.completedOrders, icon: "📋" },
-    { label: "Active Orders", value: DUMMY.stats.activeOrders, icon: "👥" },
-    { label: "Pending Orders", value: DUMMY.stats.pendingOrders, icon: "🧑‍🤝‍🧑" },
+    { label: "Total Service",     value: DUMMY.stats.totalService,     icon: "📚" },
+    { label: "Total Job",         value: DUMMY.stats.totalJob,         icon: "🗂️" },
+    { label: "Average Rating",    value: DUMMY.stats.averageRating,    icon: "⭐" },
+    { label: "Rating Count",      value: DUMMY.stats.ratingCount,      icon: "🧪" },
+    { label: "Total Order",       value: DUMMY.stats.totalOrder,       icon: "🛍️" },
+    { label: "Completed Orders",  value: DUMMY.stats.completedOrders,  icon: "📋" },
+    { label: "Active Orders",     value: DUMMY.stats.activeOrders,     icon: "👥" },
+    { label: "Pending Orders",    value: DUMMY.stats.pendingOrders,    icon: "🧑‍🤝‍🧑" },
   ]), []);
 
-  const isActive = (path) =>
-    !!path && (location.pathname === path || location.pathname.startsWith(path + "/"));
-
   return (
-    <div className="dz-wrap">
-      {/* Sidebar */}
-      <aside className="dz-sidebar">
-        <div className="dz-brand">
-          <img src="/assets/logo/logo.png" alt="Workzone" />
-          <div className="dz-brand-text">
-            <span className="dz-brand-title">Work</span>
-            <span className="dz-brand-sub">zone</span>
-          </div>
+    <div className="dz-with-shell">
+      <DashboardSidebar user={DUMMY.user} />
+
+      <main className="dz-main dz-shell-main-padding">
+        {/* header band like your screenshot */}
+        <div className="dz-headerband">
+          <h1>Dashboard</h1>
+          <p className="dz-breadcrumb">Dashboard</p>
         </div>
 
-        <nav className="dz-menu">
-          {DUMMY.sidebar.map((item) =>
-            item.path ? (
-              <Link
-                key={item.key}
-                to={item.path}
-                className={`dz-menu-item ${isActive(item.path) ? "dz-menu-item--active" : ""}`}
-              >
-                <span className="dz-icon">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            ) : (
-              <button key={item.key} className="dz-menu-item" type="button">
-                <span className="dz-icon">{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
-            )
-          )}
-        </nav>
-      </aside>
-
-      {/* Main */}
-      <main className="dz-main">
-        <header className="dz-header">
-          <div>
-            <h1>Dashboard</h1>
-            <p className="dz-breadcrumb">Dashboard</p>
-          </div>
-          <div className="dz-user">
-            <button title="Favorites" className="dz-round">♡</button>
-            <button title="Inbox" className="dz-round dz-badge">✉️</button>
-            <button title="Alerts" className="dz-round">🔔</button>
-            <img src={DUMMY.user.avatar || "/assets/img/user.png"} alt="User avatar" className="dz-avatar" />
-          </div>
-        </header>
-
-        {/* Top money tiles */}
+        {/* Top tiles */}
         <section className="dz-cards dz-cards--top">
           {topTiles.map((t, i) => (
             <article key={i} className="dz-card dz-card--big">
@@ -107,7 +53,7 @@ export default function Dashboard() {
           ))}
         </section>
 
-        {/* Mini stats grid */}
+        {/* Mini stats */}
         <section className="dz-cards dz-cards--mini">
           {miniTiles.map((t, i) => (
             <article key={i} className="dz-card dz-card--mini">

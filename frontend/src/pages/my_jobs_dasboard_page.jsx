@@ -2,13 +2,12 @@
 import React from "react";
 
 import Footer from "../components/Footer";
-import Orders_dashboard from "../components/orders_dashboard"; // your orders.jsx from yesterday
+import MyJobs from "../components/my_jobs_dashboard";
 
 export default function OrdersPage() {
   return (
     <>
-      
-      <Orders_dashboard />
+      <MyJobs />
       <div className="dz-offset">
           <Footer />
       </div>
