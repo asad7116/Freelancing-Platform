@@ -7,7 +7,8 @@ import CardListing from "../components/CardListing";
 import categories from "../data/categoriesData";
 import Card from "../components/Card";
 import topSellers from "../data/topsellersData";
-
+import ExploreSection from "../components/ExploreSection";
+import OurServices from "../components/OurServices";
 const Homepage = () => {
   return (
     <>
@@ -44,6 +45,8 @@ const Homepage = () => {
           </div>
         </div>
       </section> */}
+      <ExploreSection />
+      <OurServices />
       <Footer />
      
     </>

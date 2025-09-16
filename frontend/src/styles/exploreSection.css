@@ -1,0 +1,96 @@
+/* Section background */
+.explore {
+  background: #0f4a33;   /* greenish bg */
+  color: #fff;
+  padding: 60px 40px;
+  border-radius: 16px;
+  margin: 40px auto;
+  max-width: 1200px;
+}
+
+/* Container */
+.explore-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* Left content */
+.explore-content {
+  flex: 1;
+  min-width: 320px;
+}
+
+.explore-subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.explore-title {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+.explore-text {
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #e0e0e0;
+}
+
+/* Button */
+.explore-btn {
+  background: #00b22d;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-bottom: 30px;
+}
+.explore-btn:hover {
+  background: #009a26;
+}
+
+/* Stats */
+.explore-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.explore-stat {
+  background: #fff;
+  color: #0f4a33;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+}
+.explore-stat h3 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.explore-stat p {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Right image */
+.explore-image img {
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  object-fit: cover;
+}
