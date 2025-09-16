@@ -1,3 +1,27 @@
+/* Ensure grid items can shrink inside their tracks */
+.pricing-grid > .plan-card {
+  min-width: 0;          /* ← key fix */
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Safety: prevent any image from pushing layout */
+.plan-card img,
+.plan-mark {
+  max-width: 100%;
+  height: auto;
+}
+
+/* If a long price/label overflows, allow wrapping */
+.plan-price {
+  flex-wrap: wrap;
+}
+
+/* Optional: clip any stray sub-pixel overflow without hiding vertical scroll */
+.pricing-wrap {
+  overflow-x: clip;      /* or 'hidden' if clip is not supported in your targets */
+}
+
 /* Container */
 .pricing-wrap {
   background: #faf8f3;
