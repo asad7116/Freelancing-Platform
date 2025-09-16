@@ -1,6 +1,6 @@
 // frontend/src/pages/our_services.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import "../styles/our_services.css";
+import "../styles/services.css";
 
 /** ---- Dummy services (no backend) ---- */
 const DUMMY_SERVICES = [
@@ -114,7 +114,7 @@ const DUMMY_SERVICES = [
   },
 ];
 
-export default function OurServices({ initialServices }) {
+export default function Services({ initialServices }) {
   // data
   const [services, setServices] = useState(initialServices || []);
   // UI state
