@@ -114,7 +114,7 @@ export default function Pricing() {
               <header className="plan-header">
                 <h3 className="plan-name">{plan.name}</h3>
                 <div className="plan-price">
-                  <span className="amount">{plan.price.toFixed(2)}৳</span>
+                  <span className="amount">{plan.price.toFixed(2)}$</span>
                   <span className="term">/mo</span>
                   <img src="/assets/logo/logo-icon.png" alt="" className="plan-mark" />
                 </div>
