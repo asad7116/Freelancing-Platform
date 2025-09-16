@@ -9,6 +9,9 @@ import Card from "../components/Card";
 import topSellers from "../data/topsellersData";
 import ExploreSection from "../components/ExploreSection";
 import OurServices from "../components/OurServices";
+import Testimonials from "../components/Testimonials";
+import CallToAction from "../components/CallToAction";
+
 const Homepage = () => {
   return (
     <>
@@ -46,7 +49,9 @@ const Homepage = () => {
         </div>
       </section> */}
       <ExploreSection />
+      <Testimonials />
       <OurServices />
+      <CallToAction />
       <Footer />
      
     </>
