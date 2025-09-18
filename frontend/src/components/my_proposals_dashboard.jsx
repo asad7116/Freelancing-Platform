@@ -27,20 +27,16 @@ const DUMMY_PROPOSALS = [
 
 export default function MyProposals() {
   return (
-    <div className="mp-wrap">
-      {/* Shared dashboard sidebar + topbar */}
-      <DashboardSidebar />
+    <div className="dz-with-shell">
+      {/* Shared sidebar + topbar */}
+      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
 
-      {/* Main */}
-      <main className="mp-main">
-        <header className="mp-header">
-          <div>
-            <h1>My Proposals</h1>
-            <p className="mp-breadcrumb">
-              Jobs <span>›</span> My Proposals
-            </p>
-          </div>
-        </header>
+      {/* Main content, properly shifted */}
+      <main className="dz-main dz-shell-main-padding">
+        <div className="dz-headerband">
+          <h1>My Proposals</h1>
+          <p className="dz-breadcrumb">Jobs &gt; My Proposals</p>
+        </div>
 
         <section className="mp-table-wrap">
           <table className="mp-table">
@@ -82,7 +78,9 @@ export default function MyProposals() {
                   <td>{p.deliveryDays}</td>
 
                   <td>
-                    <span className={`mp-status ${p.status.toLowerCase()}`}>{p.status}</span>
+                    <span className={`mp-status ${p.status.toLowerCase()}`}>
+                      {p.status}
+                    </span>
                   </td>
 
                   <td className="mp-action">
