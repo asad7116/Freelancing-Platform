@@ -57,7 +57,10 @@ export default function DashboardSidebar({ user = { name: "Alex", avatar: "/asse
           </Link>
 
           <button className="dz-topbtn dz-badge" title="Inbox">✉️</button>
-          <button className="dz-topbtn" title="Alerts">🔔</button>
+          <Link to="/dashboard/payouts" className="dz-topbtn" title="Payouts">
+            💵
+          </Link>
+
           <div className="dz-topuser">
             <img src={user.avatar} alt={user.name} />
             <span className="dz-topname">{user.name}</span>
