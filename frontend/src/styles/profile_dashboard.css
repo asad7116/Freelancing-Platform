@@ -1,0 +1,80 @@
+/* src/styles/profile_dashboard.css */
+
+.profile-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+}
+
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+.profile-avatar img {
+  width: 180px;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.profile-avatar .edit-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 55%;
+  transform: translateX(-50%);
+  background: #19a165;
+  border: none;
+  border-radius: 50%;
+  padding: 6px 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.row {
+  display: flex;
+  gap: 20px;
+}
+.row label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #333;
+}
+.profile-form input,
+.profile-form select {
+  margin-top: 6px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+}
+.save-btn {
+  background: #19a165;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background .2s;
+}
+.save-btn:hover {
+  background: #128755;
+}
+/* Responsive */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+}   

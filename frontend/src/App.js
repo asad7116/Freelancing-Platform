@@ -20,6 +20,7 @@ import MessagesDashboardPage from "./pages/messages_dashaboard_page";
 import PortfolioDashboardPage from "./pages/portfolio_dashboard_page";
 import WishlistDashboardPage from "./pages/Wishlist_dahsbaord_page";
 import PayoutDashboardPage from "./pages/payout_dashboar_page";
+import ProfileDashboard from "./components/Profile_dashboard";
 // ...
 
 
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/dashboard/portfolio" element={<PortfolioDashboardPage />} />
         <Route path="/dashboard/wishlist" element={<WishlistDashboardPage />} />
         <Route path="/dashboard/payouts" element={<PayoutDashboardPage />} />
+        <Route path="/dashboard/profile" element={<ProfileDashboard />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
