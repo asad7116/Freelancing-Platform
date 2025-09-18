@@ -1,0 +1,97 @@
+.wl-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+
+.wl-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.wl-table thead th {
+  background: #e2f3cf;
+  color: #2b3a2f;
+  padding: 14px 16px;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 1px solid #dfe7de;
+}
+
+.wl-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  background: #fff;
+}
+
+.wl-gig-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wl-gig-cell img {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #e7e7e7;
+  background: #fafafa;
+}
+.wl-gig-title {
+  color: #2370d7;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Status */
+.wl-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #e9f9ee;
+  color: #19a165;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Action buttons */
+.wl-action {
+  display: flex;
+  gap: 10px;
+}
+.view-btn,
+.delete-btn {
+  background: #f2f2f2;
+  border: none;
+  border-radius: 20px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.view-btn:hover { background: #e1e1e1; }
+.delete-btn { background: #ffeaea; }
+.delete-btn:hover { background: #ffcdcd; }
+
+/* Responsive */
+@media (max-width: 560px) {
+  .wl-table thead {
+    display: none;
+  }
+  .wl-table,
+  .wl-table tbody,
+  .wl-table tr,
+  .wl-table td {
+    display: block;
+    width: 100%;
+  }
+  .wl-table tr {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+  }
+  .wl-table td {
+    padding: 8px 16px;
+  }
+}
