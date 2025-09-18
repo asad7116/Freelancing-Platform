@@ -16,6 +16,7 @@ import MyJobsPage from "./pages/my_jobs_dasboard_page";
 import MyProposalsPage from "./pages/my_proposals_dashboard_page";
 import MyOrdersPage from "./pages/my_orders_dash";
 import SubscriptionDashPage from "./components/Subscription_dash";
+import MessagesDashboardPage from "./pages/messages_dashaboard_page";
 
 // ...
 
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/dashboard/my-jobs" element={<MyJobsPage />} />
         <Route path="/dashboard/my-proposals" element={<MyProposalsPage />} />
         <Route path="/dashboard/subscription" element={<SubscriptionDashPage />} />
+        <Route path="/dashboard/messages" element={<MessagesDashboardPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
