@@ -14,6 +14,8 @@ import OrdersPage from "./pages/orders_dash_page";
 import GigsDashboardPage from "./pages/gigs_dashboard_page";
 import MyJobs from "./pages/my_jobs_dasboard_page";
 import MyProposals from "./pages/my_proposals_dashboard_page";
+import MyOrdersDash from "./pages/my_orders_dash";
+
 // ...
 
 
@@ -26,6 +28,7 @@ export default function App() {
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dashboard/orders" element={<OrdersPage />} />
+        <Route path="/dashboard/my-orders" element={<MyOrdersDash />} />
         <Route path="/dashboard/gigs" element={<GigsDashboardPage />} />
         <Route path="/dashboard/my-jobs" element={<MyJobs />} />
         <Route path="/dashboard/my-proposals" element={<MyProposals />} />
