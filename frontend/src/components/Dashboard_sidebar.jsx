@@ -13,6 +13,7 @@ const sidebarItems = [
   { key: "subscription",label: "Subscription", icon: "🎟️", path: "/dashboard/subscription" },
   { key: "messages",    label: "Messages",     icon: "✉️", path: "/dashboard/messages" },
   { key: "portfolio",   label: "Portfolio",    icon: "🖼️", path: "/dashboard/portfolio" },
+  
 ];
 
 export default function DashboardSidebar({ user = { name: "Alex", avatar: "/assets/avatar.png" } }) {
@@ -51,7 +52,10 @@ export default function DashboardSidebar({ user = { name: "Alex", avatar: "/asse
       {/* Fixed topbar */}
       <div className="dz-topbar">
         <div className="dz-topbar-right">
-          <button className="dz-topbtn" title="Favorites">♡</button>
+          <Link to="/dashboard/wishlist" className="dz-topbtn" title="Favorites">
+            ♡
+          </Link>
+
           <button className="dz-topbtn dz-badge" title="Inbox">✉️</button>
           <button className="dz-topbtn" title="Alerts">🔔</button>
           <div className="dz-topuser">
