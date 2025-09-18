@@ -61,10 +61,11 @@ export default function DashboardSidebar({ user = { name: "Alex", avatar: "/asse
             💵
           </Link>
 
-          <div className="dz-topuser">
-            <img src={user.avatar} alt={user.name} />
-            <span className="dz-topname">{user.name}</span>
-          </div>
+          <Link to="/dashboard/profile" className="dz-topuser">
+              <img src={user.avatar} alt={user.name} />
+              <span className="dz-topname">{user.name}</span>
+          </Link>
+
         </div>
       </div>
     </>
