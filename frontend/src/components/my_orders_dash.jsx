@@ -14,20 +14,16 @@ const myOrders = [
 
 export default function MyOrdersDash() {
   return (
-    <div>
-      <DashboardSidebar />
+    <div className="dz-with-shell">
+      {/* Sidebar + Topbar */}
+      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
 
-      {/* NOTE: dz-content keeps this clear of sidebar/topbar */}
-      <main className="dz-content mod-main">
-        <header className="mod-header">
+      {/* Main content shifted correctly */}
+      <main className="dz-main dz-shell-main-padding">
+        <div className="dz-headerband">
           <h1>My Orders</h1>
-          <div className="mod-user-icons">
-            <button className="mod-round" title="Favorites">♡</button>
-            <button className="mod-round mod-badge" title="Inbox">✉️</button>
-            <button className="mod-round" title="Alerts">🔔</button>
-            <img src="/assets/avatar.png" alt="User" className="mod-avatar" />
-          </div>
-        </header>
+          <p className="dz-breadcrumb">Dashboard &gt; My Orders</p>
+        </div>
 
         <section className="mod-container">
           <table className="mod-table">
@@ -54,7 +50,9 @@ export default function MyOrdersDash() {
                   <td>{order.time}</td>
                   <td>{order.amount}</td>
                   <td>
-                    <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
+                    <span className={`status ${order.status.toLowerCase()}`}>
+                      {order.status}
+                    </span>
                   </td>
                   <td className="mod-action-cell">
                     <button className="view-btn" title="View">👁</button>

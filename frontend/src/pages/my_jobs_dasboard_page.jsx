@@ -4,7 +4,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import MyJobs from "../components/my_jobs_dashboard";
 
-export default function OrdersPage() {
+export default function MyJobsPage() {
   return (
     <>
       <MyJobs />

@@ -2,17 +2,17 @@
 import React from "react";
 
 import Footer from "../components/Footer";
-import MyOrdersDash from "../components/my_orders_dash";
+import SubscriptionDash from "../components/Subscription_dash";
 
-export default function MyOrdersPage() {
+export default function SubscriptionDashPage() {
   return (
     <>
-      <MyOrdersDash />
+      <SubscriptionDash />
       <div className="dz-offset">
-        <Footer />
+          <Footer />
       </div>
 
-   
+      
     </>
   );
 }

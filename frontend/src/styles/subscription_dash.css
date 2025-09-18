@@ -1,0 +1,91 @@
+/* Container */
+.subscription-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+
+/* Table */
+.subscription-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subscription-table thead th {
+  background: #e2f3cf;  /* light green header */
+  color: #2b3a2f;
+  padding: 14px 16px;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 1px solid #dfe7de;
+}
+
+.subscription-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  background: #fff;
+}
+
+/* Plan cell */
+.plan-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.plan-cell img {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #e7e7e7;
+  background: #fafafa;
+}
+.plan-name {
+  color: #2370d7;
+  cursor: pointer;
+}
+
+/* Status chip */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.status.active {
+  background: #e9f9ee;
+  color: #19a165;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .plan-name {
+    display: inline-block;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media (max-width: 560px) {
+  .subscription-table thead {
+    display: none;
+  }
+  .subscription-table,
+  .subscription-table tbody,
+  .subscription-table tr,
+  .subscription-table td {
+    display: block;
+    width: 100%;
+  }
+  .subscription-table tr {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+  }
+  .subscription-table td {
+    padding: 8px 16px;
+  }
+}

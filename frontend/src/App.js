@@ -12,9 +12,10 @@ import SellerDetails from "./pages/SellerDetails";
 import DashboardPage from "./pages/dashboard_page";
 import OrdersPage from "./pages/orders_dash_page";
 import GigsDashboardPage from "./pages/gigs_dashboard_page";
-import MyJobs from "./pages/my_jobs_dasboard_page";
-import MyProposals from "./pages/my_proposals_dashboard_page";
-import MyOrdersDash from "./pages/my_orders_dash";
+import MyJobsPage from "./pages/my_jobs_dasboard_page";
+import MyProposalsPage from "./pages/my_proposals_dashboard_page";
+import MyOrdersPage from "./pages/my_orders_dash";
+import SubscriptionDashPage from "./components/Subscription_dash";
 
 // ...
 
@@ -28,10 +29,11 @@ export default function App() {
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dashboard/orders" element={<OrdersPage />} />
-        <Route path="/dashboard/my-orders" element={<MyOrdersDash />} />
+        <Route path="/dashboard/my-orders" element={<MyOrdersPage />} />
         <Route path="/dashboard/gigs" element={<GigsDashboardPage />} />
-        <Route path="/dashboard/my-jobs" element={<MyJobs />} />
-        <Route path="/dashboard/my-proposals" element={<MyProposals />} />
+        <Route path="/dashboard/my-jobs" element={<MyJobsPage />} />
+        <Route path="/dashboard/my-proposals" element={<MyProposalsPage />} />
+        <Route path="/dashboard/subscription" element={<SubscriptionDashPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
