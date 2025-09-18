@@ -6,7 +6,7 @@ const sidebarItems = [
   { key: "dashboard",   label: "Dashboard",    icon: "🏠", path: "/dashboard" },
   { key: "orders",      label: "Orders",       icon: "🧾", path: "/dashboard/orders" },
   { key: "gigs",        label: "Gigs",         icon: "📦", path: "/dashboard/gigs" },
-  { key: "myorders",    label: "My Orders",    icon: "🛒", path: "/dashboard/my-orders" },
+  { key: "myorders", label: "My Orders", icon: "🛒", path: "/dashboard/my-orders" },
   // ✅ Updated to route to My Jobs page
   { key: "jobs",        label: "Jobs",         icon: "💼", path: "/dashboard/my-jobs" },
   { key: "proposals",   label: "My Proposals", icon: "📝", path: "/dashboard/my-proposals" },
