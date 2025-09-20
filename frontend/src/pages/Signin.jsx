@@ -1,21 +1,46 @@
-// src/pages/SignIn.jsx
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PageHeader from "../components/PageHeader";
 import "../styles/Signin.css";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { api } from "../lib/api";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  // UX states (no CSS class changes)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
+    setError("");
+    setLoading(true);
+
+    try {
+      const { user } = await api.post("/api/auth/signin", { email, password });
+
+      // TEMP: keep RequireRole working for now
+      localStorage.setItem("role", user.role);
+
+      // if we came from a protected page, go back there; else by role
+      const backTo =
+        location.state?.from?.pathname ||
+        (user.role === "client" ? "/client/overview" : "/freelancer/overview");
+
+      navigate(backTo, { replace: true });
+    } catch (err) {
+      setError(err.message || "Sign in failed");
+    } finally {
+      setLoading(false);
+    }
   };
- 
+
   return (
     <>
       <Header />
@@ -53,8 +78,11 @@ export default function SignIn() {
                 <Link to="#">Forget Password?</Link>
               </div>
 
-              <button type="submit" className="signin-btn">
-                Sign In
+              {/* lightweight error text */}
+              {error && <div className="form-error" style={{ color: "#d33", marginTop: 6 }}>{error}</div>}
+
+              <button type="submit" className="signin-btn" disabled={loading}>
+                {loading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 
