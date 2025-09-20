@@ -13,7 +13,7 @@ export default function SubscriptionDash() {
   return (
     <div className="dz-with-shell">
       {/* Sidebar & topbar */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* Main content area */}
       <main className="dz-main dz-shell-main-padding">

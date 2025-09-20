@@ -46,15 +46,16 @@ const Header = () => {
       </div>
 
       <div className="sub-navbar">
-        <a href="#">Marketing</a>
-        <a href="#">Architecture</a>
-        <a href="#">Web Design</a>
-        <a href="#">AI Services</a>
-        <a href="#">Business Style</a>
-        <a href="#">Development & IT</a>
-        <a href="#">Photography</a>
-        <a href="#">Design & Creative</a>
+        <Link to="/#" className="marketing" >Marketing</Link>
+        <Link to="/#" className="architecture" >Architecture</Link>
+        <Link to="/#" className="web-design" >Web Design</Link>
+        <Link to="/#" className="ai-services" >AI Services</Link>
+        <Link to="/#" className="business-style" >Business Style</Link>
+        <Link to="/#" className="development-it" >Development & IT</Link>
+        <Link to="/#" className="photography" >Photography</Link>
+        <Link to="/#" className="design-creative" >Design & Creative</Link>
       </div>
+    
     </header>
   );
 };

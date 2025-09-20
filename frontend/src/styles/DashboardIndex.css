@@ -1,0 +1,16 @@
+/* src/styles/dashboard/index.css */
+@import "./DashboardShell.css";
+@import "./dashboard-sidebar.css";
+@import "./dashboard.css";
+
+@import "./orders_dashboard.css";
+@import "./gigs_dashboard.css";
+@import "./my_orders_dash.css";
+@import "./my_jobs_dashboard.css";
+@import "./my_proposals.css";
+@import "./subscription_dash.css";
+@import "./messages_dashboard.css";
+@import "./portfolio_dashboard.css";
+@import "./wishlist_dashboard.css";
+@import "./payout_dashboard.css";
+@import "./profile_dashboard.css";

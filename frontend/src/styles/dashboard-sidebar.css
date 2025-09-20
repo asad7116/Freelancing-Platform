@@ -1,0 +1,125 @@
+/* --- Theme tokens (tweak if needed) --- */
+:root {
+  --wz-green: #22c55e;    /* activated green (similar to Workzone) */
+  --wz-green-dark: #0e4f43;
+  --wz-bg: #ffffff;
+  --wz-text: #2b2b2b;
+  --wz-muted: #8b8b8b;
+  --wz-border: #eae7de;
+}
+
+/* The aside container created in DashboardLayout */
+.dash-aside {
+  background: var(--wz-bg);
+  border-right: 1px solid var(--wz-border);
+  width: 260px;                 /* fixed like the screenshot */
+}
+
+/* Sidebar root */
+.wz-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 16px;
+  gap: 16px;
+}
+
+/* Brand */
+.wz-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+}
+
+.wz-brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--wz-green-dark);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+.wz-brand-text {
+  line-height: 1;
+}
+.wz-brand-main {
+  display: block;
+  font-weight: 800;
+  font-size: 22px;
+  color: #1f9d55; /* brand 'Work' green */
+  letter-spacing: 0.2px;
+}
+.wz-brand-sub {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f9d55;
+}
+
+/* Menu */
+.wz-menu {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Links */
+.wz-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: var(--wz-text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.wz-link .wz-ic {
+  width: 20px;
+  text-align: center;
+  color: var(--wz-muted);
+  font-size: 16px;
+}
+
+/* Hover */
+.wz-link:hover {
+  background: #f1efe7; /* light tan hover */
+}
+
+/* Active state: bright green pill + white text */
+.wz-link.is-active {
+  background: var(--wz-green);
+  color: #ffffff;
+}
+.wz-link.is-active .wz-ic {
+  color: #ffffff;
+}
+
+/* Make anchor defaults neutral in the sidebar */
+.wz-sidebar a { color: inherit; text-decoration: none; }
+
+/* Responsive: collapse aside on small screens, optional */
+@media (max-width: 1024px) {
+  .dash-aside {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    z-index: 40;
+    transform: translateX(0);  /* hook a toggle later if needed */
+  }
+}
+/* icon sizing (applies to lucide <svg>) */
+.wz-link .wz-ic {
+  width: 18px;
+  height: 18px;
+  color: var(--wz-muted);       /* will become white in .is-active because it inherits */
+}
+
+/* active link already flips color via .is-active on parent */
+.wz-link.is-active .wz-ic { color: #fff; }
