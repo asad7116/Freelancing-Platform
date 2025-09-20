@@ -1,73 +1,62 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import "../styles/dashboard_sidebar.css";
+import { NavLink } from "react-router-dom";
+import {
+  Home,
+  List,
+  BriefcaseBusiness,     // "Gigs"
+  ClipboardList,         // "My Orders"
+  FileText,              // "My Proposals"
+  CreditCard,            // "Subscription"
+  MessageSquare,         // "Messages"
+  Images,                // "Portfolio"
+  Star,                  // "Wishlist"
+  Wallet,                // "Payouts"
+  UserRound              // "Profile"
+} from "lucide-react";
 
-const sidebarItems = [
-  { key: "dashboard",   label: "Dashboard",    icon: "🏠", path: "/dashboard" },
-  { key: "orders",      label: "Orders",       icon: "🧾", path: "/dashboard/orders" },
-  { key: "gigs",        label: "Gigs",         icon: "📦", path: "/dashboard/gigs" },
-  { key: "myorders", label: "My Orders", icon: "🛒", path: "/dashboard/my-orders" },
-  // ✅ Updated to route to My Jobs page
-  { key: "jobs",        label: "Jobs",         icon: "💼", path: "/dashboard/my-jobs" },
-  { key: "proposals",   label: "My Proposals", icon: "📝", path: "/dashboard/my-proposals" },
-  { key: "subscription",label: "Subscription", icon: "🎟️", path: "/dashboard/subscription" },
-  { key: "messages",    label: "Messages",     icon: "✉️", path: "/dashboard/messages" },
-  { key: "portfolio",   label: "Portfolio",    icon: "🖼️", path: "/dashboard/portfolio" },
-  
-];
+import "../styles/dashboard-sidebar.css";
 
-export default function DashboardSidebar({ user = { name: "Alex", avatar: "/assets/avatar.png" } }) {
-  const location = useLocation();
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(path + "/");
+const Icon = ({ as: As }) => <As className="wz-ic" size={18} strokeWidth={2} />;
+
+export default function DashboardSidebar() {
+  const Item = (to, IconCmp, label) => (
+    <NavLink
+      to={to}
+      end
+      className={({ isActive }) => "wz-link" + (isActive ? " is-active" : "")}
+    >
+      <Icon as={IconCmp} />
+      <span>{label}</span>
+    </NavLink>
+  );
 
   return (
-    <>
-      {/* Fixed left sidebar */}
-      <aside className="dz-sidebar">
-        <div className="dz-brand">
-          <img src="/assets/logo/logo.png" alt="Workzone" />
-          <div className="dz-brand-text">
-            <span className="dz-brand-title">Work</span>
-            <span className="dz-brand-sub">zone</span>
-          </div>
+    <div className="wz-sidebar">
+      {/* Brand */}
+      <div className="wz-brand">
+        <div className="wz-brand-logo">
+          {/* you can swap this for an <img> logo */}
+          <Home size={18} className="wz-ic" />
         </div>
-
-        <nav className="dz-menu">
-          {sidebarItems.map((item) => (
-            <Link
-              key={item.key}
-              to={item.path}
-              className={`dz-menu-item ${
-                isActive(item.path) ? "dz-menu-item--active" : ""
-              }`}
-            >
-              <span className="dz-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-      </aside>
-
-      {/* Fixed topbar */}
-      <div className="dz-topbar">
-        <div className="dz-topbar-right">
-          <Link to="/dashboard/wishlist" className="dz-topbtn" title="Favorites">
-            ♡
-          </Link>
-
-          <button className="dz-topbtn dz-badge" title="Inbox">✉️</button>
-          <Link to="/dashboard/payouts" className="dz-topbtn" title="Payouts">
-            💵
-          </Link>
-
-          <Link to="/dashboard/profile" className="dz-topuser">
-              <img src={user.avatar} alt={user.name} />
-              <span className="dz-topname">{user.name}</span>
-          </Link>
-
+        <div className="wz-brand-text">
+          <span className="wz-brand-main">Work</span>
+          <span className="wz-brand-sub">zone</span>
         </div>
       </div>
-    </>
+
+      {/* Menu */}
+      <nav className="wz-menu">
+        {Item("overview", Home, "Dashboard")}
+        {Item("orders", List, "Orders")}
+        {Item("gigs", BriefcaseBusiness, "Gigs")}
+        {Item("my-orders", ClipboardList, "My Orders")}
+        {Item("my-proposals", FileText, "My Proposals")}
+        {Item("subscription", CreditCard, "Subscription")}
+        {Item("messages", MessageSquare, "Messages")}
+        {Item("portfolio", Images, "Portfolio")}
+        {Item("wishlist", Star, "Wishlist")}
+        {Item("payouts", Wallet, "Payouts")}
+        {Item("profile", UserRound, "Profile")}
+      </nav>
+    </div>
   );
 }
