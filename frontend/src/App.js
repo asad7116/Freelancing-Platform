@@ -47,15 +47,13 @@ export default function App() {
           }
         >
           <Route index element={<Navigate to="overview" replace />} />
-          <Route path="overview" element={<ClientOverview />} />
-          {/* Add more client pages here later, e.g.: 
-              <Route path="jobs" element={<ClientJobs />} />
-              <Route path="orders" element={<ClientOrders />} /> 
-          */}
+          <Route path="overview" element={<ClientOverview />} />{" "}
+          {/* <-- this one */}
           <Route path="*" element={<div>Client page not found</div>} />
         </Route>
 
         {/* ===== Freelancer dashboard ===== */}
+        {/* FREELANCER DASHBOARD */}
         <Route
           path="/freelancer"
           element={
@@ -65,13 +63,8 @@ export default function App() {
           }
         >
           <Route index element={<Navigate to="overview" replace />} />
-          <Route path="overview" element={<FreelancerOverview />} />
-          <Route path="gigs/:id" element={<div>Gig details (placeholder)</div>} />
-          <Route path="orders/:id" element={<div>Order details (placeholder)</div>} />
-          {/* Add more freelancer pages here later, e.g.: 
-              <Route path="gigs" element={<Gigs />} />
-              <Route path="orders" element={<FreelancerOrders />} />
-          */}
+          <Route path="overview" element={<FreelancerOverview />} />{" "}
+          {/* <-- this one */}
           <Route path="*" element={<div>Freelancer page not found</div>} />
         </Route>
 
