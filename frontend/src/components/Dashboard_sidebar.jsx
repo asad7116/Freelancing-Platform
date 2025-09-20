@@ -1,61 +1,58 @@
+// src/components/Dashboard_sidebar.jsx
 import { NavLink } from "react-router-dom";
 import {
-  Home,
-  List,
-  BriefcaseBusiness,     // "Gigs"
-  ClipboardList,         // "My Orders"
-  FileText,              // "My Proposals"
-  CreditCard,            // "Subscription"
-  MessageSquare,         // "Messages"
-  Images,                // "Portfolio"
-  Star,                  // "Wishlist"
-  Wallet,                // "Payouts"
-  UserRound              // "Profile"
+  Home, List, BriefcaseBusiness, ClipboardList, FileText,
+  MessageSquare, Wallet, CreditCard, Images, Star, UserRound
 } from "lucide-react";
 
-import "../styles/dashboard-sidebar.css";
+const MENU = {
+  client: [
+    { to: "overview", label: "Dashboard", icon: Home },
+    { to: "orders",   label: "Orders",    icon: List },
+    { to: "messages", label: "Messages",  icon: MessageSquare },
+    { to: "billing",  label: "Billing",   icon: CreditCard },
+    { to: "profile",  label: "Profile",   icon: UserRound },
+  ],
+  freelancer: [
+    { to: "overview",   label: "Dashboard",  icon: Home },
+    { to: "gigs",       label: "Gigs",       icon: BriefcaseBusiness },
+    { to: "orders",     label: "My Orders",  icon: ClipboardList },
+    { to: "my-proposals", label: "My Proposals", icon: FileText },
+    { to: "subscription", label: "Subscription", icon: CreditCard },
+    { to: "messages",   label: "Messages",   icon: MessageSquare },
+    { to: "portfolio",  label: "Portfolio",  icon: Images },
+    { to: "wishlist",   label: "Wishlist",   icon: Star },
+    { to: "payouts",    label: "Payouts",    icon: Wallet },
+    { to: "profile",    label: "Profile",    icon: UserRound },
+  ],
+};
 
-const Icon = ({ as: As }) => <As className="wz-ic" size={18} strokeWidth={2} />;
-
-export default function DashboardSidebar() {
-  const Item = (to, IconCmp, label) => (
-    <NavLink
-      to={to}
-      end
-      className={({ isActive }) => "wz-link" + (isActive ? " is-active" : "")}
-    >
-      <Icon as={IconCmp} />
-      <span>{label}</span>
-    </NavLink>
-  );
+export default function DashboardSidebar({ role }) {
+  console.log("DashboardSidebar role =", role); // DEBUG: remove later
+  const items = MENU[role] || MENU.freelancer;
 
   return (
     <div className="wz-sidebar">
-      {/* Brand */}
       <div className="wz-brand">
-        <div className="wz-brand-logo">
-          {/* you can swap this for an <img> logo */}
-          <Home size={18} className="wz-ic" />
-        </div>
+        <div className="wz-brand-logo"><Home size={18} className="wz-ic" /></div>
         <div className="wz-brand-text">
           <span className="wz-brand-main">Work</span>
           <span className="wz-brand-sub">zone</span>
         </div>
       </div>
 
-      {/* Menu */}
       <nav className="wz-menu">
-        {Item("overview", Home, "Dashboard")}
-        {Item("orders", List, "Orders")}
-        {Item("gigs", BriefcaseBusiness, "Gigs")}
-        {Item("my-orders", ClipboardList, "My Orders")}
-        {Item("my-proposals", FileText, "My Proposals")}
-        {Item("subscription", CreditCard, "Subscription")}
-        {Item("messages", MessageSquare, "Messages")}
-        {Item("portfolio", Images, "Portfolio")}
-        {Item("wishlist", Star, "Wishlist")}
-        {Item("payouts", Wallet, "Payouts")}
-        {Item("profile", UserRound, "Profile")}
+        {items.map(({ to, label, icon: Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end
+            className={({ isActive }) => "wz-link" + (isActive ? " is-active" : "")}
+          >
+            <Icon className="wz-ic" size={18} />
+            <span>{label}</span>
+          </NavLink>
+        ))}
       </nav>
     </div>
   );
