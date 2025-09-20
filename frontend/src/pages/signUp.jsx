@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import PageHeader from "../components/PageHeader";
 import ToggleButtons from "../components/Login_Toggle"; // import toggle
 import "../styles/Signup.css";
+import { Link } from "react-router-dom";
 
 export default function SignUp() {
   const [role, setRole] = useState("Buyer");
@@ -86,7 +87,7 @@ export default function SignUp() {
             </div>
 
             <p className="already-account">
-              Already have an account? <a href="/signin">Sign In</a>
+              Already have an account? <Link to="/signin">Sign In</Link>
             </p>
           </div>
 

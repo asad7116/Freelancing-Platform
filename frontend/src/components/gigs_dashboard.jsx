@@ -1,6 +1,5 @@
 import React from "react";
 import "../styles/gigs_dashboard.css";
-import DashboardSidebar from "./Dashboard_sidebar";
 
 const dummyGigs = [
   {
@@ -39,7 +38,7 @@ export default function GigsDashboard() {
   return (
     <div className="dz-with-shell">
       {/* Shared Sidebar + Topbar */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* Main */}
       <main className="dz-main dz-shell-main-padding">

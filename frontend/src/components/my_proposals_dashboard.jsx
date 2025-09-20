@@ -29,7 +29,7 @@ export default function MyProposals() {
   return (
     <div className="dz-with-shell">
       {/* Shared sidebar + topbar */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* Main content, properly shifted */}
       <main className="dz-main dz-shell-main-padding">

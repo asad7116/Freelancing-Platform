@@ -18,13 +18,13 @@
 }
 
 /* main area sits to the right of the fixed sidebar and below the fixed topbar */
-.dz-main{
+/* .dz-main{
   margin-left: var(--dz-sidebar-w);
   padding: 24px 28px;
 }
 .dz-shell-main-padding{
   padding-top: calc(var(--dz-topbar-h) + 16px);
-}
+} */
 
 /* utility for any element (e.g., Footer) that should align with main area */
 .dz-offset{
@@ -89,4 +89,28 @@
 
 @media (max-width: 560px){
   .dz-cards--top{ grid-template-columns: 1fr; }
+}
+/* Grid */
+.dash-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 0;                       /* kill any column gap */
+  min-height: 100vh;
+  background: #f6f4ee;          /* tan bg like reference */
+}
+
+.dash-aside {
+  background: #fff;
+  border-right: 1px solid #eae7de;
+  /* no padding or margin here so it touches the main column */
+}
+
+.dash-main {
+  min-width: 0;
+  background: #f6f4ee;
+  padding: 0;                   /* <<< important: remove left padding that made the “gap” */
+}
+
+.dash-content {
+  padding: 24px 28px;           /* keep page padding inside content, not on the main */
 }

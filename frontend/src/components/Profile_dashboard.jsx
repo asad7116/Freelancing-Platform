@@ -26,7 +26,7 @@ export default function ProfileDashboard() {
 
   return (
     <div className="dz-with-shell">
-      <DashboardSidebar />
+      {/* <DashboardSidebar /> */}
 
       <main className="dz-main dz-shell-main-padding">
         <section className="profile-card">

@@ -48,7 +48,7 @@ const wishlistItems = [
 export default function WishlistDashboard() {
   return (
     <div className="dz-with-shell">
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       <main className="dz-main dz-shell-main-padding">
         <div className="dz-headerband">

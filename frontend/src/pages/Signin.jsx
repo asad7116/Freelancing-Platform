@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PageHeader from "../components/PageHeader";
 import "../styles/Signin.css";
+import { Link } from "react-router-dom";
+
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -48,7 +50,7 @@ export default function SignIn() {
                 <label>
                   <input type="checkbox" /> Remember Me
                 </label>
-                <a href="#">Forget Password?</a>
+                <Link to="#">Forget Password?</Link>
               </div>
 
               <button type="submit" className="signin-btn">
@@ -64,7 +66,7 @@ export default function SignIn() {
             </div>
 
             <p className="create-account">
-              Do not have an account? <a href="/signUp">Create Account</a>
+              Do not have an account? <Link to="/signUp">Create Account</Link>
             </p>
           </div>
 

@@ -37,7 +37,7 @@ export default function PortfolioDashboard() {
   return (
     <div className="dz-with-shell">
       {/* Sidebar */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* Main content */}
       <main className="dz-main dz-shell-main-padding">

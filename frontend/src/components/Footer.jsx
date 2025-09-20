@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/footer.css";
-
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="footer">
@@ -8,10 +8,10 @@ const Footer = () => {
         <div className="container footer-newsletter">
           {/* Left: Logo + blurb */}
           <div className="newsletter-left">
-            <a href="/" className="footer-logo">
+            <Link to="/" className="footer-logo">
               <img src="/assets/logo/" alt="Tixe logo" />
               <span><b>Tixe</b><em> app</em></span>
-            </a>
+            </Link>
             <p>
               It is a long established fact that a reader will be distracted by
               the readable content of a page when looking at its layout the point
@@ -48,12 +48,12 @@ const Footer = () => {
               <li>White Street Night Road<br />N/A 12 Constance Street<br />London E16 2DQ</li>
             </ul>
             <div className="store-badges">
-              <a href="https://play.google.com" target="_blank" rel="noreferrer">
+              <Link to="https://play.google.com" target="_blank" rel="noreferrer">
                 <img src="/assets/play-stor.png" alt="Google Play" />
-              </a>
-              <a href="https://www.apple.com/app-store/" target="_blank" rel="noreferrer">
+              </Link>
+              <Link to="https://www.apple.com/app-store/" target="_blank" rel="noreferrer">
                 <img src="/assets/app-stor.png" alt="App Store" />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -61,14 +61,14 @@ const Footer = () => {
           <div className="widget">
             <h4 className="widget-title">Categories</h4>
             <ul className="link-list">
-              <li><a href="#">Graphics & Design</a></li>
-              <li><a href="#">Digital Marketing</a></li>
-              <li><a href="#">Writing & Translation</a></li>
-              <li><a href="#">Video & Animation</a></li>
-              <li><a href="#">Music & Audio</a></li>
-              <li><a href="#">Tixe Logo Maker</a></li>
-              <li><a href="#">Programming & Tech</a></li>
-              <li><a href="#">Photography</a></li>
+              <li><Link to="#">Graphics & Design</Link></li>
+              <li><Link to="#">Digital Marketing</Link></li>
+              <li><Link to="#">Writing & Translation</Link></li>
+              <li><Link to="#">Video & Animation</Link></li>
+              <li><Link to="#">Music & Audio</Link></li>
+              <li><Link to="#">Tixe Logo Maker</Link></li>
+              <li><Link to="#">Programming & Tech</Link></li>
+              <li><Link to="#">Photography</Link></li>
             </ul>
           </div>
 
@@ -76,14 +76,14 @@ const Footer = () => {
           <div className="widget">
             <h4 className="widget-title">About</h4>
             <ul className="link-list">
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Press & News</a></li>
-              <li><a href="#">Pricing Plan</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Blogs</a></li>
-              <li><a href="#">FAQ’s</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><Link to="#">Careers</Link></li>
+              <li><Link to="#">Press & News</Link></li>
+              <li><Link to="#">Pricing Plan</Link></li>
+              <li><Link to="#">Privacy Policy</Link></li>
+              <li><Link to="#">Terms of Service</Link></li>
+              <li><Link to="#">Blogs</Link></li>
+              <li><Link to="#">FAQ’s</Link></li>
+              <li><Link to="#">Contact</Link></li>
             </ul>
           </div>
 
@@ -91,12 +91,12 @@ const Footer = () => {
           <div className="widget">
             <h4 className="widget-title">Help & Supports</h4>
             <ul className="link-list">
-              <li><a href="#">Help & Support</a></li>
-              <li><a href="#">Trust & Safety</a></li>
-              <li><a href="#">Selling on Tixes</a></li>
-              <li><a href="#">Buying on Tixes</a></li>
-              <li><a href="#">Tixes Guides</a></li>
-              <li><a href="#">Workspace</a></li>
+              <li><Link to="#">Help & Support</Link></li>
+              <li><Link to="#">Trust & Safety</Link></li>
+              <li><Link to="#">Selling on Tixes</Link></li>
+              <li><Link to="#">Buying on Tixes</Link></li>
+              <li><Link to="#">Tixes Guides</Link></li>
+              <li><Link to="#">Workspace</Link></li>
             </ul>
           </div>
         </div>
@@ -107,11 +107,11 @@ const Footer = () => {
         <div className="container bottom-inner">
           <p>Copyright © 2025 Tixe. All Rights Reserved.</p>
           <div className="socials">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><i className="fab fa-facebook-f" /></a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><i className="fab fa-twitter" /></a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><i className="fab fa-instagram" /></a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><i className="fab fa-linkedin-in" /></a>
-            <a href="#" aria-label="Pinterest"><i className="fab fa-pinterest-p" /></a>
+            <Link to="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><i className="fab fa-facebook-f" /></Link>
+            <Link to="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><i className="fab fa-twitter" /></Link>
+            <Link to="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><i className="fab fa-instagram" /></Link>
+            <Link to="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><i className="fab fa-linkedin-in" /></Link>
+            <Link to="#" aria-label="Pinterest"><i className="fab fa-pinterest-p" /></Link>
           </div>
         </div>
       </div>
