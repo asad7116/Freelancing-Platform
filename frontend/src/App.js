@@ -66,6 +66,8 @@ export default function App() {
         >
           <Route index element={<Navigate to="overview" replace />} />
           <Route path="overview" element={<FreelancerOverview />} />
+          <Route path="gigs/:id" element={<div>Gig details (placeholder)</div>} />
+          <Route path="orders/:id" element={<div>Order details (placeholder)</div>} />
           {/* Add more freelancer pages here later, e.g.: 
               <Route path="gigs" element={<Gigs />} />
               <Route path="orders" element={<FreelancerOrders />} />

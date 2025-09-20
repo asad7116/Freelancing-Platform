@@ -1,15 +1,13 @@
-// src/pages/freelancer/Overview.jsx
-export default function FreelancerOverview() {
-  return (
-    <section className="freelancer-overview">
-      <header className="dash-page-head">
-        <h1>Freelancer Dashboard</h1>
-        <p className="dash-bc">Freelancer &gt; Overview</p>
-      </header>
+// src/pages/DashboardPage.jsx
+import React from "react";
+import Dashboard from "../../components/dashboard"; // your dashboard.jsx component
 
-      <div className="dash-panel">
-        <p>Welcome, Freelancer! (placeholder page)</p>
-      </div>
-    </section>
+export default function DashboardPage() {
+  return (
+    <>
+      
+      <Dashboard />
+      
+    </>
   );
 }
