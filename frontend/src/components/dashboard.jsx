@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import DashboardSidebar from "./Dashboard_sidebar";
 import "../styles/dashboard.css";
 
 const DUMMY = {
@@ -31,7 +30,6 @@ export default function Dashboard() {
 
   return (
     <div className="dz-with-shell">
-      <DashboardSidebar user={DUMMY.user} />
 
       <main className="dz-main dz-shell-main-padding">
         {/* header band like your screenshot */}

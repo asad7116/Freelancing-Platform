@@ -15,7 +15,7 @@ export default function Orders() {
   return (
     <div className="dz-with-shell">
       {/* Fixed sidebar + topbar (shared) */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* Main content area shifted by sidebar & topbar */}
       <main className="dz-main dz-shell-main-padding">

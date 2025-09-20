@@ -23,7 +23,7 @@ export default function MyJobs() {
   return (
     <div className="dz-with-shell">
       {/* shared sidebar + topbar (logo, icons, avatar) */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* main */}
       <main className="dz-main dz-shell-main-padding">

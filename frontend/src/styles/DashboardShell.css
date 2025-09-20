@@ -1,0 +1,25 @@
+/* layout shell */
+.dash-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: #f6f4ee; /* soft background like the reference */
+}
+
+.dash-aside {
+  background: #ffffff;
+  border-right: 1px solid #eae7de;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.dash-main {
+  overflow: hidden;
+}
+
+.dash-container {
+  padding: 24px 28px;
+}

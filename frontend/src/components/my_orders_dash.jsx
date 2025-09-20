@@ -16,7 +16,7 @@ export default function MyOrdersDash() {
   return (
     <div className="dz-with-shell">
       {/* Sidebar + Topbar */}
-      <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} />
+      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
 
       {/* Main content shifted correctly */}
       <main className="dz-main dz-shell-main-padding">
