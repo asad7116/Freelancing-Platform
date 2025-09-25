@@ -1,0 +1,25 @@
+/* defaults (used everywhere unless overridden) */
+:root {
+  --accent: #22c55e;          /* current green */
+  --accent-600: #16a34a;
+  --accent-700: #15803d;
+
+  --text: #0f172a;            /* slate-900-ish */
+  --muted: #64748b;           /* slate-500-ish */
+  --bg: #0b1320;              /* your sidebar dark bg if used */
+  --panel: #ffffff;
+  --border: #e5e7eb;
+}
+
+/* role-based overrides (optional, see §4) */
+.dashboard.client {
+  --accent: #2563eb;          /* blue */
+  --accent-600: #1d4ed8;
+  --accent-700: #1e40af;
+}
+
+.dashboard.freelancer {
+  --accent: #22c55e;          /* green */
+  --accent-600: #16a34a;
+  --accent-700: #15803d;
+}

@@ -20,7 +20,13 @@ import RequireRole from "./components/RequireRole"; // created in step 2.1
 // ---------- New role-specific overview pages (created in step 1) ----------
 import ClientOverview from "./pages/Client/Overview";
 import FreelancerOverview from "./pages/Freelancer/Overview";
-
+import Gigs from "./pages/Dashboard/Gigs";
+import Payouts from "./pages/Dashboard/Payouts";
+import Orders from "./pages/Dashboard/Orders";
+import MyProposals from "./pages/Dashboard/MyProposals";
+import Subscription from "./pages/Dashboard/Subscription";
+import Wishlist from "./pages/Dashboard/Wishlist";
+import Profile from "./pages/Dashboard/Profile";
 export default function App() {
   return (
     <BrowserRouter>
@@ -49,6 +55,7 @@ export default function App() {
           <Route index element={<Navigate to="overview" replace />} />
           <Route path="overview" element={<ClientOverview />} />{" "}
           {/* <-- this one */}
+          <Route path="MyProposals" element={<MyProposals/>} />
           <Route path="*" element={<div>Client page not found</div>} />
         </Route>
 
@@ -65,6 +72,13 @@ export default function App() {
           <Route index element={<Navigate to="overview" replace />} />
           <Route path="overview" element={<FreelancerOverview />} />{" "}
           {/* <-- this one */}
+          <Route path="Gigs" element={<Gigs/>} />
+          <Route path="MyProposals" element={<MyProposals/>} />
+          <Route path="Subscription" element={<Subscription/>} />
+          <Route path="Wishlist" element={<Wishlist/>} />
+          <Route path="Payouts" element={<Payouts/>} />
+          <Route path="Orders" element={<Orders/>} />
+          <Route path="Profile" element={<Profile/>} />
           <Route path="*" element={<div>Freelancer page not found</div>} />
         </Route>
 
