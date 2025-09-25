@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import DashboardSidebar from "./Dashboard_sidebar";
 import "../styles/profile_dashboard.css";
-
+import {User} from "lucide-react"
 export default function ProfileDashboard() {
   const [form, setForm] = useState({
     firstName: "Matthew",
@@ -31,7 +31,7 @@ export default function ProfileDashboard() {
       <main className="dz-main dz-shell-main-padding">
         <section className="profile-card">
           <div className="profile-avatar">
-            <img src="/assets/avatar.png" alt="User Avatar" />
+            < User size={56} /><span className="dash-badge"></span>
             <button className="edit-btn">✎</button>
           </div>
 

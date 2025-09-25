@@ -14,12 +14,14 @@
   margin-bottom: 20px;
   position: relative;
 }
+
+/* 
 .profile-avatar img {
   width: 180px;
   height: 180px;
   border-radius: 10px;
   object-fit: cover;
-}
+} */
 .profile-avatar .edit-btn {
   position: absolute;
   bottom: 8px;
