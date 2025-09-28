@@ -27,6 +27,7 @@ import MyProposals from "./pages/Dashboard/MyProposals";
 import Subscription from "./pages/Dashboard/Subscription";
 import Wishlist from "./pages/Dashboard/Wishlist";
 import Profile from "./pages/Dashboard/Profile";
+import CreateGig from "./pages/Dashboard/CreateGig";
 export default function App() {
   return (
     <BrowserRouter>
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/freelancers" element={<Freelancer />} />
         <Route path="/seller/:username" element={<SellerDetails />} />
+        <Route path="/create-gig" element={<CreateGig />} />
 
         {/* ===== Client dashboard ===== */}
         <Route
