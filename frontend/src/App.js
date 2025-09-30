@@ -16,7 +16,8 @@ import SellerDetails from "./pages/SellerDetails";
 // ---------- Shared dashboard layout & guards ----------
 import DashboardLayout from "./Layouts/DashboardLayout";
 import RequireRole from "./components/RequireRole"; // created in step 2.1
-
+import MyJobs from "./pages/Dashboard/MyJobs";
+import Messages from "./pages/Dashboard/Messages"
 // ---------- New role-specific overview pages (created in step 1) ----------
 import ClientOverview from "./pages/Client/Overview";
 import FreelancerOverview from "./pages/Freelancer/Overview";
@@ -58,6 +59,9 @@ export default function App() {
           <Route path="overview" element={<ClientOverview />} />{" "}
           {/* <-- this one */}
           <Route path="MyProposals" element={<MyProposals/>} />
+          <Route path="Orders" element={<MyJobs />} />
+          <Route path="Messages" element={<Messages/>}/>
+
           <Route path="*" element={<div>Client page not found</div>} />
         </Route>
 
@@ -81,6 +85,7 @@ export default function App() {
           <Route path="Wishlist" element={<Wishlist/>} />
           <Route path="Payouts" element={<Payouts/>} />
           <Route path="Orders" element={<Orders/>} />
+          <Route path="Messages" element={<Messages/>}/>
           <Route path="Profile" element={<Profile/>} />
           <Route path="*" element={<div>Freelancer page not found</div>} />
         </Route>
