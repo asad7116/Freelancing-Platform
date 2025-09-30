@@ -3,7 +3,9 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
-import gigsRoutes from "./routes/gigs.routes.js"; // sheraz add this
+//import gigsRoutes from "./routes/gigs.routes.js"; // sheraz add this
+import gigsRoutes from './routes/gigs.route.js';
+import path from "path";
 
 const app = express();
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
