@@ -1,40 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import Axios for API calls
 import "../styles/gigs_dashboard.css";
 
-const dummyGigs = [
-  {
-    id: 1,
-    title: "App icon Design For Android And iOS",
-    price: 5500,
-    rating: 4.2,
-    reviews: 5,
-    seller: "Matthew Anderson",
-    image: "/assets/img/order1.png",
-    active: true,
-  },
-  {
-    id: 2,
-    title: "Custom Typography Design for your Product",
-    price: 2000,
-    rating: 5.0,
-    reviews: 1,
-    seller: "Matthew Anderson",
-    image: "/assets/img/order2.png",
-    active: true,
-  },
-  {
-    id: 3,
-    title: "Instagram Reel Marketing for Your Niche",
-    price: 600,
-    rating: 0.0,
-    reviews: 0,
-    seller: "Matthew Anderson",
-    image: "/assets/img/order3.png",
-    active: true,
-  },
-];
-
 export default function GigsDashboard() {
+  const [gigs, setGigs] = useState([]); // State to store fetched gigs
+
+  // Fetch gigs from the backend when the component mounts
+  useEffect(() => {
+    const fetchGigs = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/gigs'); // Full API URL to fetch gigs
+        setGigs(response.data.gigs); // Assuming the response contains a 'gigs' field
+      } catch (error) {
+        console.error("Error fetching gigs:", error);
+      }
+    };
+
+    fetchGigs(); // Call the function to fetch gigs
+  }, []); // Empty dependency array ensures it runs once on component mount
+
   return (
     <div className="dz-with-shell">
       {/* Shared Sidebar + Topbar */}
@@ -46,36 +30,58 @@ export default function GigsDashboard() {
         <div className="dz-headerband">
           <h1>Manage Gig</h1>
           <p className="dz-breadcrumb">Dashboard &gt; Manage Gig</p>
-          <button className="gd-new-gig">Create a new Gig</button>
+          <button
+            className="gd-new-gig"
+            onClick={() => (window.location.href = '/create-gig')}
+          >
+            Create a new Gig
+          </button>
         </div>
 
         {/* Gig cards */}
         <section className="gd-cards">
-          {dummyGigs.map((gig) => (
-            <article className="gd-card" key={gig.id}>
-              <img src={gig.image} alt={gig.title} className="gd-card-img" />
-              <div className="gd-card-body">
-                <div className="gd-price">${gig.price.toLocaleString()}</div>
-                <div className="gd-rating">
-                  ⭐ {gig.rating.toFixed(1)} ({gig.reviews})
-                </div>
-                <h3 className="gd-title">{gig.title}</h3>
+          {gigs.length === 0 ? (
+            <p>No gigs found.</p> // Display message when no gigs are available
+          ) : (
+            gigs.map((gig) => (
+              <article className="gd-card" key={gig.id}>
+                {/* Ensure the correct image path */}
+                <img
+                  src={`http://localhost:4000/uploads/${gig.thumbnailImage}`}
+                  alt={gig.gigTitle} // Use gigTitle as alt text
+                  className="gd-card-img"
+                />
+                <div className="gd-card-body">
+                  <div className="gd-price">${gig.price.toLocaleString()}</div>
 
-                <div className="gd-seller">
-                  <img src="/assets/avatar.png" alt={gig.seller} className="gd-avatar" />
-                  <span>{gig.seller}</span>
-                </div>
+                  {/* Render rating if available */}
+                  <div className="gd-rating">
+                    ⭐ {gig.rating ? gig.rating.toFixed(1) : "0"} ({gig.reviews || 0})
+                  </div>
 
-                <div className="gd-actions">
-                  <label className="gd-status">
-                    Status:
-                    <input type="checkbox" checked={gig.active} readOnly />
-                  </label>
-                  <button className="gd-edit">Edit Gig</button>
+                  {/* Correctly referencing gigTitle */}
+                  <h3 className="gd-title">{gig.gigTitle}</h3>
+
+                  <div className="gd-seller">
+                    <img
+                      src="/assets/avatar.png"
+                      alt={gig.seller || "Unknown Seller"}
+                      className="gd-avatar"
+                    />
+                    <span>{gig.seller || "Unknown Seller"}</span>
+                  </div>
+
+                  <div className="gd-actions">
+                    <label className="gd-status">
+                      Status:
+                      <input type="checkbox" checked={gig.active} readOnly />
+                    </label>
+                    <button className="gd-edit">Edit Gig</button>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))
+          )}
         </section>
       </main>
     </div>

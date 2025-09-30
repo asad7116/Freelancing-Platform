@@ -12,7 +12,7 @@ export default function CreateGig() {
     price: "",
     deliveryTime: "",
     revisions: "",
-    additionalNotes: ""
+    additionalNotes: "",
   });
 
   const categories = [
@@ -25,46 +25,59 @@ export default function CreateGig() {
     "Graphic Design",
     "Data Entry",
     "Translation",
-    "Virtual Assistant"
+    "Virtual Assistant",
   ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      thumbnailImage: file
+      thumbnailImage: file,
     }));
   };
 
   const handleGalleryChange = (e) => {
     const files = Array.from(e.target.files).slice(0, 3); // Limit to 3 files
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      galleryImages: files
+      galleryImages: files,
     }));
   };
 
   const nextStep = () => {
     if (currentStep < 3) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
   const handleSubmit = async () => {
+    // Ensure all required fields are filled
+    if (
+      !formData.gigTitle ||
+      !formData.category ||
+      !formData.shortDescription ||
+      !formData.price ||
+      !formData.deliveryTime ||
+      !formData.revisions
+    ) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
     const formDataToSend = new FormData();
     formDataToSend.append("gigTitle", formData.gigTitle);
     formDataToSend.append("category", formData.category);
@@ -77,29 +90,30 @@ export default function CreateGig() {
     if (formData.thumbnailImage) {
       formDataToSend.append("thumbnailImage", formData.thumbnailImage);
     }
+
     formData.galleryImages.forEach((file) => {
       formDataToSend.append("galleryImages", file);
     });
 
     try {
-      const res = await fetch("http://localhost:5000/api/gigs", {
+      const res = await fetch("http://localhost:4000/api/gigs", {
         method: "POST",
         body: formDataToSend,
       });
 
       const data = await res.json();
-      if (data.success) {
+      if (data.gig) {
+        // Assuming the backend sends the 'gig' data
         alert("Gig created successfully!");
         console.log("Saved:", data.gig);
       } else {
-        alert("Failed to create gig");
+        alert(data.message || "Failed to create gig");
       }
     } catch (err) {
       console.error(err);
       alert("Error submitting gig");
     }
   };
-
 
   const renderStep1 = () => (
     <div className="step-content">
@@ -128,7 +142,9 @@ export default function CreateGig() {
         >
           <option value="">Select a category</option>
           {categories.map((cat, index) => (
-            <option key={index} value={cat}>{cat}</option>
+            <option key={index} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
       </div>
@@ -151,7 +167,7 @@ export default function CreateGig() {
   const renderStep2 = () => (
     <div className="step-content">
       <h2>Step 2: Images & Pricing</h2>
-      
+
       <div className="form-group">
         <label htmlFor="thumbnailImage">Thumbnail Image *</label>
         <input
@@ -265,21 +281,21 @@ export default function CreateGig() {
         <div className="create-gig-wrapper">
           <div className="progress-container">
             <div className="progress-bar">
-              <div 
-                className="progress-fill" 
+              <div
+                className="progress-fill"
                 style={{ width: `${(currentStep / 3) * 100}%` }}
               />
             </div>
             <div className="progress-steps">
-              <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
+              <div className={`step ${currentStep >= 1 ? "active" : ""}`}>
                 <span>1</span>
                 <p>Basic Info</p>
               </div>
-              <div className={`step ${currentStep >= 2 ? 'active' : ''}`}>
+              <div className={`step ${currentStep >= 2 ? "active" : ""}`}>
                 <span>2</span>
                 <p>Images & Price</p>
               </div>
-              <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
+              <div className={`step ${currentStep >= 3 ? "active" : ""}`}>
                 <span>3</span>
                 <p>Delivery</p>
               </div>
@@ -293,26 +309,26 @@ export default function CreateGig() {
 
             <div className="button-container">
               {currentStep > 1 && (
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="btn btn-secondary"
                   onClick={prevStep}
                 >
                   Previous
                 </button>
               )}
-              
+
               {currentStep < 3 ? (
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="btn btn-primary"
                   onClick={nextStep}
                 >
                   Next
                 </button>
               ) : (
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="btn btn-primary"
                   onClick={handleSubmit}
                 >
