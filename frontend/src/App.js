@@ -44,7 +44,6 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/freelancers" element={<Freelancer />} />
         <Route path="/seller/:username" element={<SellerDetails />} />
-        <Route path="/create-gig" element={<CreateGig />} />
 
         {/* ===== Client dashboard ===== */}
         <Route
