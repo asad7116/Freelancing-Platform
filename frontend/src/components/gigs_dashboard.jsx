@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios for API calls
 import "../styles/gigs_dashboard.css";
+import { useNavigate } from "react-router-dom";
+
 
 export default function GigsDashboard() {
   const [gigs, setGigs] = useState([]); // State to store fetched gigs
@@ -18,8 +20,10 @@ export default function GigsDashboard() {
 
     fetchGigs(); // Call the function to fetch gigs
   }, []); // Empty dependency array ensures it runs once on component mount
-
+  const navigate = useNavigate();
   return (
+   
+
     <div className="dz-with-shell">
       {/* Shared Sidebar + Topbar */}
       {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
@@ -32,7 +36,7 @@ export default function GigsDashboard() {
           <p className="dz-breadcrumb">Dashboard &gt; Manage Gig</p>
           <button
             className="gd-new-gig"
-            onClick={() => (window.location.href = '/create-gig')}
+            onClick={() => navigate('/freelancer/CreateGig')}
           >
             Create a new Gig
           </button>
