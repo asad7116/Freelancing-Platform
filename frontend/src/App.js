@@ -78,7 +78,7 @@ export default function App() {
           <Route path="overview" element={<FreelancerOverview />} />{" "}
           {/* <-- this one */}
           <Route path="Gigs" element={<Gigs/>} />
-          <Route path="CreateGig" element={<CreateGig />} />
+          <Route path="CreateGig" element={<CreateGig/>} />
           <Route path="MyProposals" element={<MyProposals/>} />
           <Route path="Subscription" element={<Subscription/>} />
           <Route path="Wishlist" element={<Wishlist/>} />
