@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios for API calls
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 import "../styles/gigs_dashboard.css";
-import { useNavigate } from "react-router-dom";
-
 
 export default function GigsDashboard() {
   const [gigs, setGigs] = useState([]); // State to store fetched gigs
+  const navigate = useNavigate(); // Initialize the navigate function
 
   // Fetch gigs from the backend when the component mounts
   useEffect(() => {
@@ -20,10 +20,13 @@ export default function GigsDashboard() {
 
     fetchGigs(); // Call the function to fetch gigs
   }, []); // Empty dependency array ensures it runs once on component mount
-  const navigate = useNavigate();
-  return (
-   
 
+  // Navigate to the CreateGig page
+  const createGigHandler = () => {
+    navigate('/freelancer/CreateGig'); // Use navigate to redirect to the CreateGig page
+  };
+
+  return (
     <div className="dz-with-shell">
       {/* Shared Sidebar + Topbar */}
       {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
@@ -36,7 +39,7 @@ export default function GigsDashboard() {
           <p className="dz-breadcrumb">Dashboard &gt; Manage Gig</p>
           <button
             className="gd-new-gig"
-            onClick={() => navigate('/freelancer/CreateGig')}
+            onClick={createGigHandler} // Navigate to the CreateGig page
           >
             Create a new Gig
           </button>
