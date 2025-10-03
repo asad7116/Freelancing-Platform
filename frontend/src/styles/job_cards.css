@@ -18,6 +18,7 @@
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid #e5e7eb;
+  cursor: pointer;
 }
 
 .job-card:hover {
