@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 //import gigsRoutes from "./routes/gigs.routes.js"; // sheraz add this
 import gigsRoutes from './routes/gigs.route.js';
+import jobPostRoutes from './routes/jobPosts.routes.js';
+import categoriesRoutes from './routes/categories.routes.js';
+import publicRoutes from './routes/public.routes.js';
 import path from "path";
 
 const app = express();
@@ -22,6 +25,9 @@ app.get("/", (req, res) => res.send("API running"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/gigs", gigsRoutes); // sheraz add this
+app.use("/api", publicRoutes); // Public routes (no auth required)
+app.use("/api", jobPostRoutes);
+app.use("/api", categoriesRoutes);
 
 // Health check
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
