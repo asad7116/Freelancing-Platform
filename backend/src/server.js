@@ -8,6 +8,7 @@ import gigsRoutes from './routes/gigs.route.js';
 import jobPostRoutes from './routes/jobPosts.routes.js';
 import categoriesRoutes from './routes/categories.routes.js';
 import publicRoutes from './routes/public.routes.js';
+import skillsRoutes from './routes/skills.routes.js';
 import path from "path";
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/gigs", gigsRoutes); // sheraz add this
 app.use("/api", publicRoutes); // Public routes (no auth required)
 app.use("/api", jobPostRoutes);
 app.use("/api", categoriesRoutes);
+app.use("/api", skillsRoutes);
 
 // Health check
 app.get("/api/health", (_req, res) => res.json({ ok: true }));

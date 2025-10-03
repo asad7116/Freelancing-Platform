@@ -50,42 +50,71 @@ class JobPostController {
   static async create(req, res) {
     try {
       const {
+        // Basic info
         title,
-        slug,
+        summary,
+        description,
+        deliverables,
         category_id,
-        city_id,
+        specialty,
+        
+        // Budget
+        budget_type,
+        hourly_rate_from,
+        hourly_rate_to,
+        fixed_price,
+        
+        // Project details
+        project_type,
+        duration,
+        hours_per_week,
+        job_size,
+        freelancers_needed,
+        
+        // Experience and skills
+        experience_level,
+        mandatory_skills,
+        nice_to_have_skills,
+        tools,
+        languages,
+        
+        // Legacy fields (for backward compatibility)
         regular_price,
         job_type,
-        description
+        city_id
       } = req.body;
 
       const userId = req.user.id; // From auth middleware
+
+      // Generate slug from title if not provided
+      const jobSlug = title?.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-') + '-' + Date.now();
 
       // Validation
       const errors = {};
       
       if (!title?.trim()) errors.title = 'Job title is required';
-      if (!slug?.trim()) errors.slug = 'Slug is required';
       if (!category_id) errors.category_id = 'Category is required';
-      if (!city_id) errors.city_id = 'City is required';
-      if (!regular_price) errors.regular_price = 'Price is required';
-      if (!description?.trim() || description === '<p><br></p>') {
-        errors.description = 'Description is required';
+      if (!description?.trim()) errors.description = 'Description is required';
+      
+      // Budget validation
+      if (budget_type === 'hourly') {
+        if (!hourly_rate_from) errors.hourly_rate_from = 'Minimum hourly rate is required';
+        if (!hourly_rate_to) errors.hourly_rate_to = 'Maximum hourly rate is required';
+        if (parseFloat(hourly_rate_from) >= parseFloat(hourly_rate_to)) {
+          errors.hourly_rate_to = 'Maximum rate must be higher than minimum rate';
+        }
+      } else if (budget_type === 'fixed') {
+        if (!fixed_price) errors.fixed_price = 'Fixed price is required';
       }
 
-      // Check if slug already exists
-      const existingSlug = await prisma.jobPost.findUnique({
-        where: { slug }
-      });
-
-      if (existingSlug) {
-        errors.slug = 'Slug already exists';
-      }
-
-      // Validate price
-      const price = parseFloat(regular_price);
-      if (isNaN(price) || price <= 0) {
-        errors.regular_price = 'Price must be a valid positive number';
+      // Skills validation
+      try {
+        const parsedMandatorySkills = mandatory_skills ? JSON.parse(mandatory_skills) : [];
+        if (parsedMandatorySkills.length === 0) {
+          errors.mandatory_skills = 'At least one mandatory skill is required';
+        }
+      } catch (e) {
+        errors.mandatory_skills = 'Invalid skills format';
       }
 
       // Validate category exists
@@ -95,15 +124,6 @@ class JobPostController {
 
       if (!categoryExists) {
         errors.category_id = 'Selected category does not exist';
-      }
-
-      // Validate city exists
-      const cityExists = await prisma.city.findUnique({
-        where: { id: parseInt(city_id) }
-      });
-
-      if (!cityExists) {
-        errors.city_id = 'Selected city does not exist';
       }
 
       if (Object.keys(errors).length > 0) {
@@ -117,12 +137,38 @@ class JobPostController {
       // Create job post
       const jobPostData = {
         title,
-        slug,
-        category_id: parseInt(category_id),
-        city_id: parseInt(city_id),
-        regular_price: price,
-        job_type: job_type || 'Hourly',
+        slug: jobSlug,
+        summary,
         description,
+        deliverables,
+        category_id: parseInt(category_id),
+        specialty,
+        city_id: city_id ? parseInt(city_id) : null,
+        
+        // Budget fields
+        budget_type: budget_type || 'hourly',
+        hourly_rate_from: hourly_rate_from ? parseFloat(hourly_rate_from) : null,
+        hourly_rate_to: hourly_rate_to ? parseFloat(hourly_rate_to) : null,
+        fixed_price: fixed_price ? parseFloat(fixed_price) : null,
+        
+        // Project details
+        project_type: project_type || 'one-time',
+        duration,
+        hours_per_week,
+        job_size,
+        freelancers_needed: freelancers_needed ? parseInt(freelancers_needed) : 1,
+        
+        // Experience and skills (stored as JSON)
+        experience_level: experience_level || 'intermediate',
+        mandatory_skills: mandatory_skills ? JSON.parse(mandatory_skills) : [],
+        nice_to_have_skills: nice_to_have_skills ? JSON.parse(nice_to_have_skills) : [],
+        tools: tools ? JSON.parse(tools) : [],
+        languages: languages ? JSON.parse(languages) : [],
+        
+        // Legacy fields (for backward compatibility)
+        regular_price: fixed_price ? parseFloat(fixed_price) : (hourly_rate_to ? parseFloat(hourly_rate_to) : null),
+        job_type: budget_type === 'hourly' ? 'Hourly' : 'Fixed',
+        
         buyer_id: userId,
         status: 'active',
         approved_by_admin: 'pending'
@@ -133,19 +179,26 @@ class JobPostController {
         jobPostData.thumb_image = req.file.filename;
       }
 
+      // Create the include object dynamically
+      const includeOptions = {
+        category: {
+          select: { id: true, name: true }
+        },
+        buyer: {
+          select: { id: true, name: true, email: true }
+        }
+      };
+
+      // Only include city if city_id is provided
+      if (city_id) {
+        includeOptions.city = {
+          select: { id: true, name: true }
+        };
+      }
+
       const jobPost = await prisma.jobPost.create({
         data: jobPostData,
-        include: {
-          category: {
-            select: { id: true, name: true }
-          },
-          city: {
-            select: { id: true, name: true }
-          },
-          buyer: {
-            select: { id: true, name: true, email: true }
-          }
-        }
+        include: includeOptions
       });
 
       res.status(201).json({
