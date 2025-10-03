@@ -19,8 +19,7 @@ export default function MyJobs() {
   };
 
   const handleViewJob = (jobId) => {
-    // For now, we can navigate to the edit page or create a separate view page later
-    navigate(`/client/PostJob/edit/${jobId}`);
+    navigate(`/client/job/${jobId}`);
   };  useEffect(() => {
     fetchJobPosts();
   }, []);
@@ -134,7 +133,7 @@ export default function MyJobs() {
           ) : (
             <div className="jobs-grid">
               {jobPosts.map((job) => (
-                <div key={job.id} className="job-card">
+                <div key={job.id} className="job-card" onClick={() => handleViewJob(job.id)}>
                   {/* Thumbnail Section */}
                   <div className="job-thumbnail">
                     {job.thumb_image ? (
@@ -151,7 +150,10 @@ export default function MyJobs() {
                       <button 
                         className="action-btn edit-btn" 
                         title="Edit Job"
-                        onClick={() => handleEditJob(job.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditJob(job.id);
+                        }}
                       >
                         ✏️
                       </button>
