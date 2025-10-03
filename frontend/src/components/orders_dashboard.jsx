@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardSidebar from "../components/Dashboard_sidebar";
 import "../styles/orders_dashboard.css"; // table styles only
+import "../styles/job_cards.css"; // New card-based layout
 
 export default function Orders() {
   const navigate = useNavigate();
@@ -124,75 +125,79 @@ export default function Orders() {
           </button>
         </div>
 
-        <section className="orders-container">
+        <section className="jobs-container">
           {jobPosts.length === 0 ? (
-            <div style={{padding: '2rem', textAlign: 'center'}}>
-              <p>No job posts found. <a href="/client/PostJob">Post your first job</a></p>
+            <div className="empty-state">
+              <div className="empty-icon">📋</div>
+              <h3>No job posts yet</h3>
+              <p>Start by posting your first job to find the perfect freelancer</p>
+              <button className="post-job-btn" onClick={handlePostJob}>
+                Post Your First Job
+              </button>
             </div>
           ) : (
-            <table className="orders-table">
-              <thead>
-                <tr>
-                  <th>Job ID</th>
-                  <th>Job Title</th>
-                  <th>Category</th>
-                  <th>City</th>
-                  <th>Posted Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Applications</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {jobPosts.map((job) => (
-                  <tr key={job.id}>
-                    <td>#{job.id}</td>
-                    <td className="product-cell">
-                      {job.thumb_image && (
-                        <img 
-                          src={`/uploads/job-thumbnails/${job.thumb_image}`} 
-                          alt={job.title}
-                          style={{width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px'}}
-                        />
-                      )}
-                      <span className="product-name">{job.title}</span>
-                    </td>
-                    <td>{job.category?.name || 'N/A'}</td>
-                    <td>{job.city?.name || 'N/A'}</td>
-                    <td>{formatDate(job.created_at)}</td>
-                    <td>${job.regular_price}</td>
-                    <td>
-                      <span className={`status ${getStatusClass(job.approved_by_admin)}`}>
-                        {getStatusDisplay(job.approved_by_admin)}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="applications-count">
-                        {job._count?.applications || 0}
-                      </span>
-                    </td>
-                    <td className="action-cell">
+            <div className="jobs-grid">
+              {jobPosts.map((job) => (
+                <div key={job.id} className="job-card">
+                  {/* Thumbnail Section */}
+                  <div className="job-thumbnail">
+                    {job.thumb_image ? (
+                      <img 
+                        src={`/uploads/job-thumbnails/${job.thumb_image}`} 
+                        alt={job.title}
+                      />
+                    ) : (
+                      <div className="placeholder-thumbnail">
+                        <span>📋</span>
+                      </div>
+                    )}
+                    <div className="job-actions">
                       <button 
-                        className="view-btn" 
-                        title="View Details"
-                        onClick={() => handleViewJob(job.id)}
-                      >
-                        👁
-                      </button>
-                      <button 
-                        className="edit-btn" 
+                        className="action-btn edit-btn" 
                         title="Edit Job"
                         onClick={() => handleEditJob(job.id)}
                       >
                         ✏️
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+
+                  {/* Job Info Section */}
+                  <div className="job-info">
+                    <div className="job-header">
+                      <h3 className="job-title">{job.title}</h3>
+                      <div className="job-meta">
+                        <span className="job-category">{job.category?.name || 'General'}</span>
+                        {job.city && <span className="job-location">📍 {job.city.name}</span>}
+                      </div>
+                    </div>
+
+                    <div className="job-stats">
+                      <div className="stat-item">
+                        <span className="stat-label">Price:</span>
+                        <span className="stat-value price">${job.regular_price || job.fixed_price || 'TBD'}</span>
+                      </div>
+                      
+                      <div className="stat-item">
+                        <span className="stat-label">Applications:</span>
+                        <span className="stat-value applications">
+                          {job._count?.applications || 0}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="job-footer">
+                      <div className="job-date">
+                        Posted: {formatDate(job.created_at)}
+                      </div>
+                      <div className={`job-status status-${getStatusClass(job.approved_by_admin)}`}>
+                        {getStatusDisplay(job.approved_by_admin)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </section>
       </main>
