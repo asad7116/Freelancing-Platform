@@ -11,6 +11,15 @@ export default function MyJobs() {
 
   const handlePostJob = () => {
     navigate('/client/PostJob');
+  };
+
+  const handleEditJob = (jobId) => {
+    navigate(`/client/PostJob/edit/${jobId}`);
+  };
+
+  const handleViewJob = (jobId) => {
+    // For now, we can navigate to the edit page or create a separate view page later
+    navigate(`/client/PostJob/edit/${jobId}`);
   };  useEffect(() => {
     fetchJobPosts();
   }, []);
@@ -154,8 +163,20 @@ export default function MyJobs() {
                       <span className="mj-pill">{job._count?.applications || 0}</span>
                     </td>
                     <td className="td-action">
-                      <button className="mj-icon-btn" title="Edit">🖊️</button>
-                      <button className="mj-icon-btn" title="View">👁️</button>
+                      <button 
+                        className="mj-icon-btn" 
+                        title="Edit"
+                        onClick={() => handleEditJob(job.id)}
+                      >
+                        🖊️
+                      </button>
+                      <button 
+                        className="mj-icon-btn" 
+                        title="View"
+                        onClick={() => handleViewJob(job.id)}
+                      >
+                        👁️
+                      </button>
                     </td>
                   </tr>
                 ))}

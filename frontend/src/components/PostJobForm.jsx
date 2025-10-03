@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/post_job.css';
 
 const PostJobForm = () => {
+  const { jobId } = useParams();
+  const navigate = useNavigate();
+  const isEditMode = Boolean(jobId);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState([]);
@@ -48,7 +52,12 @@ const PostJobForm = () => {
   useEffect(() => {
     fetchCategories();
     fetchCities();
-  }, []);
+    
+    // If in edit mode, fetch the job data
+    if (isEditMode && jobId) {
+      fetchJobData(jobId);
+    }
+  }, [jobId, isEditMode]);
 
   const fetchCategories = async () => {
     try {
@@ -79,6 +88,44 @@ const PostJobForm = () => {
       }
     } catch (error) {
       console.error('Error fetching cities:', error);
+    }
+  };
+
+  const fetchJobData = async (jobId) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/job-posts/${jobId}`, {
+        credentials: 'include'
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        const job = data.data;
+        setFormData({
+          title: job.title || '',
+          slug: job.slug || '',
+          category_id: job.category_id || '',
+          city_id: job.city_id || '',
+          regular_price: job.regular_price || '',
+          job_type: job.job_type || 'Hourly',
+          description: job.description || '',
+          thumb_image: null // Don't prefill file input
+        });
+        
+        // Set image preview if there's an existing image
+        if (job.thumb_image) {
+          setImagePreview(`/uploads/job-thumbnails/${job.thumb_image}`);
+        }
+      } else {
+        alert('Failed to load job data');
+        navigate('/client/Orders');
+      }
+    } catch (error) {
+      console.error('Error fetching job data:', error);
+      alert('Error loading job data');
+      navigate('/client/Orders');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -183,8 +230,11 @@ const PostJobForm = () => {
 
       console.log('Submitting job post data:', Object.fromEntries(submitData)); // Debug log
 
-      const response = await fetch('/api/job-posts', {
-        method: 'POST',
+      const url = isEditMode ? `/api/job-posts/${jobId}` : '/api/job-posts';
+      const method = isEditMode ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
         credentials: 'include', // This sends cookies automatically
         body: submitData
       });
@@ -194,19 +244,25 @@ const PostJobForm = () => {
       console.log('Response data:', result); // Debug log
 
       if (response.ok) {
-        alert('Job posted successfully!');
-        // Reset form
-        setFormData({
-          title: '',
-          slug: '',
-          category_id: '',
-          city_id: '',
-          regular_price: '',
-          job_type: 'Hourly',
-          description: '',
-          thumb_image: null
-        });
-        setImagePreview(null);
+        alert(isEditMode ? 'Job updated successfully!' : 'Job posted successfully!');
+        
+        if (isEditMode) {
+          // Navigate back to orders page after edit
+          navigate('/client/Orders');
+        } else {
+          // Reset form for new job
+          setFormData({
+            title: '',
+            slug: '',
+            category_id: '',
+            city_id: '',
+            regular_price: '',
+            job_type: 'Hourly',
+            description: '',
+            thumb_image: null
+          });
+          setImagePreview(null);
+        }
       } else {
         if (result.errors) {
           setErrors(result.errors);
@@ -227,13 +283,13 @@ const PostJobForm = () => {
       <div className="job-post-container">
         {/* Page Header */}
         <div className="page-header">
-          <h3 className="page-title">Post a Job</h3>
+          <h3 className="page-title">{isEditMode ? 'Edit Job' : 'Post a Job'}</h3>
           <nav className="breadcrumb-nav">
             <span className="breadcrumb-item">Dashboard</span>
             <svg className="breadcrumb-separator" width="5" height="11" viewBox="0 0 5 11">
               <path d="M1 10L4 5.5L1 1" stroke="#5B5B5B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="breadcrumb-item active">Post a Job</span>
+            <span className="breadcrumb-item active">{isEditMode ? 'Edit Job' : 'Post a Job'}</span>
           </nav>
         </div>
 
@@ -421,7 +477,7 @@ const PostJobForm = () => {
                     className="submit-btn"
                     disabled={loading}
                   >
-                    {loading ? 'Submitting...' : 'Submit Now'}
+                    {loading ? (isEditMode ? 'Updating...' : 'Submitting...') : (isEditMode ? 'Update Job' : 'Submit Now')}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="14"

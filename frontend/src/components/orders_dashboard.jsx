@@ -67,6 +67,15 @@ export default function Orders() {
     navigate('/client/PostJob');
   };
 
+  const handleEditJob = (jobId) => {
+    navigate(`/client/PostJob/edit/${jobId}`);
+  };
+
+  const handleViewJob = (jobId) => {
+    // For now, we can navigate to the edit page or create a separate view page later
+    navigate(`/client/PostJob/edit/${jobId}`);
+  };
+
   if (loading) {
     return (
       <div className="dz-with-shell">
@@ -165,8 +174,20 @@ export default function Orders() {
                       </span>
                     </td>
                     <td className="action-cell">
-                      <button className="view-btn" title="View Details">👁</button>
-                      <button className="edit-btn" title="Edit Job">✏️</button>
+                      <button 
+                        className="view-btn" 
+                        title="View Details"
+                        onClick={() => handleViewJob(job.id)}
+                      >
+                        👁
+                      </button>
+                      <button 
+                        className="edit-btn" 
+                        title="Edit Job"
+                        onClick={() => handleEditJob(job.id)}
+                      >
+                        ✏️
+                      </button>
                     </td>
                   </tr>
                 ))}
