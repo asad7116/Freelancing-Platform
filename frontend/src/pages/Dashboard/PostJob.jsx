@@ -1,8 +1,8 @@
 import React from 'react';
-import PostJobForm from '../../components/PostJobForm';
+import PostJobFormEnhanced from '../../components/PostJobFormEnhanced';
 
 const PostJob = () => {
-  return <PostJobForm />;
+  return <PostJobFormEnhanced />;
 };
 
 export default PostJob;
