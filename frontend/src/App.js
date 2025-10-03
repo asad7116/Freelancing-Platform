@@ -59,6 +59,7 @@ export default function App() {
           <Route path="overview" element={<ClientOverview />} />{" "}
           {/* <-- this one */}
           <Route path="PostJob" element={<PostJob/>} />
+          <Route path="PostJob/edit/:jobId" element={<PostJob/>} />
           <Route path="MyProposals" element={<MyProposals/>} />
           <Route path="Orders" element={<MyJobs />} />
           <Route path="Messages" element={<Messages/>}/>
