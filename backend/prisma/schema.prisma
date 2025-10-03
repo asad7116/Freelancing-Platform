@@ -19,8 +19,15 @@ model User {
   email        String   @unique
   passwordHash String
   role         Role     @default(client)
+  avatar       String?
+  city_id      Int?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  // Relations
+  city             City?                @relation(fields: [city_id], references: [id])
+  job_posts        JobPost[]            @relation("BuyerJobPosts")
+  job_applications JobApplication[]     @relation("FreelancerApplications")
 }
 
 model Gig {
@@ -35,4 +42,81 @@ model Gig {
   revisions       Int     // Changed to Int
   additionalNotes String?
   createdAt       DateTime @default(now())
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  description String?
+  image       String?
+  status      String   @default("active") // active, inactive
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relations
+  job_posts   JobPost[]
+
+  @@map("categories")
+}
+
+model City {
+  id         Int      @id @default(autoincrement())
+  name       String
+  country    String?
+  status     String   @default("active") // active, inactive
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Relations
+  job_posts  JobPost[]
+  users      User[]
+
+  @@unique([name, country])
+  @@map("cities")
+}
+
+model JobPost {
+  id                Int      @id @default(autoincrement())
+  title             String
+  slug              String   @unique
+  description       String   @db.Text
+  category_id       Int
+  city_id           Int
+  regular_price     Decimal  @db.Decimal(10, 2)
+  job_type          String   @default("Hourly") // Hourly, Daily, Monthly, Yearly
+  thumb_image       String?
+  buyer_id          String   // Changed to String to match User.id
+  status            String   @default("active") // active, inactive, completed
+  approved_by_admin String   @default("pending") // pending, approved, rejected
+  featured          Boolean  @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  // Relations
+  category      Category         @relation(fields: [category_id], references: [id])
+  city          City             @relation(fields: [city_id], references: [id])
+  buyer         User             @relation("BuyerJobPosts", fields: [buyer_id], references: [id])
+  applications  JobApplication[]
+
+  @@map("job_posts")
+}
+
+model JobApplication {
+  id              Int      @id @default(autoincrement())
+  job_post_id     Int
+  freelancer_id   String   // Changed to String to match User.id
+  cover_letter    String   @db.Text
+  proposed_price  Decimal  @db.Decimal(10, 2)
+  delivery_time   Int      // in days
+  status          String   @default("pending") // pending, approved, rejected, withdrawn
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  job_post        JobPost  @relation(fields: [job_post_id], references: [id], onDelete: Cascade)
+  freelancer      User     @relation("FreelancerApplications", fields: [freelancer_id], references: [id])
+
+  @@unique([job_post_id, freelancer_id]) // Prevent duplicate applications
+  @@map("job_applications")
 }
