@@ -49,6 +49,10 @@ const PostJobFormEnhanced = () => {
     freelancers_needed: 1
   });
   
+  // Thumbnail upload state
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  
   const [errors, setErrors] = useState({});
 
   // Experience level options
@@ -162,6 +166,11 @@ const PostJobFormEnhanced = () => {
           job_size: job.job_size || '',
           freelancers_needed: job.freelancers_needed || 1
         });
+        
+        // Set existing thumbnail if available
+        if (job.thumb_image) {
+          setThumbnailPreview(`/uploads/job-thumbnails/${job.thumb_image}`);
+        }
       } else {
         alert('Failed to load job data');
         navigate('/client/Orders');
@@ -249,31 +258,70 @@ const PostJobFormEnhanced = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
+  // Handle thumbnail file selection
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Please select a valid image file (JPEG, PNG, GIF, WebP)');
+        return;
+      }
+      
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Please select an image smaller than 5MB');
+        return;
+      }
+      
+      setThumbnailFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setThumbnailPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Remove thumbnail
+  const removeThumbnail = () => {
+    setThumbnailFile(null);
+    setThumbnailPreview(null);
+  };
+
   const handleSubmit = async () => {
     if (!validateStep(currentStep)) return;
     
     setLoading(true);
     
     try {
-      const submitData = {
-        ...formData,
-        // Convert arrays to JSON for storage
-        mandatory_skills: JSON.stringify(formData.mandatory_skills),
-        nice_to_have_skills: JSON.stringify(formData.nice_to_have_skills),
-        tools: JSON.stringify(formData.tools),
-        languages: JSON.stringify(formData.languages)
-      };
+      // Use FormData for file upload
+      const formDataObj = new FormData();
+      
+      // Add all form fields
+      Object.keys(formData).forEach(key => {
+        if (Array.isArray(formData[key])) {
+          formDataObj.append(key, JSON.stringify(formData[key]));
+        } else {
+          formDataObj.append(key, formData[key]);
+        }
+      });
+      
+      // Add thumbnail file if selected
+      if (thumbnailFile) {
+        formDataObj.append('thumb_image', thumbnailFile);
+      }
 
       const url = isEditMode ? `/api/job-posts/${jobId}` : '/api/job-posts';
       const method = isEditMode ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
         credentials: 'include',
-        body: JSON.stringify(submitData)
+        body: formDataObj // Don't set Content-Type header for FormData
       });
 
       const result = await response.json();
@@ -407,6 +455,38 @@ const PostJobFormEnhanced = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+            </div>
+
+            {/* Thumbnail Upload Section */}
+            <div className="form-group">
+              <label>Job Thumbnail</label>
+              <div className="thumbnail-upload-container">
+                {!thumbnailPreview ? (
+                  <div className="thumbnail-upload-area">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbnailChange}
+                      id="thumbnail-upload"
+                      style={{ display: 'none' }}
+                    />
+                    <label htmlFor="thumbnail-upload" className="thumbnail-upload-button">
+                      <div className="upload-icon">📷</div>
+                      <div className="upload-text">
+                        <div>Choose Thumbnail</div>
+                        <div className="upload-subtext">JPG, PNG, GIF, WebP (Max 5MB)</div>
+                      </div>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="thumbnail-preview">
+                    <img src={thumbnailPreview} alt="Job thumbnail" />
+                    <button type="button" className="remove-thumbnail" onClick={removeThumbnail}>
+                      ×
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

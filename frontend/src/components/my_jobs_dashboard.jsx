@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardSidebar from "./Dashboard_sidebar";
 import "../styles/my_jobs_dashboard.css";
+import "../styles/job_cards.css"; // New card-based layout
 
 export default function MyJobs() {
   const navigate = useNavigate();
@@ -58,14 +59,14 @@ export default function MyJobs() {
   };
 
   const getStatusClass = (approved) => {
-    if (approved === null) return 'pending';
-    if (approved === true) return 'approved';
-    return 'rejected';
+    if (approved === 'pending' || approved === null) return 'pending';
+    if (approved === 'approved' || approved === true) return 'completed';
+    return 'revision';
   };
 
   const getStatusDisplay = (approved) => {
-    if (approved === null) return 'Pending Approval';
-    if (approved === true) return 'Approved';
+    if (approved === 'pending' || approved === null) return 'Pending';
+    if (approved === 'approved' || approved === true) return 'Approved';
     return 'Rejected';
   };
 
@@ -120,68 +121,78 @@ export default function MyJobs() {
           <button className="mj-post-btn" onClick={handlePostJob}>Post a Job</button>
         </div>
 
-        <section className="mj-card">
+        <section className="jobs-container">
           {jobPosts.length === 0 ? (
-            <div style={{padding: '2rem', textAlign: 'center'}}>
-              <p>No job posts found. Click "Post a Job" to create your first job post.</p>
+            <div className="empty-state">
+              <div className="empty-icon">📋</div>
+              <h3>No job posts yet</h3>
+              <p>Start by posting your first job to find the perfect freelancer</p>
+              <button className="mj-post-btn" onClick={handlePostJob}>
+                Post Your First Job
+              </button>
             </div>
           ) : (
-            <table className="mj-table">
-              <thead>
-                <tr>
-                  <th className="th-project">Project Name</th>
-                  <th className="th-category">Category</th>
-                  <th className="th-amount">Amount</th>
-                  <th className="th-status">Status</th>
-                  <th className="th-prop">Applications</th>
-                  <th className="th-action">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobPosts.map((job) => (
-                  <tr key={job.id}>
-                    <td className="td-project">
-                      {job.thumb_image ? (
-                        <img 
-                          src={`/uploads/job-thumbnails/${job.thumb_image}`} 
-                          alt={job.title} 
-                          className="mj-logo" 
-                        />
-                      ) : (
-                        <div className="mj-logo mj-logo-placeholder">📄</div>
-                      )}
-                      <a className="mj-title" href="#!">{job.title}</a>
-                    </td>
-                    <td className="td-category">{job.category?.name || 'N/A'}</td>
-                    <td className="td-amount">${parseFloat(job.regular_price).toFixed(2)}</td>
-                    <td className="td-status">
-                      <span className={`mj-status ${getStatusClass(job.approved_by_admin)}`}>
-                        {getStatusDisplay(job.approved_by_admin)}
-                      </span>
-                    </td>
-                    <td className="td-prop">
-                      <span className="mj-pill">{job._count?.applications || 0}</span>
-                    </td>
-                    <td className="td-action">
+            <div className="jobs-grid">
+              {jobPosts.map((job) => (
+                <div key={job.id} className="job-card">
+                  {/* Thumbnail Section */}
+                  <div className="job-thumbnail">
+                    {job.thumb_image ? (
+                      <img 
+                        src={`/uploads/job-thumbnails/${job.thumb_image}`} 
+                        alt={job.title}
+                      />
+                    ) : (
+                      <div className="placeholder-thumbnail">
+                        <span>📋</span>
+                      </div>
+                    )}
+                    <div className="job-actions">
                       <button 
-                        className="mj-icon-btn" 
-                        title="Edit"
+                        className="action-btn edit-btn" 
+                        title="Edit Job"
                         onClick={() => handleEditJob(job.id)}
                       >
-                        🖊️
+                        ✏️
                       </button>
-                      <button 
-                        className="mj-icon-btn" 
-                        title="View"
-                        onClick={() => handleViewJob(job.id)}
-                      >
-                        👁️
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+
+                  {/* Job Info Section */}
+                  <div className="job-info">
+                    <div className="job-header">
+                      <h3 className="job-title">{job.title}</h3>
+                      <div className="job-meta">
+                        <span className="job-category">{job.category?.name || 'General'}</span>
+                      </div>
+                    </div>
+
+                    <div className="job-stats">
+                      <div className="stat-item">
+                        <span className="stat-label">Price:</span>
+                        <span className="stat-value price">${parseFloat(job.regular_price || job.fixed_price || 0).toFixed(2)}</span>
+                      </div>
+                      
+                      <div className="stat-item">
+                        <span className="stat-label">Applications:</span>
+                        <span className="stat-value applications">
+                          {job._count?.applications || 0}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="job-footer">
+                      <div className="job-date">
+                        Posted: {formatDate(job.created_at)}
+                      </div>
+                      <div className={`job-status status-${getStatusClass(job.approved_by_admin)}`}>
+                        {getStatusDisplay(job.approved_by_admin)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </section>
       </main>
