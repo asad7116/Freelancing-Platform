@@ -21,5 +21,16 @@ export default function RequireRole({ role, children }) {
   // Allow admin to view both spaces (optional)
   const allowed = userRole === role || userRole === "admin";
 
-  return allowed ? children : <Navigate to="/" replace />;
+  if (!allowed) {
+    // Redirect to appropriate dashboard based on user role
+    if (userRole === "client") {
+      return <Navigate to="/client" replace />;
+    } else if (userRole === "freelancer") {
+      return <Navigate to="/freelancer" replace />;
+    } else {
+      return <Navigate to="/" replace />;
+    }
+  }
+
+  return children;
 }

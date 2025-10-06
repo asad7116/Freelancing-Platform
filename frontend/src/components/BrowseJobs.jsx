@@ -134,8 +134,8 @@ export default function BrowseJobs() {
   }, [filterAndSortJobs]);
 
   const handleJobClick = (jobId) => {
-    // Navigate to job details page (client job detail route)
-    navigate(`/client/job/${jobId}`);
+    // Navigate to job details page (freelancer job detail route)
+    navigate(`/freelancer/job/${jobId}`);
   };
 
   const handleApplyClick = (e, jobId) => {

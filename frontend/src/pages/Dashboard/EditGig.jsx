@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, X } from "lucide-react";
-import "../../styles/CreateGig.css";
+import { ArrowLeft } from "lucide-react";
+import "../../styles/CreateGig.css"; // Use the same CSS as CreateGig
 
 export default function EditGig() {
   const { gigId } = useParams();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     gigTitle: "",
     category: "",
@@ -65,11 +65,13 @@ export default function EditGig() {
           existingGallery: gig.galleryImages || []
         });
       } else {
-        setError(data.message || 'Failed to fetch gig data');
+        alert('Failed to fetch gig data');
+        navigate('/freelancer/Gigs');
       }
     } catch (error) {
       console.error('Error fetching gig data:', error);
-      setError('Error fetching gig data');
+      alert('Error fetching gig data');
+      navigate('/freelancer/Gigs');
     } finally {
       setLoading(false);
     }
@@ -100,7 +102,7 @@ export default function EditGig() {
   };
 
   const nextStep = () => {
-    if (currentStep < 3) {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -112,12 +114,10 @@ export default function EditGig() {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to previous page
+    navigate('/freelancer/Gigs');
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!formData.gigTitle || !formData.category || !formData.shortDescription || 
         !formData.price || !formData.deliveryTime || !formData.revisions) {
       alert("Please fill in all required fields.");
@@ -202,45 +202,41 @@ export default function EditGig() {
 
   return (
     <div className="create-gig-container">
-      <div className="create-gig-header">
-        <button onClick={handleCancel} className="back-btn">
-          <ArrowLeft size={18} />
-          Cancel
-        </button>
-        <h1>Edit Gig</h1>
-        <div className="header-actions">
-          <button onClick={handleSubmit} className="save-btn" disabled={saving}>
-            <Save size={16} />
-            {saving ? 'Saving...' : 'Save Changes'}
-          </button>
+      <div className="create-gig-wrapper">
+        <div className="progress-container">
+          <h1 style={{textAlign: 'center', marginBottom: '2rem', color: '#28a745', fontSize: '2rem', fontWeight: '700'}}>Edit Gig</h1>
+          
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${(currentStep / 4) * 100}%` }}
+            ></div>
+          </div>
+          
+          <div className="progress-steps">
+            <div className={`step ${currentStep >= 1 ? "active" : ""}`}>
+              <span>1</span>
+              <p>Basic Info</p>
+            </div>
+            <div className={`step ${currentStep >= 2 ? "active" : ""}`}>
+              <span>2</span>
+              <p>Images</p>
+            </div>
+            <div className={`step ${currentStep >= 3 ? "active" : ""}`}>
+              <span>3</span>
+              <p>Pricing</p>
+            </div>
+            <div className={`step ${currentStep >= 4 ? "active" : ""}`}>
+              <span>4</span>
+              <p>Publish</p>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {error && (
-        <div className="error-message">
-          <X size={16} />
-          {error}
-        </div>
-      )}
-
-      <div className="progress-bar-container">
-        <div className="progress-bar">
-          <div 
-            className="progress-fill" 
-            style={{ width: `${(currentStep / 3) * 100}%` }}
-          ></div>
-        </div>
-        <div className="step-indicators">
-          <span className={currentStep >= 1 ? "active" : ""}>1. Basic Info</span>
-          <span className={currentStep >= 2 ? "active" : ""}>2. Media</span>
-          <span className={currentStep >= 3 ? "active" : ""}>3. Pricing</span>
-        </div>
-      </div>
-
-      <form className="create-gig-form" onSubmit={handleSubmit}>
+      <div className="form-container">
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
-          <div className="form-step">
+          <div className="step-content">
             <h2>Basic Information</h2>
             
             <div className="form-group">
@@ -287,18 +283,22 @@ export default function EditGig() {
               />
             </div>
 
-            <div className="form-navigation">
-              <button type="button" onClick={nextStep} className="next-btn">
-                Next Step
+            <div className="step-navigation">
+              <button
+                type="button"
+                onClick={nextStep}
+                className="btn btn-primary"
+              >
+                Next
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 2: Media Upload */}
+        {/* Step 2: Images */}
         {currentStep === 2 && (
-          <div className="form-step">
-            <h2>Images & Media</h2>
+          <div className="step-content">
+            <h2>Images</h2>
             
             <div className="form-group">
               <label htmlFor="thumbnailImage">Thumbnail Image</label>
@@ -354,20 +354,28 @@ export default function EditGig() {
               <small>Upload new images to replace the current gallery (optional)</small>
             </div>
 
-            <div className="form-navigation">
-              <button type="button" onClick={prevStep} className="prev-btn">
-                Previous
+            <div className="step-navigation">
+              <button
+                type="button"
+                onClick={prevStep}
+                className="btn btn-secondary"
+              >
+                Back
               </button>
-              <button type="button" onClick={nextStep} className="next-btn">
-                Next Step
+              <button
+                type="button"
+                onClick={nextStep}
+                className="btn btn-primary"
+              >
+                Next
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 3: Pricing & Details */}
+        {/* Step 3: Pricing */}
         {currentStep === 3 && (
-          <div className="form-step">
+          <div className="step-content">
             <h2>Pricing & Delivery</h2>
             
             <div className="form-row">
@@ -439,17 +447,61 @@ export default function EditGig() {
               />
             </div>
 
-            <div className="form-navigation">
-              <button type="button" onClick={prevStep} className="prev-btn">
-                Previous
+            <div className="step-navigation">
+              <button
+                type="button"
+                onClick={prevStep}
+                className="btn btn-secondary"
+              >
+                Back
               </button>
-              <button type="submit" className="submit-btn" disabled={saving}>
-                {saving ? 'Updating...' : 'Update Gig'}
+              <button
+                type="button"
+                onClick={nextStep}
+                className="btn btn-primary"
+              >
+                Next
               </button>
             </div>
           </div>
         )}
-      </form>
+
+        {/* Step 4: Publish */}
+        {currentStep === 4 && (
+          <div className="step-content">
+            <h2>Update Gig</h2>
+            <p>Review your gig details and click "Update Gig" to save your changes.</p>
+            
+            <div className="gig-preview">
+              <h3>{formData.gigTitle}</h3>
+              <p><strong>Category:</strong> {formData.category}</p>
+              <p><strong>Description:</strong> {formData.shortDescription}</p>
+              <p><strong>Price:</strong> ${formData.price}</p>
+              <p><strong>Delivery:</strong> {formData.deliveryTime} days</p>
+              <p><strong>Revisions:</strong> {formData.revisions === "-1" ? "Unlimited" : formData.revisions}</p>
+            </div>
+
+            <div className="step-navigation">
+              <button
+                type="button"
+                onClick={prevStep}
+                className="btn btn-secondary"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="btn btn-primary"
+                disabled={saving}
+              >
+                {saving ? "Updating..." : "Update Gig"}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      </div>
     </div>
   );
 }
