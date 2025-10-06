@@ -21,10 +21,6 @@ export default function BrowseGigs() {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    filterAndSortGigs();
-  }, [filterAndSortGigs]);
-
   const fetchGigs = async () => {
     try {
       setLoading(true);
@@ -111,6 +107,10 @@ export default function BrowseGigs() {
 
     setFilteredGigs(filtered);
   }, [gigs, searchTerm, selectedCategory, priceRange, sortBy]);
+
+  useEffect(() => {
+    filterAndSortGigs();
+  }, [filterAndSortGigs]);
 
   const handleGigClick = (gigId) => {
     // Navigate to gig details page

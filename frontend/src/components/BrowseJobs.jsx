@@ -23,10 +23,6 @@ export default function BrowseJobs() {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    filterAndSortJobs();
-  }, [filterAndSortJobs]);
-
   const fetchJobs = async () => {
     try {
       setLoading(true);
@@ -131,6 +127,10 @@ export default function BrowseJobs() {
 
     setFilteredJobs(filtered);
   }, [jobs, searchTerm, selectedCategory, selectedJobType, selectedExperience, priceRange, sortBy]);
+
+  useEffect(() => {
+    filterAndSortJobs();
+  }, [filterAndSortJobs]);
 
   const handleJobClick = (jobId) => {
     // Navigate to job details page
