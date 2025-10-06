@@ -26,6 +26,17 @@ export default function GigsDashboard() {
     navigate('/freelancer/CreateGig'); // Use navigate to redirect to the CreateGig page
   };
 
+  // Navigate to gig details page
+  const handleGigClick = (gigId) => {
+    navigate(`/freelancer/gig/${gigId}`);
+  };
+
+  // Navigate to edit gig page
+  const handleEditGig = (e, gigId) => {
+    e.stopPropagation(); // Prevent card click when edit button is clicked
+    navigate(`/freelancer/edit-gig/${gigId}`);
+  };
+
   return (
     <div className="dz-with-shell">
       {/* Shared Sidebar + Topbar */}
@@ -51,7 +62,12 @@ export default function GigsDashboard() {
             <p>No gigs found.</p> // Display message when no gigs are available
           ) : (
             gigs.map((gig) => (
-              <article className="gd-card" key={gig.id}>
+              <article 
+                className="gd-card" 
+                key={gig.id}
+                onClick={() => handleGigClick(gig.id)}
+                style={{ cursor: 'pointer' }}
+              >
                 {/* Ensure the correct image path */}
                 <img
                   src={`http://localhost:4000/uploads/${gig.thumbnailImage}`}
@@ -83,7 +99,12 @@ export default function GigsDashboard() {
                       Status:
                       <input type="checkbox" checked={gig.active} readOnly />
                     </label>
-                    <button className="gd-edit">Edit Gig</button>
+                    <button 
+                      className="gd-edit"
+                      onClick={(e) => handleEditGig(e, gig.id)}
+                    >
+                      Edit Gig
+                    </button>
                   </div>
                 </div>
               </article>
