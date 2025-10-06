@@ -2,12 +2,13 @@
 import { NavLink } from "react-router-dom";
 import {
   Home, List, BriefcaseBusiness, ClipboardList, FileText,
-  MessageSquare, Wallet, CreditCard, Images, Star, UserRound
+  MessageSquare, Wallet, CreditCard, Images, Star, UserRound, Search
 } from "lucide-react";
 
 const MENU = {
   client: [
     { to: "overview", label: "Dashboard", icon: Home },
+    { to: "browse-gigs", label: "Browse Gigs", icon: Search },
     { to: "orders",   label: "Orders",    icon: List },
     { to: "messages", label: "Messages",  icon: MessageSquare },
     { to: "billing",  label: "Billing",   icon: CreditCard },
@@ -15,6 +16,7 @@ const MENU = {
   ],
   freelancer: [
     { to: "overview",   label: "Dashboard",  icon: Home },
+    { to: "browse-jobs", label: "Browse Jobs", icon: Search },
     { to: "gigs",       label: "Gigs",       icon: BriefcaseBusiness },
     { to: "orders",     label: "My Orders",  icon: ClipboardList },
     { to: "my-proposals", label: "My Proposals", icon: FileText },
