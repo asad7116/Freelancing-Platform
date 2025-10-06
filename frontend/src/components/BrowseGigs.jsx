@@ -115,8 +115,8 @@ export default function BrowseGigs() {
   }, [filterAndSortGigs]);
 
   const handleGigClick = (gigId) => {
-    // Navigate to gig details page
-    navigate(`/gig/${gigId}`);
+    // Navigate to gig details page (client viewing gig)
+    navigate(`/client/gig/${gigId}`);
   };
 
   const formatDate = (dateString) => {
