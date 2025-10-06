@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/job_detail.css';
 
 const JobDetail = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Determine user role from route or localStorage
+  const userRole = localStorage.getItem("role");
+  const isClient = userRole === "client" || location.pathname.startsWith('/client');
 
   useEffect(() => {
     fetchJobDetails();
@@ -67,7 +72,11 @@ const JobDetail = () => {
   };
 
   const handleGoBack = () => {
-    navigate('/client/Orders');
+    if (isClient) {
+      navigate('/client/Orders'); // Client's My Jobs page
+    } else {
+      navigate('/freelancer/browse-jobs'); // Freelancer's Browse Jobs page
+    }
   };
 
   if (loading) {
@@ -153,9 +162,12 @@ const JobDetail = () => {
                 <span>Posted</span>
               </div>
             </div>
-            <button onClick={handleEdit} className="btn-primary edit-job-btn">
-              ✏️ Edit Job
-            </button>
+            {/* Only show edit button for clients viewing their own job */}
+            {isClient && (
+              <button onClick={handleEdit} className="btn-primary edit-job-btn">
+                ✏️ Edit Job
+              </button>
+            )}
           </div>
         </div>
       </div>
