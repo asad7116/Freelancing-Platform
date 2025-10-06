@@ -1,10 +1,10 @@
 /* CreateGig.css */
 
 .create-gig-container {
-  min-height: 80vh;
+  min-height: 100vh;
   background-color: #f8f9fa;
   padding: 2rem 0;
-  font-family: 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .create-gig-wrapper {
@@ -107,23 +107,29 @@
   margin-bottom: 1.5rem;
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 600;
-  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 0.875rem;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s;
   background-color: #fff;
 }
 
@@ -133,7 +139,6 @@
   outline: none;
   border-color: #28a745;
   box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
-  transform: translateY(-1px);
 }
 
 .form-group textarea {
@@ -223,6 +228,20 @@
 
 .btn:active {
   transform: translateY(0);
+}
+
+/* Step Navigation */
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.step-navigation button:only-child {
+  margin-left: auto;
 }
 
 /* Responsive Design */
