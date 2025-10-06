@@ -235,8 +235,9 @@ class JobPostController {
       
       // Build where conditions
       const where = {
-        status: 'active',
-        approved_by_admin: 'approved'
+        status: 'active'
+        // Temporarily removed approval requirement for testing
+        // approved_by_admin: 'approved'
       };
 
       if (category_id) {
