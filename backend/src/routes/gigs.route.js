@@ -97,14 +97,21 @@ router.post(
 // Route for fetching all gigs
 router.get("/", async (req, res) => {
   try {
-    const gigs = await prisma.gig.findMany();
+    const gigs = await prisma.gig.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
 
     res.status(200).json({
+      success: true,
       gigs,
     });
   } catch (error) {
     console.error("Error fetching gigs:", error);
-    res.status(500).json({ message: "Error fetching gigs", error: error.message });
+    res.status(500).json({ 
+      success: false,
+      message: "Error fetching gigs", 
+      error: error.message 
+    });
   }
 });
 

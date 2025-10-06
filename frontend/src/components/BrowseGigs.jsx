@@ -31,8 +31,10 @@ export default function BrowseGigs() {
       const data = await response.json();
       console.log('Gigs response:', data);
       
-      if (data.success) {
-        setGigs(data.gigs || []);
+      if (data.success !== false) {
+        // Handle both {success: true, gigs: [...]} and {gigs: [...]} formats
+        const gigsArray = data.gigs || data || [];
+        setGigs(gigsArray);
       } else {
         setError(data.message || 'Failed to fetch gigs');
       }

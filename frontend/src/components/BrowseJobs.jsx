@@ -32,11 +32,12 @@ export default function BrowseJobs() {
       
       const data = await response.json();
       console.log('Jobs response:', data);
+      console.log('Response status:', response.status);
       
-      if (data.success) {
+      if (response.ok && data.success) {
         setJobs(data.data || []);
       } else {
-        setError(data.message || 'Failed to fetch jobs');
+        setError(data.message || `Failed to fetch jobs (Status: ${response.status})`);
       }
     } catch (error) {
       console.error('Error fetching jobs:', error);
