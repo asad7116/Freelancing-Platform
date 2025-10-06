@@ -30,6 +30,8 @@ import MyProposals from "./pages/Dashboard/MyProposals";
 import Subscription from "./pages/Dashboard/Subscription";
 import BrowseGigs from "./components/BrowseGigs";
 import BrowseJobs from "./components/BrowseJobs";
+import GigDetail from "./components/GigDetail";
+import EditGig from "./pages/Dashboard/EditGig";
 import Wishlist from "./pages/Dashboard/Wishlist";
 import Profile from "./pages/Dashboard/Profile";
 import CreateGig from "./pages/Dashboard/CreateGig";
@@ -62,6 +64,7 @@ export default function App() {
           <Route path="overview" element={<ClientOverview />} />{" "}
           {/* <-- this one */}
           <Route path="browse-gigs" element={<BrowseGigs />} />
+          <Route path="gig/:gigId" element={<GigDetail />} />
           <Route path="PostJob" element={<PostJob/>} />
           <Route path="PostJob/edit/:jobId" element={<PostJob/>} />
           <Route path="job/:jobId" element={<JobDetail/>} />
@@ -86,6 +89,8 @@ export default function App() {
           <Route path="overview" element={<FreelancerOverview />} />{" "}
           {/* <-- this one */}
           <Route path="browse-jobs" element={<BrowseJobs />} />
+          <Route path="gig/:gigId" element={<GigDetail />} />
+          <Route path="edit-gig/:gigId" element={<EditGig />} />
           <Route path="Gigs" element={<Gigs/>} />
           <Route path="CreateGig" element={<CreateGig/>} />
           <Route path="MyProposals" element={<MyProposals/>} />

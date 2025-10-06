@@ -115,4 +115,98 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Get single gig by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const gig = await prisma.gig.findUnique({
+      where: { id: parseInt(id) }
+    });
+
+    if (!gig) {
+      return res.status(404).json({
+        success: false,
+        message: "Gig not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      gig,
+    });
+  } catch (error) {
+    console.error("Error fetching gig:", error);
+    res.status(500).json({ 
+      success: false,
+      message: "Error fetching gig", 
+      error: error.message 
+    });
+  }
+});
+
+// Update gig by ID
+router.put("/:id", upload.fields([
+  { name: "thumbnailImage", maxCount: 1 },
+  { name: "galleryImages", maxCount: 3 },
+]), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { gigTitle, category, shortDescription, price, deliveryTime, revisions, additionalNotes } = req.body;
+
+    // Check if gig exists
+    const existingGig = await prisma.gig.findUnique({
+      where: { id: parseInt(id) }
+    });
+
+    if (!existingGig) {
+      return res.status(404).json({
+        success: false,
+        message: "Gig not found"
+      });
+    }
+
+    // Prepare update data
+    const updateData = {
+      gigTitle,
+      category,
+      shortDescription,
+      price: parseFloat(price),
+      deliveryTime: parseInt(deliveryTime),
+      revisions: parseInt(revisions),
+      additionalNotes,
+    };
+
+    // Handle file uploads
+    if (req.files) {
+      if (req.files["thumbnailImage"]) {
+        updateData.thumbnailImage = req.files["thumbnailImage"][0].filename;
+      }
+      
+      if (req.files["galleryImages"]) {
+        updateData.galleryImages = req.files["galleryImages"].map((file) => file.filename);
+      }
+    }
+
+    // Update the gig
+    const updatedGig = await prisma.gig.update({
+      where: { id: parseInt(id) },
+      data: updateData
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Gig updated successfully",
+      gig: updatedGig,
+    });
+  } catch (error) {
+    console.error("Error updating gig:", error);
+    res.status(500).json({ 
+      success: false,
+      message: "Error updating gig", 
+      error: error.message 
+    });
+  }
+});
+
 export default router;
