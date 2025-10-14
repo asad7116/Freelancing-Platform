@@ -98,6 +98,11 @@ const PostJobFormEnhanced = () => {
     }
   }, [jobId, isEditMode]);
 
+  // Debug: Log specialties whenever they change
+  useEffect(() => {
+    console.log('Specialties state updated:', specialties);
+  }, [specialties]);
+
   const fetchCategories = async () => {
     try {
       const response = await fetch('/api/categories');
@@ -124,13 +129,20 @@ const PostJobFormEnhanced = () => {
 
   const fetchSpecialties = async (categoryId) => {
     try {
+      console.log('Fetching specialties for category:', categoryId);
       const response = await fetch(`/api/specialties?category_id=${categoryId}`);
       const data = await response.json();
+      console.log('Specialties response:', data);
       if (data.success) {
         setSpecialties(data.data);
+        console.log('Specialties set:', data.data);
+      } else {
+        console.error('Failed to fetch specialties:', data.message);
+        setSpecialties([]);
       }
     } catch (error) {
       console.error('Error fetching specialties:', error);
+      setSpecialties([]);
     }
   };
 
@@ -167,6 +179,11 @@ const PostJobFormEnhanced = () => {
           freelancers_needed: job.freelancers_needed || 1
         });
         
+        // Fetch specialties for the selected category
+        if (job.category_id) {
+          fetchSpecialties(job.category_id);
+        }
+        
         // Set existing thumbnail if available
         if (job.thumb_image) {
           setThumbnailPreview(`/uploads/job-thumbnails/${job.thumb_image}`);
@@ -200,6 +217,9 @@ const PostJobFormEnhanced = () => {
 
     // Fetch specialties when category changes
     if (name === 'category_id' && value) {
+      console.log('Category changed to:', value);
+      setSpecialties([]); // Clear previous specialties
+      setFormData(prev => ({ ...prev, specialty: '' })); // Clear selected specialty
       fetchSpecialties(value);
     }
   };
@@ -447,14 +467,26 @@ const PostJobFormEnhanced = () => {
                 <select
                   value={formData.specialty}
                   onChange={(e) => handleInputChange('specialty', e.target.value)}
+                  disabled={!formData.category_id || specialties.length === 0}
                 >
-                  <option value="">Select a specialty</option>
+                  <option value="" disabled>
+                    {!formData.category_id 
+                      ? 'Select a category first' 
+                      : specialties.length === 0 
+                        ? 'Loading specialties...' 
+                        : 'Select a specialty'}
+                  </option>
                   {specialties.map(specialty => (
                     <option key={specialty.id} value={specialty.name}>
                       {specialty.name}
                     </option>
                   ))}
                 </select>
+                {formData.category_id && specialties.length === 0 && (
+                  <span className="info-message" style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+                    No specialties available for this category
+                  </span>
+                )}
               </div>
             </div>
 

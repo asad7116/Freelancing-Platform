@@ -38,8 +38,8 @@ model Gig {
   thumbnailImage  String?
   galleryImages   String[] // Postgres supports arrays
   price           Float
-  deliveryTime    Int     // Changed to Int
-  revisions       Int     // Changed to Int
+  deliveryTime    Int
+  revisions       Int
   additionalNotes String?
   createdAt       DateTime @default(now())
 }

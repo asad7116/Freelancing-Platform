@@ -114,34 +114,112 @@ async function main() {
     });
   }
 
-  // Create specialties for Web Development category
-  const webDevCategory = await prisma.category.findUnique({
-    where: { slug: 'web-development' }
-  });
+  // Create specialties for all categories
+  const allCategories = await prisma.category.findMany();
+  
+  const specialtiesByCategory = {
+    'web-development': [
+      'Full Stack Development',
+      'Frontend Development',
+      'Backend Development',
+      'E-commerce Development',
+      'API Development',
+      'Database Design',
+      'WordPress Development',
+      'Shopify Development'
+    ],
+    'mobile-app-development': [
+      'iOS Development',
+      'Android Development',
+      'React Native',
+      'Flutter Development',
+      'Cross-platform Development',
+      'Mobile UI/UX',
+      'App Testing'
+    ],
+    'ui-ux-design': [
+      'User Interface Design',
+      'User Experience Design',
+      'Wireframing',
+      'Prototyping',
+      'Usability Testing',
+      'Design Systems',
+      'Mobile App Design',
+      'Web Design'
+    ],
+    'graphic-design': [
+      'Logo Design',
+      'Brand Identity',
+      'Print Design',
+      'Packaging Design',
+      'Illustration',
+      'Typography',
+      'Social Media Graphics',
+      'Marketing Materials'
+    ],
+    'digital-marketing': [
+      'SEO',
+      'Social Media Marketing',
+      'Content Marketing',
+      'Email Marketing',
+      'PPC Advertising',
+      'Influencer Marketing',
+      'Marketing Analytics',
+      'Conversion Optimization'
+    ],
+    'content-writing': [
+      'Blog Writing',
+      'Copywriting',
+      'Technical Writing',
+      'SEO Content',
+      'Product Descriptions',
+      'Social Media Content',
+      'Creative Writing',
+      'Editing & Proofreading'
+    ],
+    'data-analysis': [
+      'Statistical Analysis',
+      'Business Intelligence',
+      'Data Visualization',
+      'Predictive Modeling',
+      'Machine Learning',
+      'Data Mining',
+      'Big Data Analytics',
+      'SQL Analysis'
+    ],
+    'video-editing': [
+      'Video Production',
+      'Motion Graphics',
+      'Color Grading',
+      'Audio Editing',
+      'YouTube Videos',
+      'Corporate Videos',
+      'Wedding Videos',
+      'Promotional Videos'
+    ]
+  };
 
-  if (webDevCategory) {
-    const specialties = [
-      { name: 'Full Stack Development', category_id: webDevCategory.id },
-      { name: 'Frontend Development', category_id: webDevCategory.id },
-      { name: 'Backend Development', category_id: webDevCategory.id },
-      { name: 'E-commerce Development', category_id: webDevCategory.id },
-      { name: 'API Development', category_id: webDevCategory.id },
-      { name: 'Database Design', category_id: webDevCategory.id }
-    ];
-
-    console.log('Creating specialties...');
-    for (const specialty of specialties) {
+  console.log('Creating specialties for all categories...');
+  for (const category of allCategories) {
+    const categorySpecialties = specialtiesByCategory[category.slug] || [];
+    
+    for (const specialtyName of categorySpecialties) {
       await prisma.specialty.upsert({
         where: { 
           name_category_id: { 
-            name: specialty.name, 
-            category_id: specialty.category_id 
+            name: specialtyName, 
+            category_id: category.id 
           } 
         },
         update: {},
-        create: specialty
+        create: {
+          name: specialtyName,
+          category_id: category.id,
+          status: 'active'
+        }
       });
     }
+    console.log(`Created ${categorySpecialties.length} specialties for ${category.name}`);
   }
 
   console.log('Seed data created successfully!');
