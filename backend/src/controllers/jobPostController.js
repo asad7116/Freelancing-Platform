@@ -429,13 +429,39 @@ class JobPostController {
       const { id } = req.params;
       const userId = req.user.id;
       const {
+        // Basic info
         title,
-        slug,
+        summary,
+        description,
+        deliverables,
         category_id,
+        specialty,
+        
+        // Budget
+        budget_type,
+        hourly_rate_from,
+        hourly_rate_to,
+        fixed_price,
+        
+        // Project details
+        project_type,
+        duration,
+        hours_per_week,
+        job_size,
+        freelancers_needed,
+        
+        // Experience and skills
+        experience_level,
+        mandatory_skills,
+        nice_to_have_skills,
+        tools,
+        languages,
+        
+        // Legacy fields (for backward compatibility)
+        slug,
         city_id,
         regular_price,
-        job_type,
-        description
+        job_type
       } = req.body;
 
       // Check if job post exists and belongs to user
@@ -457,23 +483,18 @@ class JobPostController {
         });
       }
 
-      // Validation (similar to create)
+      // Validation
       const errors = {};
       
       if (title && !title.trim()) errors.title = 'Job title cannot be empty';
-      if (slug && !slug.trim()) errors.slug = 'Slug cannot be empty';
-      if (regular_price && (isNaN(parseFloat(regular_price)) || parseFloat(regular_price) <= 0)) {
-        errors.regular_price = 'Price must be a valid positive number';
-      }
-
-      // Check if slug already exists (excluding current post)
-      if (slug && slug !== existingJobPost.slug) {
-        const existingSlug = await prisma.jobPost.findUnique({
-          where: { slug }
-        });
-
-        if (existingSlug) {
-          errors.slug = 'Slug already exists';
+      if (description && !description.trim()) errors.description = 'Description cannot be empty';
+      
+      // Budget validation
+      if (budget_type === 'hourly') {
+        if (hourly_rate_from && hourly_rate_to) {
+          if (parseFloat(hourly_rate_from) >= parseFloat(hourly_rate_to)) {
+            errors.hourly_rate_to = 'Maximum rate must be higher than minimum rate';
+          }
         }
       }
 
@@ -488,12 +509,49 @@ class JobPostController {
       // Prepare update data
       const updateData = {};
       if (title) updateData.title = title;
-      if (slug) updateData.slug = slug;
-      if (category_id) updateData.category_id = parseInt(category_id);
-      if (city_id) updateData.city_id = parseInt(city_id);
-      if (regular_price) updateData.regular_price = parseFloat(regular_price);
-      if (job_type) updateData.job_type = job_type;
+      if (summary !== undefined) updateData.summary = summary;
       if (description) updateData.description = description;
+      if (deliverables !== undefined) updateData.deliverables = deliverables;
+      if (category_id) updateData.category_id = parseInt(category_id);
+      if (specialty !== undefined) updateData.specialty = specialty;
+      if (city_id) updateData.city_id = parseInt(city_id);
+      
+      // Budget fields
+      if (budget_type) updateData.budget_type = budget_type;
+      if (hourly_rate_from !== undefined) updateData.hourly_rate_from = hourly_rate_from ? parseFloat(hourly_rate_from) : null;
+      if (hourly_rate_to !== undefined) updateData.hourly_rate_to = hourly_rate_to ? parseFloat(hourly_rate_to) : null;
+      if (fixed_price !== undefined) updateData.fixed_price = fixed_price ? parseFloat(fixed_price) : null;
+      
+      // Project details
+      if (project_type) updateData.project_type = project_type;
+      if (duration !== undefined) updateData.duration = duration;
+      if (hours_per_week !== undefined) updateData.hours_per_week = hours_per_week;
+      if (job_size !== undefined) updateData.job_size = job_size;
+      if (freelancers_needed) updateData.freelancers_needed = parseInt(freelancers_needed);
+      
+      // Experience and skills (stored as JSON)
+      if (experience_level) updateData.experience_level = experience_level;
+      if (mandatory_skills) updateData.mandatory_skills = typeof mandatory_skills === 'string' ? JSON.parse(mandatory_skills) : mandatory_skills;
+      if (nice_to_have_skills) updateData.nice_to_have_skills = typeof nice_to_have_skills === 'string' ? JSON.parse(nice_to_have_skills) : nice_to_have_skills;
+      if (tools) updateData.tools = typeof tools === 'string' ? JSON.parse(tools) : tools;
+      if (languages) updateData.languages = typeof languages === 'string' ? JSON.parse(languages) : languages;
+      
+      // Legacy fields (for backward compatibility)
+      if (regular_price !== undefined) updateData.regular_price = regular_price ? parseFloat(regular_price) : null;
+      if (job_type) updateData.job_type = job_type;
+      
+      // Update regular_price and job_type based on budget fields if not explicitly provided
+      if (!regular_price) {
+        if (fixed_price) {
+          updateData.regular_price = parseFloat(fixed_price);
+        } else if (hourly_rate_to) {
+          updateData.regular_price = parseFloat(hourly_rate_to);
+        }
+      }
+      
+      if (!job_type && budget_type) {
+        updateData.job_type = budget_type === 'hourly' ? 'Hourly' : 'Fixed';
+      }
 
       // Add thumbnail if uploaded
       if (req.file) {
