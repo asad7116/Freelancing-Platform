@@ -8,7 +8,10 @@
 header {
   width: 100%;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 /* Navbar */
@@ -18,20 +21,38 @@ header {
   align-items: center;
   padding: 15px 60px;
   font-family: Arial, sans-serif;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .logo img {
   height: 70px;
   width: auto;
+  object-fit: contain;
 }
 
 .logo .green {
+  color: #00a86b;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  padding: 8px;
+}
+
+.mobile-menu-toggle:hover {
   color: #00a86b;
 }
 
@@ -39,6 +60,10 @@ header {
   display: flex;
   gap: 25px;
   position: relative;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -46,6 +71,8 @@ header {
   color: #333;
   font-weight: 500;
   transition: color 0.3s;
+  white-space: nowrap;
+  font-size: 1rem;
 }
 
 .nav-links a:hover {
@@ -56,6 +83,33 @@ header {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Currency & Language Selectors */
+.currency-selector,
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+
+.currency-selector:hover,
+.language-selector:hover {
+  color: #00a86b;
+}
+
+.currency-selector svg,
+.language-selector svg {
+  flex-shrink: 0;
+  stroke-width: 2;
 }
 
 .signin-btn {
@@ -67,6 +121,9 @@ header {
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .signin-btn:hover {
@@ -79,8 +136,10 @@ header {
   display: flex;
   justify-content: center;
   gap: 30px;
-  padding: 10px 0;
+  padding: 10px 20px;
   border-top: 1px solid #eaeaea;
+  flex-wrap: wrap;
+  overflow-x: auto;
 }
 
 .sub-navbar a {
@@ -88,6 +147,8 @@ header {
   color: #555;
   font-size: 14px;
   transition: color 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .sub-navbar a:hover {
@@ -105,25 +166,35 @@ header {
   border: 0;
   cursor: pointer;
   font: inherit;
-  color: inherit;
+  color: #333;
   font-weight: 500;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 4px 0;
 }
 
-.pages-trigger .caret {
-  margin-left: 4px;
-  font-size: 12px;
+.pages-trigger:hover {
+  color: #00a86b;
+}
+
+.pages-trigger svg {
+  flex-shrink: 0;
+  stroke-width: 2.5;
 }
 
 .pages-menu {
   position: absolute;
   left: 0;
-  top: 100%;
+  top: calc(100% + 8px);
   min-width: 180px;
   background: #fff;
   color: #111;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
   padding: 6px 0;
   display: none;
   z-index: 1000;
@@ -135,6 +206,7 @@ header {
   text-decoration: none;
   color: #333;
   font-size: 14px;
+  transition: background 0.2s, color 0.2s;
 }
 
 .pages-menu a:hover {
@@ -144,4 +216,206 @@ header {
 
 .pages-dropdown:hover .pages-menu {
   display: block;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 30px;
+    gap: 15px;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    gap: 15px;
+    flex-wrap: wrap;
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+  .right-side {
+    gap: 10px;
+    order: 2;
+  }
+
+  .currency-selector,
+  .language-selector {
+    font-size: 0.85rem;
+  }
+
+  .sub-navbar {
+    gap: 20px;
+    padding: 10px 15px;
+  }
+
+  .sub-navbar a {
+    font-size: 13px;
+  }
+
+  .pages-trigger {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 12px 15px;
+    gap: 10px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .logo {
+    order: 1;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .mobile-menu-toggle {
+    order: 2;
+    display: block;
+  }
+
+  .nav-links {
+    gap: 12px;
+    flex-wrap: wrap;
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    font-size: 0.85rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .nav-links.mobile-open {
+    max-height: 500px;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+
+  .right-side {
+    order: 4;
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .currency-selector,
+  .language-selector {
+    font-size: 0.75rem;
+  }
+
+  .currency-selector svg,
+  .language-selector svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .signin-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .sub-navbar {
+    gap: 12px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .sub-navbar a {
+    font-size: 12px;
+  }
+
+  .pages-trigger {
+    font-size: 0.8rem;
+  }
+
+  .pages-trigger svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pages-menu {
+    left: -50%;
+    min-width: 160px;
+    font-size: 13px;
+  }
+
+  .pages-menu a {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Extra Small (320px and below) */
+@media (max-width: 320px) {
+  .navbar {
+    padding: 10px 10px;
+  }
+
+  .logo img {
+    height: 35px;
+  }
+
+  .nav-links {
+    gap: 8px;
+  }
+
+  .nav-links a {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+  }
+
+  .right-side {
+    gap: 5px;
+    font-size: 0.65rem;
+  }
+
+  .currency-selector,
+  .language-selector {
+    font-size: 0.65rem;
+  }
+
+  .currency-selector svg,
+  .language-selector svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .signin-btn {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
+
+  .sub-navbar {
+    gap: 10px;
+    padding: 6px 8px;
+  }
+
+  .sub-navbar a {
+    font-size: 10px;
+  }
 }
