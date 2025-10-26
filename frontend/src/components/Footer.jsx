@@ -1,32 +1,49 @@
 import React from "react";
 import "../styles/footer.css";
+
 import { Link } from "react-router-dom";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  ArrowUp,
+} from "lucide-react";
+
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer className="footer">
       <div className="footer-top">
         <div className="container footer-newsletter">
-          {/* Left: Logo + blurb */}
+          {/* Left: Logo + Description */}
           <div className="newsletter-left">
             <Link to="/" className="footer-logo">
-              <img src="/assets/logo/" alt="Tixe logo" />
-              <span><b>Tixe</b><em> app</em></span>
+              <img src="/assets/logo/logo.png" alt="logo" />
             </Link>
             <p>
-              It is a long established fact that a reader will be distracted by
-              the readable content of a page when looking at its layout the point
-              of using lorem varius sit amet ipsum.
+              Connect with talented freelancers and find the perfect professional
+              for your project. Get your work done efficiently and affordably.
             </p>
           </div>
 
           {/* Right: Newsletter */}
           <div className="newsletter-right">
-            <h3>Subscribe to Our Newsletter</h3>
-            <p className="muted">We’ll keep you updated with the best new jobs.</p>
-            <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
+            <h3>Subscribe to Newsletter</h3>
+            <p className="muted">Get the latest job updates delivered to your inbox.</p>
+            <form
+              className="newsletter-form"
+              onSubmit={(e) => e.preventDefault()}
+            >
               <input
                 type="email"
-                placeholder="Enter your email address"
+                placeholder="Enter your email"
                 aria-label="Email"
                 required
               />
@@ -35,68 +52,97 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="container"><hr className="footer-divider" /></div>
+        <div className="container">
+          <hr className="footer-divider" />
+        </div>
 
         {/* Widgets row */}
         <div className="container footer-widgets">
-          {/* Download / Contact */}
+          {/* Contact Info */}
           <div className="widget">
-            <h4 className="widget-title">Download App</h4>
+            <h4 className="widget-title">Contact</h4>
             <ul className="contact-list">
-              <li>📧 example@email.com</li>
-              <li>📞 +1 778-344-544</li>
-              <li>White Street Night Road<br />N/A 12 Constance Street<br />London E16 2DQ</li>
+              <li>
+                <Mail size={16} />
+                <a href="mailto:info@workzone.com">info@workzone.com</a>
+              </li>
+              <li>
+                <Phone size={16} />
+                <a href="tel:+12345678900">+1 (234) 567-8900</a>
+              </li>
+              <li>
+                <MapPin size={16} />
+                <span>123 Business Street, Suite 100<br />New York, NY 10001</span>
+              </li>
             </ul>
-            <div className="store-badges">
-              <Link to="https://play.google.com" target="_blank" rel="noreferrer">
-                <img src="/assets/play-stor.png" alt="Google Play" />
-              </Link>
-              <Link to="https://www.apple.com/app-store/" target="_blank" rel="noreferrer">
-                <img src="/assets/app-stor.png" alt="App Store" />
-              </Link>
-            </div>
           </div>
 
           {/* Categories */}
           <div className="widget">
             <h4 className="widget-title">Categories</h4>
             <ul className="link-list">
-              <li><Link to="#">Graphics & Design</Link></li>
-              <li><Link to="#">Digital Marketing</Link></li>
-              <li><Link to="#">Writing & Translation</Link></li>
-              <li><Link to="#">Video & Animation</Link></li>
-              <li><Link to="#">Music & Audio</Link></li>
-              <li><Link to="#">Tixe Logo Maker</Link></li>
-              <li><Link to="#">Programming & Tech</Link></li>
-              <li><Link to="#">Photography</Link></li>
+              <li>
+                <Link to="#">Graphics & Design</Link>
+              </li>
+              <li>
+                <Link to="#">Digital Marketing</Link>
+              </li>
+              <li>
+                <Link to="#">Programming & Tech</Link>
+              </li>
+              <li>
+                <Link to="#">Video & Animation</Link>
+              </li>
+              <li>
+                <Link to="#">Photography</Link>
+              </li>
+              <li>
+                <Link to="#">Writing & Translation</Link>
+              </li>
             </ul>
           </div>
 
-          {/* About */}
+          {/* Company */}
           <div className="widget">
-            <h4 className="widget-title">About</h4>
+            <h4 className="widget-title">Company</h4>
             <ul className="link-list">
-              <li><Link to="#">Careers</Link></li>
-              <li><Link to="#">Press & News</Link></li>
-              <li><Link to="#">Pricing Plan</Link></li>
-              <li><Link to="#">Privacy Policy</Link></li>
-              <li><Link to="#">Terms of Service</Link></li>
-              <li><Link to="#">Blogs</Link></li>
-              <li><Link to="#">FAQ’s</Link></li>
-              <li><Link to="#">Contact</Link></li>
+              <li>
+                <Link to="#">About Us</Link>
+              </li>
+              <li>
+                <Link to="#">Careers</Link>
+              </li>
+              <li>
+                <Link to="#">Blog</Link>
+              </li>
+              <li>
+                <Link to="#">Press</Link>
+              </li>
+              <li>
+                <Link to="#">Contact</Link>
+              </li>
             </ul>
           </div>
 
-          {/* Help & Supports */}
+          {/* Support */}
           <div className="widget">
-            <h4 className="widget-title">Help & Supports</h4>
+            <h4 className="widget-title">Support</h4>
             <ul className="link-list">
-              <li><Link to="#">Help & Support</Link></li>
-              <li><Link to="#">Trust & Safety</Link></li>
-              <li><Link to="#">Selling on Tixes</Link></li>
-              <li><Link to="#">Buying on Tixes</Link></li>
-              <li><Link to="#">Tixes Guides</Link></li>
-              <li><Link to="#">Workspace</Link></li>
+              <li>
+                <Link to="#">Help Center</Link>
+              </li>
+              <li>
+                <Link to="#">Privacy Policy</Link>
+              </li>
+              <li>
+                <Link to="#">Terms of Service</Link>
+              </li>
+              <li>
+                <Link to="#">FAQ's</Link>
+              </li>
+              <li>
+                <Link to="#">Trust & Safety</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -105,19 +151,57 @@ const Footer = () => {
       {/* Bottom bar */}
       <div className="footer-bottom">
         <div className="container bottom-inner">
-          <p>Copyright © 2025 Tixe. All Rights Reserved.</p>
+          <p>&copy; 2025 Tixe - Grow with us. All Rights Reserved.</p>
           <div className="socials">
-            <Link to="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><i className="fab fa-facebook-f" /></Link>
-            <Link to="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><i className="fab fa-twitter" /></Link>
-            <Link to="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><i className="fab fa-instagram" /></Link>
-            <Link to="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><i className="fab fa-linkedin-in" /></Link>
-            <Link to="#" aria-label="Pinterest"><i className="fab fa-pinterest-p" /></Link>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+              title="Facebook"
+            >
+              <Facebook size={18} />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Twitter"
+              title="Twitter"
+            >
+              <Twitter size={18} />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+              title="Instagram"
+            >
+              <Instagram size={18} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              title="LinkedIn"
+            >
+              <Linkedin size={18} />
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Scroll to top (static icon spot from screenshot) */}
-      <button className="scrolltop" aria-label="Scroll to top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>↑</button>
+      {/* Scroll to top button */}
+      <button
+        className="scrolltop"
+        aria-label="Scroll to top"
+        onClick={scrollToTop}
+        title="Back to top"
+      >
+        <ArrowUp size={20} />
+      </button>
     </footer>
   );
 };
