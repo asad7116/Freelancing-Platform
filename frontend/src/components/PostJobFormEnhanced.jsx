@@ -325,6 +325,10 @@ const PostJobFormEnhanced = () => {
       Object.keys(formData).forEach(key => {
         if (Array.isArray(formData[key])) {
           formDataObj.append(key, JSON.stringify(formData[key]));
+        } else if (key === 'fixed_price' && formData[key]) {
+          // Ensure fixed price is sent with exactly 2 decimal places
+          const price = parseFloat(formData[key]).toFixed(2);
+          formDataObj.append(key, price);
         } else {
           formDataObj.append(key, formData[key]);
         }
@@ -683,14 +687,20 @@ const PostJobFormEnhanced = () => {
                 </div>
               </div>
             ) : (
-              <div className="fixed-price-section">
+                <div className="fixed-price-section">
                 <h4>Fixed Price</h4>
                 <div className="form-group">
                   <label>Project Budget *</label>
                   <input
-                    type="number"
+                    type="text"
                     value={formData.fixed_price}
-                    onChange={(e) => handleInputChange('fixed_price', e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Only allow numbers and decimal point
+                      if (/^\d*\.?\d*$/.test(value)) {
+                        handleInputChange('fixed_price', value);
+                      }
+                    }}
                     placeholder="1000.00"
                     className={errors.fixed_price ? 'error' : ''}
                   />
