@@ -1,8 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import pkg from '@prisma/client';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
 
+const { PrismaClient, Decimal } = pkg;
 const prisma = new PrismaClient();
 
 // Configure multer for file uploads
@@ -100,7 +101,9 @@ class JobPostController {
       if (budget_type === 'hourly') {
         if (!hourly_rate_from) errors.hourly_rate_from = 'Minimum hourly rate is required';
         if (!hourly_rate_to) errors.hourly_rate_to = 'Maximum hourly rate is required';
-        if (parseFloat(hourly_rate_from) >= parseFloat(hourly_rate_to)) {
+        const fromRate = new Decimal(hourly_rate_from || 0);
+        const toRate = new Decimal(hourly_rate_to || 0);
+        if (fromRate.greaterThanOrEqualTo(toRate)) {
           errors.hourly_rate_to = 'Maximum rate must be higher than minimum rate';
         }
       } else if (budget_type === 'fixed') {
@@ -147,9 +150,9 @@ class JobPostController {
         
         // Budget fields
         budget_type: budget_type || 'hourly',
-        hourly_rate_from: hourly_rate_from ? parseFloat(hourly_rate_from) : null,
-        hourly_rate_to: hourly_rate_to ? parseFloat(hourly_rate_to) : null,
-        fixed_price: fixed_price ? parseFloat(fixed_price) : null,
+        hourly_rate_from: hourly_rate_from ? new Decimal(hourly_rate_from) : null,
+        hourly_rate_to: hourly_rate_to ? new Decimal(hourly_rate_to) : null,
+        fixed_price: fixed_price ? new Decimal(fixed_price) : null,
         
         // Project details
         project_type: project_type || 'one-time',
@@ -166,7 +169,7 @@ class JobPostController {
         languages: languages ? JSON.parse(languages) : [],
         
         // Legacy fields (for backward compatibility)
-        regular_price: fixed_price ? parseFloat(fixed_price) : (hourly_rate_to ? parseFloat(hourly_rate_to) : null),
+        regular_price: fixed_price ? new Decimal(fixed_price) : (hourly_rate_to ? new Decimal(hourly_rate_to) : null),
         job_type: budget_type === 'hourly' ? 'Hourly' : 'Fixed',
         
         buyer_id: userId,
@@ -518,9 +521,9 @@ class JobPostController {
       
       // Budget fields
       if (budget_type) updateData.budget_type = budget_type;
-      if (hourly_rate_from !== undefined) updateData.hourly_rate_from = hourly_rate_from ? parseFloat(hourly_rate_from) : null;
-      if (hourly_rate_to !== undefined) updateData.hourly_rate_to = hourly_rate_to ? parseFloat(hourly_rate_to) : null;
-      if (fixed_price !== undefined) updateData.fixed_price = fixed_price ? parseFloat(fixed_price) : null;
+      if (hourly_rate_from !== undefined) updateData.hourly_rate_from = hourly_rate_from ? new Decimal(hourly_rate_from) : null;
+      if (hourly_rate_to !== undefined) updateData.hourly_rate_to = hourly_rate_to ? new Decimal(hourly_rate_to) : null;
+      if (fixed_price !== undefined) updateData.fixed_price = fixed_price ? new Decimal(fixed_price) : null;
       
       // Project details
       if (project_type) updateData.project_type = project_type;
@@ -543,9 +546,9 @@ class JobPostController {
       // Update regular_price and job_type based on budget fields if not explicitly provided
       if (!regular_price) {
         if (fixed_price) {
-          updateData.regular_price = parseFloat(fixed_price);
+          updateData.regular_price = new Decimal(fixed_price);
         } else if (hourly_rate_to) {
-          updateData.regular_price = parseFloat(hourly_rate_to);
+          updateData.regular_price = new Decimal(hourly_rate_to);
         }
       }
       
