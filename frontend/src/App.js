@@ -35,6 +35,8 @@ import EditGig from "./pages/Dashboard/EditGig";
 import Wishlist from "./pages/Dashboard/Wishlist";
 import Profile from "./pages/Dashboard/Profile";
 import CreateGig from "./pages/Dashboard/CreateGig";
+import FreelancerProfileSetup from "./pages/Dashboard/FreelancerProfileSetup";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -89,6 +91,7 @@ export default function App() {
           <Route path="overview" element={<FreelancerOverview />} />{" "}
           {/* <-- this one */}
           <Route path="browse-jobs" element={<BrowseJobs />} />
+          <Route path="profile-setup" element={<FreelancerProfileSetup />} />
           <Route path="job/:jobId" element={<JobDetail />} />
           <Route path="gig/:gigId" element={<GigDetail />} />
           <Route path="edit-gig/:gigId" element={<EditGig />} />
