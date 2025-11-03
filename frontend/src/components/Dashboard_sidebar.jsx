@@ -9,7 +9,7 @@ const MENU = {
   client: [
     { to: "overview", label: "Dashboard", icon: Home },
     { to: "browse-gigs", label: "Browse Gigs", icon: Search },
-    { to: "orders",   label: "Orders",    icon: List },
+    { to: "orders",   label: "Add Jobs",    icon: List },
     { to: "messages", label: "Messages",  icon: MessageSquare },
     { to: "billing",  label: "Billing",   icon: CreditCard },
     { to: "profile",  label: "Profile",   icon: UserRound },
