@@ -9,34 +9,43 @@
 
 /* Container */
 .cta-container {
-  background: #085f52;
+  background: linear-gradient(135deg, #085f52 0%, #064d42 100%);
   color: #fff;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  border-radius: 16px;
-  padding: 40px 50px;
+  justify-items: center;
+  border-radius: 20px;
+  padding: 30px 50px 0px 50px;
   width: 100%;
   max-width: 1200px;
   min-height: 320px;
-  gap: 40px;
+  gap: 50px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
 }
 
 /* Left content */
 .cta-content {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-self: start;
 }
+
 .cta-title {
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 800;
-  margin-bottom: 16px;
   line-height: 1.3;
+  margin: 0;
+  color: #fff;
 }
+
 .cta-subtitle {
   font-size: 15px;
   color: #d9e6e1;
-  margin-bottom: 20px;
+  margin: 0;
   max-width: 450px;
+  line-height: 1.6;
 }
 
 /* Button */
@@ -46,42 +55,218 @@
   border: none;
   border-radius: 30px;
   padding: 12px 28px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
 }
+
 .cta-btn:hover {
   background: #009b40;
+  transform: translateX(3px);
+  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+}
+
+.cta-btn svg {
+  flex-shrink: 0;
+  stroke-width: 2.5;
 }
 
 /* Right Image */
-.cta-image img {
-  max-width: 320px;
-  width: 100%;
-  border-radius: 12px;
-  object-fit: cover;
+.cta-image {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  justify-self: end;
 }
 
-/* Responsive */
+.cta-image img {
+  max-width: 100%;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablets (900px and below) */
 @media (max-width: 900px) {
+  .cta-section {
+      padding: 30px 50px 0px 50px; 
+  }
+
   .cta-container {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 40px 40px;
+    min-height: auto;
     text-align: center;
-    padding: 30px;
+    justify-items: center;
   }
+
   .cta-content {
-    margin-bottom: 20px;
+    align-items: center;
+    justify-self: center;
+    max-width: 500px;
   }
+
+  .cta-title {
+    font-size: 28px;
+  }
+
+  .cta-subtitle {
+    max-width: 100%;
+  }
+
+  .cta-image {
+    justify-self: end;
+  }
+
   .cta-image img {
-    max-width: 260px;
+    max-width: 300px;
   }
 }
-@media (max-width: 500px) {
+
+/* Smaller Tablets (768px and below) */
+@media (max-width: 768px) {
+  .cta-section {
+      padding: 30px 50px 0px 50px;
+  }
+
+  .cta-container {
+    padding: 35px 30px;
+    gap: 25px;
+    border-radius: 16px;
+  }
+
+  .cta-content {
+    gap: 16px;
+  }
+
   .cta-title {
     font-size: 24px;
+    line-height: 1.35;
   }
+
+  .cta-subtitle {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .cta-btn {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .cta-image img {
+    max-width: 280px;
+  }
+}
+
+/* Mobile (560px and below) */
+@media (max-width: 560px) {
+  .cta-section {
+    padding: 30px 16px;
+  }
+
+  .cta-container {
+    padding: 25px 20px;
+    gap: 20px;
+    min-height: auto;
+  }
+
+  .cta-content {
+    gap: 14px;
+    width: 100%;
+  }
+
+  .cta-title {
+    font-size: 20px;
+    line-height: 1.35;
+  }
+
+  .cta-subtitle {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .cta-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cta-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cta-image {
+    width: 100%;
+  }
+
+  .cta-image img {
+    max-width: 240px;
+    width: 90%;
+  }
+}
+
+/* Extra Small (380px and below) */
+@media (max-width: 380px) {
+  .cta-section {
+    padding: 24px 12px;
+  }
+
+  .cta-container {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .cta-content {
+    gap: 12px;
+  }
+
+  .cta-title {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  .cta-subtitle {
+    font-size: 12px;
+  }
+
+  .cta-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
   .cta-image img {
     max-width: 200px;
+  }
+}
+
+/* Very Small (320px and below) */
+@media (max-width: 320px) {
+  .cta-container {
+    padding: 16px 12px;
+  }
+
+  .cta-title {
+    font-size: 16px;
+  }
+
+  .cta-subtitle {
+    font-size: 11px;
+  }
+
+  .cta-image img {
+    max-width: 180px;
   }
 }
