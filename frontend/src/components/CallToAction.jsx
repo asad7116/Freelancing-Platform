@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/CallToAction.css";
+import { ArrowRight } from "lucide-react";
 
 export default function CallToAction() {
   return (
@@ -8,14 +9,17 @@ export default function CallToAction() {
         {/* Left Side Content */}
         <div className="cta-content">
           <h2 className="cta-title">
-            Find the talent needed to get <br /> your business growing.
+            Find the talent needed to get your business growing.
           </h2>
           <p className="cta-subtitle">
-            There are many variations of passages of Lorem Ipsum available,
-            but the majority have suffered alteration in some form,
-            by injected humour.
+            Connect with skilled professionals and build the perfect team for
+            your projects. Scale your business with vetted talent from around
+            the world.
           </p>
-          <button className="cta-btn">Get Started →</button>
+          <button className="cta-btn">
+            <span>Get Started</span>
+            <ArrowRight size={18} />
+          </button>
         </div>
 
         {/* Right Side Image */}

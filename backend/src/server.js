@@ -10,6 +10,7 @@ import categoriesRoutes from './routes/categories.routes.js';
 import publicRoutes from './routes/public.routes.js';
 import skillsRoutes from './routes/skills.routes.js';
 import path from "path";
+import freelancerProfileRoutes from './routes/freelancerProfile.routes.js';
 
 const app = express();
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/gigs", gigsRoutes); // sheraz add this
 app.use("/api", publicRoutes); // Public routes (no auth required)
 app.use("/api", jobPostRoutes);
+app.use('/api/freelancer/profile', freelancerProfileRoutes);
 app.use("/api", categoriesRoutes);
 app.use("/api", skillsRoutes);
 
