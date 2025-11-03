@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/Hero.css";
+import { Search, Star } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -44,29 +45,8 @@ export default function Hero() {
                     placeholder="Search for any service"
                     name="search"
                   />
-                  <button className="hero-form-btn">
-                    <svg
-                      width="19"
-                      height="18"
-                      viewBox="0 0 19 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z"
-                        stroke="#F2F2F2"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M18 17L14 13"
-                        stroke="#F2F2F2"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                  <button className="hero-form-btn" type="submit">
+                    <Search size={19} />
                     Search
                   </button>
                 </div>
@@ -90,11 +70,11 @@ export default function Hero() {
 
             <div className="rating">
               <p>4.9</p>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="far fa-star"></i>
+              <Star size={16} fill="currentColor" />
+              <Star size={16} fill="currentColor" />
+              <Star size={16} fill="currentColor" />
+              <Star size={16} fill="currentColor" />
+              <Star size={16} />
             </div>
           </div>
         </div>
