@@ -103,7 +103,7 @@ export default function App() {
           <Route path="Payouts" element={<Payouts/>} />
           <Route path="Orders" element={<Orders/>} />
           <Route path="Messages" element={<Messages/>}/>
-          <Route path="Profile" element={<Profile/>} />
+          <Route path="Profile" element={<FreelancerProfileSetup/>} />
           <Route path="*" element={<div>Freelancer page not found</div>} />
         </Route>
 
