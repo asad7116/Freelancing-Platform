@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import { prisma } from "../prisma.js"; // Prisma client import
 import { gigSchema } from "../lib/validators.js"; // Assuming you have a validation schema for gigs
+import { authMiddleware } from "../middleware/authMiddleware.js"; // Import auth middleware
 
 const router = express.Router();
 
@@ -26,6 +27,7 @@ if (!fs.existsSync(uploadDirectory)) {
 // Route for creating a gig
 router.post(
   "/",
+  authMiddleware, // Add authentication middleware
   upload.fields([
     { name: "thumbnailImage", maxCount: 1 },
     { name: "galleryImages", maxCount: 3 },
@@ -71,6 +73,7 @@ router.post(
           additionalNotes,
           thumbnailImage,
           galleryImages,
+          createdBy: req.user.id, // Set the creator's user ID
         },
       });
 
@@ -206,6 +209,32 @@ router.put("/:id", upload.fields([
       message: "Error updating gig", 
       error: error.message 
     });
+  }
+});
+
+// Debug route to check all gigs
+router.get("/debug/all", async (req, res) => {
+  try {
+    const allGigs = await prisma.gig.findMany({
+      select: {
+        id: true,
+        gigTitle: true,
+        createdBy: true,
+        createdAt: true,
+      },
+    });
+    res.json({ count: allGigs.length, gigs: allGigs });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Debug route to check current user
+router.get("/debug/me", authMiddleware, async (req, res) => {
+  try {
+    res.json({ user: req.user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
