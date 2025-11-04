@@ -1,25 +1,27 @@
+// frontend/src/components/PostJobFormEnhanced.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/post_job_enhanced.css';
+import { emit } from '../lib/eventBus'; // ✅ to refresh dashboard after success
 
 const PostJobFormEnhanced = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(jobId);
-  
+
   // Form step management
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
-  
+
   // Loading states
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
-  
+
   // Data for dropdowns
   const [categories, setCategories] = useState([]);
   const [specialties, setSpecialties] = useState([]);
   const [skills, setSkills] = useState([]);
-  
+
   // Form data
   const [formData, setFormData] = useState({
     // Step 1: About the Job
@@ -29,14 +31,14 @@ const PostJobFormEnhanced = () => {
     deliverables: '',
     category_id: '',
     specialty: '',
-    
+
     // Step 2: Freelancer Requirements
     mandatory_skills: [],
     nice_to_have_skills: [],
     tools: [],
     experience_level: 'intermediate',
     languages: [],
-    
+
     // Step 3: Budget
     budget_type: 'hourly',
     hourly_rate_from: '',
@@ -46,70 +48,56 @@ const PostJobFormEnhanced = () => {
     duration: '',
     hours_per_week: '',
     job_size: '',
-    freelancers_needed: 1
+    freelancers_needed: 1,
   });
-  
+
   // Thumbnail upload state
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
-  
+
   const [errors, setErrors] = useState({});
 
   // Experience level options
   const experienceLevels = [
     { value: 'entry', label: 'Entry Level', description: 'Looking for someone relatively new to this field' },
     { value: 'intermediate', label: 'Intermediate', description: 'Looking for substantial experience in this field' },
-    { value: 'expert', label: 'Expert', description: 'Looking for comprehensive and deep expertise in this field' }
-  ];
-
-  // Project type options
-  const projectTypes = [
-    { value: 'one-time', label: 'One-time project', description: 'A single project with a clear beginning and end' },
-    { value: 'ongoing', label: 'Ongoing project', description: 'Longer term or potentially permanent work' }
+    { value: 'expert', label: 'Expert', description: 'Looking for comprehensive and deep expertise in this field' },
   ];
 
   // Duration options
   const durationOptions = [
     { value: '1-3-months', label: '1 to 3 months' },
     { value: '3-6-months', label: '3 to 6 months' },
-    { value: '6-months-plus', label: 'More than 6 months' }
+    { value: '6-months-plus', label: 'More than 6 months' },
   ];
 
   // Hours per week options
   const hoursPerWeekOptions = [
     { value: 'less-than-30', label: 'Less than 30 hrs/week' },
-    { value: '30-plus', label: '30+ hrs/week' }
+    { value: '30-plus', label: '30+ hrs/week' },
   ];
 
   // Job size options
   const jobSizeOptions = [
     { value: 'small', label: 'Small', description: 'Quick and straightforward' },
     { value: 'medium', label: 'Medium', description: 'Well-defined project' },
-    { value: 'large', label: 'Large', description: 'Larger and more complex project' }
+    { value: 'large', label: 'Large', description: 'Larger and more complex project' },
   ];
 
   // Fetch initial data
   useEffect(() => {
     fetchCategories();
     fetchSkills();
-    
     if (isEditMode && jobId) {
       fetchJobData(jobId);
     }
   }, [jobId, isEditMode]);
 
-  // Debug: Log specialties whenever they change
-  useEffect(() => {
-    console.log('Specialties state updated:', specialties);
-  }, [specialties]);
-
   const fetchCategories = async () => {
     try {
       const response = await fetch('/api/categories');
       const data = await response.json();
-      if (data.success) {
-        setCategories(data.data);
-      }
+      if (data.success) setCategories(data.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -119,9 +107,7 @@ const PostJobFormEnhanced = () => {
     try {
       const response = await fetch('/api/skills');
       const data = await response.json();
-      if (data.success) {
-        setSkills(data.data);
-      }
+      if (data.success) setSkills(data.data);
     } catch (error) {
       console.error('Error fetching skills:', error);
     }
@@ -129,31 +115,25 @@ const PostJobFormEnhanced = () => {
 
   const fetchSpecialties = async (categoryId) => {
     try {
-      console.log('Fetching specialties for category:', categoryId);
       const response = await fetch(`/api/specialties?category_id=${categoryId}`);
       const data = await response.json();
-      console.log('Specialties response:', data);
-      if (data.success) {
-        setSpecialties(data.data);
-        console.log('Specialties set:', data.data);
-      } else {
-        console.error('Failed to fetch specialties:', data.message);
-        setSpecialties([]);
-      }
+      if (data.success) setSpecialties(data.data);
+      else setSpecialties([]);
     } catch (error) {
       console.error('Error fetching specialties:', error);
       setSpecialties([]);
     }
   };
 
-  const fetchJobData = async (jobId) => {
+  const fetchJobData = async (jid) => {
     try {
       setFetchingData(true);
-      const response = await fetch(`/api/job-posts/${jobId}`, {
-        credentials: 'include'
+      const response = await fetch(`/api/job-posts/${jid}`, {
+        credentials: 'include',
+        headers: { 'Cache-Control': 'no-store' }, // avoid stale edit data
       });
       const data = await response.json();
-      
+
       if (data.success) {
         const job = data.data;
         setFormData({
@@ -176,18 +156,11 @@ const PostJobFormEnhanced = () => {
           duration: job.duration || '',
           hours_per_week: job.hours_per_week || '',
           job_size: job.job_size || '',
-          freelancers_needed: job.freelancers_needed || 1
+          freelancers_needed: job.freelancers_needed || 1,
         });
-        
-        // Fetch specialties for the selected category
-        if (job.category_id) {
-          fetchSpecialties(job.category_id);
-        }
-        
-        // Set existing thumbnail if available
-        if (job.thumb_image) {
-          setThumbnailPreview(`/uploads/job-thumbnails/${job.thumb_image}`);
-        }
+
+        if (job.category_id) fetchSpecialties(job.category_id);
+        if (job.thumb_image) setThumbnailPreview(`/uploads/job-thumbnails/${job.thumb_image}`);
       } else {
         alert('Failed to load job data');
         navigate('/client/Orders');
@@ -202,111 +175,86 @@ const PostJobFormEnhanced = () => {
   };
 
   const handleInputChange = (name, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Fetch specialties when category changes
+    // clear error on type
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+
+    // when category changes, refresh specialties
     if (name === 'category_id' && value) {
-      console.log('Category changed to:', value);
-      setSpecialties([]); // Clear previous specialties
-      setFormData(prev => ({ ...prev, specialty: '' })); // Clear selected specialty
+      setSpecialties([]);
+      setFormData((prev) => ({ ...prev, specialty: '' }));
       fetchSpecialties(value);
     }
   };
 
   const addSkill = (skillType, skill) => {
-    if (!formData[skillType].some(s => s.id === skill.id)) {
-      setFormData(prev => ({
-        ...prev,
-        [skillType]: [...prev[skillType], skill]
-      }));
+    if (!formData[skillType].some((s) => s.id === skill.id)) {
+      setFormData((prev) => ({ ...prev, [skillType]: [...prev[skillType], skill] }));
     }
   };
 
   const removeSkill = (skillType, skillId) => {
-    setFormData(prev => ({
-      ...prev,
-      [skillType]: prev[skillType].filter(skill => skill.id !== skillId)
-    }));
+    setFormData((prev) => ({ ...prev, [skillType]: prev[skillType].filter((s) => s.id !== skillId) }));
   };
 
   const validateStep = (step) => {
     const newErrors = {};
-    
+
     if (step === 1) {
       if (!formData.title.trim()) newErrors.title = 'Job title is required';
       if (!formData.description.trim()) newErrors.description = 'Job description is required';
       if (!formData.category_id) newErrors.category_id = 'Category is required';
     }
-    
+
     if (step === 2) {
-      if (formData.mandatory_skills.length === 0) {
-        newErrors.mandatory_skills = 'At least one mandatory skill is required';
-      }
+      if (formData.mandatory_skills.length === 0) newErrors.mandatory_skills = 'At least one mandatory skill is required';
     }
-    
+
     if (step === 3) {
       if (formData.budget_type === 'hourly') {
         if (!formData.hourly_rate_from) newErrors.hourly_rate_from = 'Minimum hourly rate is required';
         if (!formData.hourly_rate_to) newErrors.hourly_rate_to = 'Maximum hourly rate is required';
+        const a = Number(formData.hourly_rate_from);
+        const b = Number(formData.hourly_rate_to);
+        if (!Number.isNaN(a) && !Number.isNaN(b) && a > b) {
+          newErrors.hourly_rate_to = 'Max rate must be ≥ min rate';
+        }
       } else {
         if (!formData.fixed_price) newErrors.fixed_price = 'Fixed price is required';
       }
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const nextStep = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
-    }
+    if (validateStep(currentStep)) setCurrentStep((p) => Math.min(p + 1, totalSteps));
   };
-
-  const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
+  const prevStep = () => setCurrentStep((p) => Math.max(p - 1, 1));
 
   // Handle thumbnail file selection
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        alert('Please select a valid image file (JPEG, PNG, GIF, WebP)');
-        return;
-      }
-      
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Please select an image smaller than 5MB');
-        return;
-      }
-      
-      setThumbnailFile(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setThumbnailPreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      alert('Please select a valid image file (JPEG, PNG, GIF, WebP)');
+      return;
     }
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Please select an image smaller than 5MB');
+      return;
+    }
+
+    setThumbnailFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setThumbnailPreview(ev.target.result);
+    reader.readAsDataURL(file);
   };
 
-  // Remove thumbnail
   const removeThumbnail = () => {
     setThumbnailFile(null);
     setThumbnailPreview(null);
@@ -314,51 +262,47 @@ const PostJobFormEnhanced = () => {
 
   const handleSubmit = async () => {
     if (!validateStep(currentStep)) return;
-    
+
     setLoading(true);
-    
     try {
-      // Use FormData for file upload
       const formDataObj = new FormData();
-      
-      // Add all form fields
-      Object.keys(formData).forEach(key => {
+
+      // append all fields
+      Object.keys(formData).forEach((key) => {
         if (Array.isArray(formData[key])) {
           formDataObj.append(key, JSON.stringify(formData[key]));
         } else if (key === 'fixed_price' && formData[key]) {
-          // Ensure fixed price is sent with exactly 2 decimal places
           const price = parseFloat(formData[key]).toFixed(2);
           formDataObj.append(key, price);
         } else {
           formDataObj.append(key, formData[key]);
         }
       });
-      
-      // Add thumbnail file if selected
-      if (thumbnailFile) {
-        formDataObj.append('thumb_image', thumbnailFile);
-      }
+
+      if (thumbnailFile) formDataObj.append('thumb_image', thumbnailFile);
 
       const url = isEditMode ? `/api/job-posts/${jobId}` : '/api/job-posts';
       const method = isEditMode ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
-        method: method,
+        method,
         credentials: 'include',
-        body: formDataObj // Don't set Content-Type header for FormData
+        body: formDataObj, // no Content-Type header for FormData
       });
 
       const result = await response.json();
 
       if (response.ok) {
         alert(isEditMode ? 'Job updated successfully!' : 'Job posted successfully!');
+
+        // 🔔 Tell the app to refresh dashboard tiles immediately
+        const id = (result && result.data && result.data.id) || jobId;
+        emit('job:mutated', { type: isEditMode ? 'updated' : 'created', jobId: id });
+
         navigate('/client/Orders');
       } else {
-        if (result.errors) {
-          setErrors(result.errors);
-        } else {
-          alert(result.message || 'Error saving job post');
-        }
+        if (result.errors) setErrors(result.errors);
+        else alert(result.message || 'Error saving job post');
       }
     } catch (error) {
       console.error('Error submitting job post:', error);
@@ -403,7 +347,7 @@ const PostJobFormEnhanced = () => {
         {currentStep === 1 && (
           <div className="form-step">
             <h2>About the Job</h2>
-            
+
             <div className="form-group">
               <label>Title *</label>
               <input
@@ -457,7 +401,7 @@ const PostJobFormEnhanced = () => {
                   className={errors.category_id ? 'error' : ''}
                 >
                   <option value="">Select a category</option>
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
@@ -474,20 +418,23 @@ const PostJobFormEnhanced = () => {
                   disabled={!formData.category_id || specialties.length === 0}
                 >
                   <option value="" disabled>
-                    {!formData.category_id 
-                      ? 'Select a category first' 
-                      : specialties.length === 0 
-                        ? 'Loading specialties...' 
-                        : 'Select a specialty'}
+                    {!formData.category_id
+                      ? 'Select a category first'
+                      : specialties.length === 0
+                      ? 'Loading specialties...'
+                      : 'Select a specialty'}
                   </option>
-                  {specialties.map(specialty => (
+                  {specialties.map((specialty) => (
                     <option key={specialty.id} value={specialty.name}>
                       {specialty.name}
                     </option>
                   ))}
                 </select>
                 {formData.category_id && specialties.length === 0 && (
-                  <span className="info-message" style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+                  <span
+                    className="info-message"
+                    style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}
+                  >
                     No specialties available for this category
                   </span>
                 )}
@@ -500,13 +447,7 @@ const PostJobFormEnhanced = () => {
               <div className="thumbnail-upload-container">
                 {!thumbnailPreview ? (
                   <div className="thumbnail-upload-area">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleThumbnailChange}
-                      id="thumbnail-upload"
-                      style={{ display: 'none' }}
-                    />
+                    <input type="file" accept="image/*" onChange={handleThumbnailChange} id="thumbnail-upload" style={{ display: 'none' }} />
                     <label htmlFor="thumbnail-upload" className="thumbnail-upload-button">
                       <div className="upload-icon">📷</div>
                       <div className="upload-text">
@@ -532,28 +473,34 @@ const PostJobFormEnhanced = () => {
         {currentStep === 2 && (
           <div className="form-step">
             <h2>Freelancer Requirements</h2>
-            
+
             <div className="skills-section">
               <h3>Mandatory Skills *</h3>
               <div className="selected-skills">
-                {formData.mandatory_skills.map(skill => (
+                {formData.mandatory_skills.map((skill) => (
                   <span key={skill.id} className="skill-tag">
                     {skill.name}
-                    <button type="button" onClick={() => removeSkill('mandatory_skills', skill.id)}>×</button>
+                    <button type="button" onClick={() => removeSkill('mandatory_skills', skill.id)}>
+                      ×
+                    </button>
                   </span>
                 ))}
               </div>
               <select
                 onChange={(e) => {
-                  const skill = skills.find(s => s.id === parseInt(e.target.value));
+                  const skill = skills.find((s) => s.id === parseInt(e.target.value, 10));
                   if (skill) addSkill('mandatory_skills', skill);
                   e.target.value = '';
                 }}
               >
                 <option value="">Add skills</option>
-                {skills.filter(skill => skill.type === 'skill').map(skill => (
-                  <option key={skill.id} value={skill.id}>{skill.name}</option>
-                ))}
+                {skills
+                  .filter((skill) => skill.type === 'skill')
+                  .map((skill) => (
+                    <option key={skill.id} value={skill.id}>
+                      {skill.name}
+                    </option>
+                  ))}
               </select>
               {errors.mandatory_skills && <span className="error-message">{errors.mandatory_skills}</span>}
             </div>
@@ -561,54 +508,66 @@ const PostJobFormEnhanced = () => {
             <div className="skills-section">
               <h3>Nice-to-have Skills</h3>
               <div className="selected-skills">
-                {formData.nice_to_have_skills.map(skill => (
+                {formData.nice_to_have_skills.map((skill) => (
                   <span key={skill.id} className="skill-tag">
                     {skill.name}
-                    <button type="button" onClick={() => removeSkill('nice_to_have_skills', skill.id)}>×</button>
+                    <button type="button" onClick={() => removeSkill('nice_to_have_skills', skill.id)}>
+                      ×
+                    </button>
                   </span>
                 ))}
               </div>
               <select
                 onChange={(e) => {
-                  const skill = skills.find(s => s.id === parseInt(e.target.value));
+                  const skill = skills.find((s) => s.id === parseInt(e.target.value, 10));
                   if (skill) addSkill('nice_to_have_skills', skill);
                   e.target.value = '';
                 }}
               >
                 <option value="">Add skills</option>
-                {skills.filter(skill => skill.type === 'skill').map(skill => (
-                  <option key={skill.id} value={skill.id}>{skill.name}</option>
-                ))}
+                {skills
+                  .filter((skill) => skill.type === 'skill')
+                  .map((skill) => (
+                    <option key={skill.id} value={skill.id}>
+                      {skill.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
             <div className="skills-section">
               <h3>Tools (optional)</h3>
               <div className="selected-skills">
-                {formData.tools.map(tool => (
+                {formData.tools.map((tool) => (
                   <span key={tool.id} className="skill-tag">
                     {tool.name}
-                    <button type="button" onClick={() => removeSkill('tools', tool.id)}>×</button>
+                    <button type="button" onClick={() => removeSkill('tools', tool.id)}>
+                      ×
+                    </button>
                   </span>
                 ))}
               </div>
               <select
                 onChange={(e) => {
-                  const tool = skills.find(s => s.id === parseInt(e.target.value));
+                  const tool = skills.find((s) => s.id === parseInt(e.target.value, 10));
                   if (tool) addSkill('tools', tool);
                   e.target.value = '';
                 }}
               >
                 <option value="">Add tools</option>
-                {skills.filter(skill => skill.type === 'tool').map(tool => (
-                  <option key={tool.id} value={tool.id}>{tool.name}</option>
-                ))}
+                {skills
+                  .filter((s) => s.type === 'tool')
+                  .map((tool) => (
+                    <option key={tool.id} value={tool.id}>
+                      {tool.name}
+                    </option>
+                  ))}
               </select>
             </div>
 
             <div className="experience-section">
               <h3>Experience Level</h3>
-              {experienceLevels.map(level => (
+              {experienceLevels.map((level) => (
                 <label key={level.value} className="radio-option">
                   <input
                     type="radio"
@@ -631,7 +590,7 @@ const PostJobFormEnhanced = () => {
         {currentStep === 3 && (
           <div className="form-step">
             <h2>Budget</h2>
-            
+
             <div className="budget-type-section">
               <h3>Project Type</h3>
               <div className="radio-group">
@@ -687,7 +646,7 @@ const PostJobFormEnhanced = () => {
                 </div>
               </div>
             ) : (
-                <div className="fixed-price-section">
+              <div className="fixed-price-section">
                 <h4>Fixed Price</h4>
                 <div className="form-group">
                   <label>Project Budget *</label>
@@ -696,7 +655,6 @@ const PostJobFormEnhanced = () => {
                     value={formData.fixed_price}
                     onChange={(e) => {
                       const value = e.target.value;
-                      // Only allow numbers and decimal point
                       if (/^\d*\.?\d*$/.test(value)) {
                         handleInputChange('fixed_price', value);
                       }
@@ -711,16 +669,13 @@ const PostJobFormEnhanced = () => {
 
             <div className="project-details-section">
               <h3>Project Details</h3>
-              
+
               <div className="form-row">
                 <div className="form-group">
                   <label>Duration</label>
-                  <select
-                    value={formData.duration}
-                    onChange={(e) => handleInputChange('duration', e.target.value)}
-                  >
+                  <select value={formData.duration} onChange={(e) => handleInputChange('duration', e.target.value)}>
                     <option value="">Select duration</option>
-                    {durationOptions.map(option => (
+                    {durationOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -730,12 +685,9 @@ const PostJobFormEnhanced = () => {
 
                 <div className="form-group">
                   <label>Hours per week</label>
-                  <select
-                    value={formData.hours_per_week}
-                    onChange={(e) => handleInputChange('hours_per_week', e.target.value)}
-                  >
+                  <select value={formData.hours_per_week} onChange={(e) => handleInputChange('hours_per_week', e.target.value)}>
                     <option value="">Select hours</option>
-                    {hoursPerWeekOptions.map(option => (
+                    {hoursPerWeekOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -747,7 +699,7 @@ const PostJobFormEnhanced = () => {
               <div className="form-group">
                 <label>Job Size</label>
                 <div className="job-size-options">
-                  {jobSizeOptions.map(size => (
+                  {jobSizeOptions.map((size) => (
                     <label key={size.value} className="radio-option">
                       <input
                         type="radio"
@@ -768,18 +720,15 @@ const PostJobFormEnhanced = () => {
               <div className="form-group">
                 <label>Freelancers needed</label>
                 <div className="freelancer-counter">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => handleInputChange('freelancers_needed', Math.max(1, formData.freelancers_needed - 1))}
                     disabled={formData.freelancers_needed <= 1}
                   >
                     -
                   </button>
                   <span>{formData.freelancers_needed}</span>
-                  <button 
-                    type="button" 
-                    onClick={() => handleInputChange('freelancers_needed', formData.freelancers_needed + 1)}
-                  >
+                  <button type="button" onClick={() => handleInputChange('freelancers_needed', formData.freelancers_needed + 1)}>
                     +
                   </button>
                 </div>
@@ -795,19 +744,14 @@ const PostJobFormEnhanced = () => {
               Back
             </button>
           )}
-          
+
           {currentStep < totalSteps ? (
             <button type="button" className="btn-primary" onClick={nextStep}>
               Next
             </button>
           ) : (
-            <button 
-              type="button" 
-              className="btn-primary" 
-              onClick={handleSubmit}
-              disabled={loading}
-            >
-              {loading ? (isEditMode ? 'Updating...' : 'Posting...') : (isEditMode ? 'Update Job' : 'Post Job')}
+            <button type="button" className="btn-primary" onClick={handleSubmit} disabled={loading}>
+              {loading ? (isEditMode ? 'Updating...' : 'Posting...') : isEditMode ? 'Update Job' : 'Post Job'}
             </button>
           )}
         </div>
