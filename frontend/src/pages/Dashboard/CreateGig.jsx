@@ -78,6 +78,9 @@ export default function CreateGig() {
       return;
     }
 
+    // Debug: log cookies
+    console.log("Document cookies:", document.cookie);
+
     const formDataToSend = new FormData();
     formDataToSend.append("gigTitle", formData.gigTitle);
     formDataToSend.append("category", formData.category);
@@ -99,19 +102,30 @@ export default function CreateGig() {
       const res = await fetch("http://localhost:4000/api/gigs", {
         method: "POST",
         body: formDataToSend,
+        credentials: 'include', // ✅ Include cookies for authentication
       });
 
       const data = await res.json();
+      
+      if (!res.ok) {
+        // Handle error responses
+        alert(data.message || `Error: ${res.status} ${res.statusText}`);
+        console.error("Error response:", data);
+        return;
+      }
+      
       if (data.gig) {
         // Assuming the backend sends the 'gig' data
         alert("Gig created successfully!");
         console.log("Saved:", data.gig);
+        // Optionally redirect to gigs page
+        // window.location.href = "/freelancer/Gigs";
       } else {
         alert(data.message || "Failed to create gig");
       }
     } catch (err) {
       console.error(err);
-      alert("Error submitting gig");
+      alert("Error submitting gig: " + err.message);
     }
   };
 
