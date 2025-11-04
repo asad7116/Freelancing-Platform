@@ -26,9 +26,11 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations
-  city             City?                @relation(fields: [city_id], references: [id])
-  job_posts        JobPost[]            @relation("BuyerJobPosts")
-  job_applications JobApplication[]     @relation("FreelancerApplications")
+  city                City?                @relation(fields: [city_id], references: [id])
+  job_posts           JobPost[]            @relation("BuyerJobPosts")
+  job_applications    JobApplication[]     @relation("FreelancerApplications")
+  freelancer_profile  FreelancerProfile?   @relation("FreelancerProfileRelation")
+  client_profile      ClientProfile?       @relation("ClientProfileRelation")
 }
 
 model Gig {
@@ -183,17 +185,114 @@ model JobApplication {
 
 model FreelancerProfile {
   id            Int       @id @default(autoincrement())
-  userId        Int
-  title         String
-  bio           String
-  skills        String
-  hourlyRate    Float
-  experience    Int
-  location      String
-  portfolioUrl  String?
-  profileImage  String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  user_id       String    @unique // Changed to String to match User.id and made unique
+  
+  // Personal Information
+  title         String?
+  bio           String?   @db.Text
+  phone         String?
+  date_of_birth DateTime?
+  gender        String?   // male, female, other
+  
+  // Location
+  address       String?
+  city          String?
+  state         String?
+  country       String?
+  postal_code   String?
+  
+  // Professional Details
+  specialization       String?
+  hourly_rate          Decimal?  @db.Decimal(10, 2)
+  years_of_experience  Int       @default(0)
+  
+  // Skills & Languages (stored as JSON arrays)
+  skills        Json?     // Array of skill objects
+  languages     Json?     // Array of {language, proficiency}
+  
+  // Education (stored as JSON array)
+  education     Json?     // Array of {degree, institution, field_of_study, start_date, end_date, description}
+  
+  // Experience (stored as JSON array)
+  experience    Json?     // Array of {title, company, location, start_date, end_date, description}
+  
+  // Certifications (stored as JSON array)
+  certifications Json?    // Array of {name, issuing_organization, issue_date, expiry_date, credential_id, credential_url}
+  
+  // Portfolio
+  portfolio_items Json?   // Array of {title, description, url, image, tags}
+  
+  // Social Links
+  linkedin_url   String?
+  github_url     String?
+  website_url    String?
+  twitter_url    String?
+  
+  // Payment Information (stored as JSON arrays)
+  bank_accounts  Json?    // Array of {bank_name, account_title, account_number, iban, branch_code}
+  payment_methods Json?   // Array of {type: 'jazzcash'|'easypaisa'|'paypal', account_number, account_name}
+  
+  // Profile Settings
+  profile_image  String?
+  cover_image    String?
+  is_available   Boolean   @default(true)
+  
+  // System fields
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
 
-  user          User      @relation(fields: [userId], references: [id])
+  // Relations
+  user          User      @relation("FreelancerProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("freelancer_profiles")
+}
+
+model ClientProfile {
+  id            Int       @id @default(autoincrement())
+  user_id       String    @unique // Changed to String to match User.id
+  
+  // Personal Information
+  phone         String?
+  date_of_birth DateTime?
+  gender        String?   // male, female, other
+  company_name  String?
+  company_size  String?   // 1-10, 11-50, 51-200, 201-500, 500+
+  industry      String?
+  
+  // Location
+  address       String?
+  city          String?
+  state         String?
+  country       String?
+  postal_code   String?
+  
+  // Contact Information
+  website_url   String?
+  linkedin_url  String?
+  
+  // Education (stored as JSON array)
+  education     Json?     // Array of {degree, institution, field_of_study, start_date, end_date, description}
+  
+  // Certifications (stored as JSON array)
+  certifications Json?    // Array of {name, issuing_organization, issue_date, expiry_date, credential_id, credential_url}
+  
+  // Payment Information (stored as JSON arrays)
+  bank_accounts  Json?    // Array of {bank_name, account_title, account_number, iban, branch_code}
+  payment_methods Json?   // Array of {type: 'jazzcash'|'easypaisa'|'paypal', account_number, account_name}
+  
+  // Profile Settings
+  profile_image  String?
+  
+  // Preferences
+  preferred_language String? @default("en")
+  timezone          String?
+  
+  // System fields
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  // Relations
+  user          User      @relation("ClientProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("client_profiles")
 }
