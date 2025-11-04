@@ -36,6 +36,7 @@ import Wishlist from "./pages/Dashboard/Wishlist";
 import Profile from "./pages/Dashboard/Profile";
 import CreateGig from "./pages/Dashboard/CreateGig";
 import FreelancerProfileSetup from "./pages/Dashboard/FreelancerProfileSetup";
+import ProfileSettings from "./pages/Dashboard/ProfileSettings";
 
 export default function App() {
   return (
@@ -73,6 +74,7 @@ export default function App() {
           <Route path="MyProposals" element={<MyProposals/>} />
           <Route path="Orders" element={<MyJobs />} />
           <Route path="Messages" element={<Messages/>}/>
+          <Route path="Profile" element={<ProfileSettings/>} />
 
           <Route path="*" element={<div>Client page not found</div>} />
         </Route>
@@ -103,7 +105,7 @@ export default function App() {
           <Route path="Payouts" element={<Payouts/>} />
           <Route path="Orders" element={<Orders/>} />
           <Route path="Messages" element={<Messages/>}/>
-          <Route path="Profile" element={<FreelancerProfileSetup/>} />
+          <Route path="Profile" element={<ProfileSettings/>} />
           <Route path="*" element={<div>Freelancer page not found</div>} />
         </Route>
 

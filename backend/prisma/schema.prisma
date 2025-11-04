@@ -25,13 +25,12 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // Relations
-  city              City?              @relation(fields: [city_id], references: [id])
-  job_posts         JobPost[]          @relation("BuyerJobPosts")
-  job_applications  JobApplication[]   @relation("FreelancerApplications")
-  freelancerProfile FreelancerProfile? // ✅ opposite relation for FreelancerProfile
-  // 👇 Add this line for the reverse relation
-  gigs              Gig[] // one user can have many gigs
+  city               City?                @relation(fields: [city_id], references: [id])
+  job_posts          JobPost[]            @relation("BuyerJobPosts")
+  job_applications   JobApplication[]     @relation("FreelancerApplications")
+  freelancerProfile  FreelancerProfile?   @relation("FreelancerProfileRelation")
+  clientProfile      ClientProfile?       @relation("ClientProfileRelation")
+  gigs               Gig[]                // from main branch
 }
 
 model Gig {
@@ -46,7 +45,7 @@ model Gig {
   revisions        Int
   additionalNotes  String?
   createdAt        DateTime @default(now())
-  createdBy        String?  // Foreign key to User
+  createdBy        String?
   user             User?    @relation(fields: [createdBy], references: [id])
 }
 
@@ -118,36 +117,27 @@ model JobPost {
   specialty    String?
   city_id      Int?
 
-  // Budget Information
   budget_type      String   @default("hourly")
   hourly_rate_from Decimal? @db.Decimal(10, 2)
   hourly_rate_to   Decimal? @db.Decimal(10, 2)
   fixed_price      Decimal? @db.Decimal(10, 2)
 
-  // Project Details
   project_type       String  @default("one-time")
   duration           String?
   hours_per_week     String?
   job_size           String?
   freelancers_needed Int     @default(1)
+  experience_level   String  @default("intermediate")
 
-  // Experience Requirements
-  experience_level String @default("intermediate")
-
-  // Skills (stored as JSON arrays)
   mandatory_skills    Json?
   nice_to_have_skills Json?
   tools               Json?
+  languages           Json?
 
-  // Additional Options
-  languages Json?
-
-  // Legacy fields
   regular_price Decimal? @db.Decimal(10, 2)
   job_type      String   @default("Hourly")
   thumb_image   String?
 
-  // System fields
   buyer_id          String
   status            String   @default("active")
   approved_by_admin String   @default("pending")
@@ -155,7 +145,6 @@ model JobPost {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  // Relations
   category     Category         @relation(fields: [category_id], references: [id])
   city         City?            @relation(fields: [city_id], references: [id])
   buyer        User             @relation("BuyerJobPosts", fields: [buyer_id], references: [id])
@@ -183,18 +172,71 @@ model JobApplication {
 }
 
 model FreelancerProfile {
-  id           Int      @id @default(autoincrement())
-  userId       String   @unique // ✅ changed to String (to match User.id)
-  title        String
-  bio          String
-  skills       String
-  hourlyRate   Float
-  experience   Int
-  location     String
-  portfolioUrl String?
-  profileImage String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                   Int      @id @default(autoincrement())
+  user_id              String   @unique
+  title                String?
+  bio                  String?   @db.Text
+  phone                String?
+  date_of_birth        DateTime?
+  gender               String?
+  address              String?
+  city                 String?
+  state                String?
+  country              String?
+  postal_code          String?
+  specialization       String?
+  hourly_rate          Decimal?  @db.Decimal(10, 2)
+  years_of_experience  Int       @default(0)
+  skills               Json?
+  languages            Json?
+  education            Json?
+  experience           Json?
+  certifications       Json?
+  portfolio_items      Json?
+  linkedin_url         String?
+  github_url           String?
+  website_url          String?
+  twitter_url          String?
+  bank_accounts        Json?
+  payment_methods      Json?
+  profile_image        String?
+  cover_image          String?
+  is_available         Boolean   @default(true)
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation("FreelancerProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("freelancer_profiles")
+}
+
+model ClientProfile {
+  id                Int      @id @default(autoincrement())
+  user_id           String   @unique
+  phone             String?
+  date_of_birth     DateTime?
+  gender            String?
+  company_name      String?
+  company_size      String?
+  industry          String?
+  address           String?
+  city              String?
+  state             String?
+  country           String?
+  postal_code       String?
+  website_url       String?
+  linkedin_url      String?
+  education         Json?
+  certifications    Json?
+  bank_accounts     Json?
+  payment_methods   Json?
+  profile_image     String?
+  preferred_language String? @default("en")
+  timezone          String?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+
+  user User @relation("ClientProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("client_profiles")
 }
