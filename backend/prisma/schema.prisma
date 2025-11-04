@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "windows", "debian-openssl-3.0.x"]
 }
 
@@ -25,26 +25,28 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // Relations
-  city                City?                @relation(fields: [city_id], references: [id])
-  job_posts           JobPost[]            @relation("BuyerJobPosts")
-  job_applications    JobApplication[]     @relation("FreelancerApplications")
-  freelancer_profile  FreelancerProfile?   @relation("FreelancerProfileRelation")
-  client_profile      ClientProfile?       @relation("ClientProfileRelation")
+  city               City?                @relation(fields: [city_id], references: [id])
+  job_posts          JobPost[]            @relation("BuyerJobPosts")
+  job_applications   JobApplication[]     @relation("FreelancerApplications")
+  freelancerProfile  FreelancerProfile?   @relation("FreelancerProfileRelation")
+  clientProfile      ClientProfile?       @relation("ClientProfileRelation")
+  gigs               Gig[]                // from main branch
 }
 
 model Gig {
-  id              Int      @id @default(autoincrement())
-  gigTitle        String
-  category        String
+  id               Int      @id @default(autoincrement())
+  gigTitle         String
+  category         String
   shortDescription String
-  thumbnailImage  String?
-  galleryImages   String[] // Postgres supports arrays
-  price           Float
-  deliveryTime    Int
-  revisions       Int
-  additionalNotes String?
-  createdAt       DateTime @default(now())
+  thumbnailImage   String?
+  galleryImages    String[]
+  price            Float
+  deliveryTime     Int
+  revisions        Int
+  additionalNotes  String?
+  createdAt        DateTime @default(now())
+  createdBy        String?
+  user             User?    @relation(fields: [createdBy], references: [id])
 }
 
 model Category {
@@ -53,11 +55,10 @@ model Category {
   slug        String   @unique
   description String?
   image       String?
-  status      String   @default("active") // active, inactive
+  status      String   @default("active")
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  // Relations
   job_posts   JobPost[]
   specialties Specialty[]
 
@@ -68,26 +69,25 @@ model City {
   id         Int      @id @default(autoincrement())
   name       String
   country    String?
-  status     String   @default("active") // active, inactive
+  status     String   @default("active")
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  // Relations
-  job_posts  JobPost[]
-  users      User[]
+  job_posts JobPost[]
+  users     User[]
 
   @@unique([name, country])
   @@map("cities")
 }
 
 model Skill {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  category    String   // Programming Languages, Frameworks, Tools, etc.
-  type        String   @default("skill") // skill, tool, language
-  status      String   @default("active")
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  category   String
+  type       String   @default("skill")
+  status     String   @default("active")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("skills")
 }
@@ -100,199 +100,143 @@ model Specialty {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  // Relations
-  category    Category @relation(fields: [category_id], references: [id])
+  category Category @relation(fields: [category_id], references: [id])
 
   @@unique([name, category_id])
   @@map("specialties")
 }
 
 model JobPost {
-  id                  Int      @id @default(autoincrement())
-  title               String
-  slug                String   @unique
-  summary             String?  @db.Text
-  description         String   @db.Text
-  deliverables        String?  @db.Text
-  category_id         Int
-  specialty           String?
-  city_id             Int?
-  
-  // Budget Information
-  budget_type         String   @default("hourly") // hourly, fixed
-  hourly_rate_from    Decimal? @db.Decimal(10, 2)
-  hourly_rate_to      Decimal? @db.Decimal(10, 2)
-  fixed_price         Decimal? @db.Decimal(10, 2)
-  
-  // Project Details
-  project_type        String   @default("one-time") // one-time, ongoing
-  duration            String?  // 1-3 months, 3-6 months, etc.
-  hours_per_week      String?  // less than 30, 30+, etc.
-  job_size            String?  // small, medium, large
-  freelancers_needed  Int      @default(1)
-  
-  // Experience Requirements
-  experience_level    String   @default("intermediate") // entry, intermediate, expert
-  
-  // Skills (stored as JSON arrays)
-  mandatory_skills    Json?    // Array of skill objects
-  nice_to_have_skills Json?    // Array of skill objects  
-  tools               Json?    // Array of tool objects
-  
-  // Additional Options
-  languages           Json?    // Array of language requirements
-  
-  // Legacy fields (keep for backward compatibility)
-  regular_price       Decimal? @db.Decimal(10, 2)
-  job_type           String   @default("Hourly") // Hourly, Daily, Monthly, Yearly
-  thumb_image        String?
-  
-  // System fields
-  buyer_id           String   // Changed to String to match User.id
-  status             String   @default("active") // active, inactive, completed
-  approved_by_admin  String   @default("pending") // pending, approved, rejected
-  featured           Boolean  @default(false)
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  id           Int     @id @default(autoincrement())
+  title        String
+  slug         String  @unique
+  summary      String? @db.Text
+  description  String  @db.Text
+  deliverables String? @db.Text
+  category_id  Int
+  specialty    String?
+  city_id      Int?
 
-  // Relations
-  category      Category         @relation(fields: [category_id], references: [id])
-  city          City?            @relation(fields: [city_id], references: [id])
-  buyer         User             @relation("BuyerJobPosts", fields: [buyer_id], references: [id])
-  applications  JobApplication[]
+  budget_type      String   @default("hourly")
+  hourly_rate_from Decimal? @db.Decimal(10, 2)
+  hourly_rate_to   Decimal? @db.Decimal(10, 2)
+  fixed_price      Decimal? @db.Decimal(10, 2)
+
+  project_type       String  @default("one-time")
+  duration           String?
+  hours_per_week     String?
+  job_size           String?
+  freelancers_needed Int     @default(1)
+  experience_level   String  @default("intermediate")
+
+  mandatory_skills    Json?
+  nice_to_have_skills Json?
+  tools               Json?
+  languages           Json?
+
+  regular_price Decimal? @db.Decimal(10, 2)
+  job_type      String   @default("Hourly")
+  thumb_image   String?
+
+  buyer_id          String
+  status            String   @default("active")
+  approved_by_admin String   @default("pending")
+  featured          Boolean  @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  category     Category         @relation(fields: [category_id], references: [id])
+  city         City?            @relation(fields: [city_id], references: [id])
+  buyer        User             @relation("BuyerJobPosts", fields: [buyer_id], references: [id])
+  applications JobApplication[]
 
   @@map("job_posts")
 }
 
 model JobApplication {
-  id              Int      @id @default(autoincrement())
-  job_post_id     Int
-  freelancer_id   String   // Changed to String to match User.id
-  cover_letter    String   @db.Text
-  proposed_price  Decimal  @db.Decimal(10, 2)
-  delivery_time   Int      // in days
-  status          String   @default("pending") // pending, approved, rejected, withdrawn
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  job_post_id    Int
+  freelancer_id  String
+  cover_letter   String   @db.Text
+  proposed_price Decimal  @db.Decimal(10, 2)
+  delivery_time  Int
+  status         String   @default("pending")
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
-  // Relations
-  job_post        JobPost  @relation(fields: [job_post_id], references: [id], onDelete: Cascade)
-  freelancer      User     @relation("FreelancerApplications", fields: [freelancer_id], references: [id])
+  job_post   JobPost @relation(fields: [job_post_id], references: [id], onDelete: Cascade)
+  freelancer User    @relation("FreelancerApplications", fields: [freelancer_id], references: [id])
 
-  @@unique([job_post_id, freelancer_id]) // Prevent duplicate applications
+  @@unique([job_post_id, freelancer_id])
   @@map("job_applications")
 }
 
 model FreelancerProfile {
-  id            Int       @id @default(autoincrement())
-  user_id       String    @unique // Changed to String to match User.id and made unique
-  
-  // Personal Information
-  title         String?
-  bio           String?   @db.Text
-  phone         String?
-  date_of_birth DateTime?
-  gender        String?   // male, female, other
-  
-  // Location
-  address       String?
-  city          String?
-  state         String?
-  country       String?
-  postal_code   String?
-  
-  // Professional Details
+  id                   Int      @id @default(autoincrement())
+  user_id              String   @unique
+  title                String?
+  bio                  String?   @db.Text
+  phone                String?
+  date_of_birth        DateTime?
+  gender               String?
+  address              String?
+  city                 String?
+  state                String?
+  country              String?
+  postal_code          String?
   specialization       String?
   hourly_rate          Decimal?  @db.Decimal(10, 2)
   years_of_experience  Int       @default(0)
-  
-  // Skills & Languages (stored as JSON arrays)
-  skills        Json?     // Array of skill objects
-  languages     Json?     // Array of {language, proficiency}
-  
-  // Education (stored as JSON array)
-  education     Json?     // Array of {degree, institution, field_of_study, start_date, end_date, description}
-  
-  // Experience (stored as JSON array)
-  experience    Json?     // Array of {title, company, location, start_date, end_date, description}
-  
-  // Certifications (stored as JSON array)
-  certifications Json?    // Array of {name, issuing_organization, issue_date, expiry_date, credential_id, credential_url}
-  
-  // Portfolio
-  portfolio_items Json?   // Array of {title, description, url, image, tags}
-  
-  // Social Links
-  linkedin_url   String?
-  github_url     String?
-  website_url    String?
-  twitter_url    String?
-  
-  // Payment Information (stored as JSON arrays)
-  bank_accounts  Json?    // Array of {bank_name, account_title, account_number, iban, branch_code}
-  payment_methods Json?   // Array of {type: 'jazzcash'|'easypaisa'|'paypal', account_number, account_name}
-  
-  // Profile Settings
-  profile_image  String?
-  cover_image    String?
-  is_available   Boolean   @default(true)
-  
-  // System fields
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
+  skills               Json?
+  languages            Json?
+  education            Json?
+  experience           Json?
+  certifications       Json?
+  portfolio_items      Json?
+  linkedin_url         String?
+  github_url           String?
+  website_url          String?
+  twitter_url          String?
+  bank_accounts        Json?
+  payment_methods      Json?
+  profile_image        String?
+  cover_image          String?
+  is_available         Boolean   @default(true)
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
 
-  // Relations
-  user          User      @relation("FreelancerProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation("FreelancerProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("freelancer_profiles")
 }
 
 model ClientProfile {
-  id            Int       @id @default(autoincrement())
-  user_id       String    @unique // Changed to String to match User.id
-  
-  // Personal Information
-  phone         String?
-  date_of_birth DateTime?
-  gender        String?   // male, female, other
-  company_name  String?
-  company_size  String?   // 1-10, 11-50, 51-200, 201-500, 500+
-  industry      String?
-  
-  // Location
-  address       String?
-  city          String?
-  state         String?
-  country       String?
-  postal_code   String?
-  
-  // Contact Information
-  website_url   String?
-  linkedin_url  String?
-  
-  // Education (stored as JSON array)
-  education     Json?     // Array of {degree, institution, field_of_study, start_date, end_date, description}
-  
-  // Certifications (stored as JSON array)
-  certifications Json?    // Array of {name, issuing_organization, issue_date, expiry_date, credential_id, credential_url}
-  
-  // Payment Information (stored as JSON arrays)
-  bank_accounts  Json?    // Array of {bank_name, account_title, account_number, iban, branch_code}
-  payment_methods Json?   // Array of {type: 'jazzcash'|'easypaisa'|'paypal', account_number, account_name}
-  
-  // Profile Settings
-  profile_image  String?
-  
-  // Preferences
+  id                Int      @id @default(autoincrement())
+  user_id           String   @unique
+  phone             String?
+  date_of_birth     DateTime?
+  gender            String?
+  company_name      String?
+  company_size      String?
+  industry          String?
+  address           String?
+  city              String?
+  state             String?
+  country           String?
+  postal_code       String?
+  website_url       String?
+  linkedin_url      String?
+  education         Json?
+  certifications    Json?
+  bank_accounts     Json?
+  payment_methods   Json?
+  profile_image     String?
   preferred_language String? @default("en")
   timezone          String?
-  
-  // System fields
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
 
-  // Relations
-  user          User      @relation("ClientProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation("ClientProfileRelation", fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("client_profiles")
 }
