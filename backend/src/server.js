@@ -1,45 +1,68 @@
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes.js";
-import gigsRoutes from "./routes/gigs.route.js";
-import jobPostRoutes from "./routes/jobPosts.routes.js";
-import categoriesRoutes from "./routes/categories.routes.js";
-import publicRoutes from "./routes/public.routes.js";
-import skillsRoutes from "./routes/skills.routes.js";
-import path from "path";
-import freelancerDashboardRoutes from "./routes/freelancerDashboard.routes.js";
-import freelancerProfileRoutes from "./routes/freelancerProfile.routes.js";
-import profileRoutes from "./routes/profile.routes.js";
-import clientDashboardRoutes from "./routes/clientDashboard.routes.js";
+import "dotenv/config"
+import express from "express"
+import cors from "cors"
+import cookieParser from "cookie-parser"
+import { connectToDatabase, getDatabase } from "./db/mongodb.js"
+import { initializeCollections } from "./db/initializeCollections.js"
+import authRoutes from "./routes/auth.routes.js"
+import gigsRoutes from "./routes/gigs.route.js"
+import jobPostRoutes from "./routes/jobPosts.routes.js"
+import categoriesRoutes from "./routes/categories.routes.js"
+import publicRoutes from "./routes/public.routes.js"
+import skillsRoutes from "./routes/skills.routes.js"
+import path from "path"
+import freelancerDashboardRoutes from "./routes/freelancerDashboard.routes.js"
+import freelancerProfileRoutes from "./routes/freelancerProfile.routes.js"
+import profileRoutes from "./routes/profile.routes.js"
+import clientDashboardRoutes from "./routes/clientDashboard.routes.js"
 
-const app = express();
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 
-app.use("/uploads", express.static(path.resolve("./uploads")));
+const app = express()
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000"
 
-app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }));
-app.use(express.json());
-app.use(cookieParser());
+// Initialize MongoDB before starting server
+async function initializeApp() {
+  try {
+    await connectToDatabase()
+    await initializeCollections()
+    console.log("[App] MongoDB initialized successfully")
+  } catch (error) {
+    console.error("[App] Failed to initialize MongoDB:", error)
+    process.exit(1)
+  }
+}
+
+initializeApp()
+
+app.use("/uploads", express.static(path.resolve("./uploads")))
+
+app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }))
+app.use(express.json())
+app.use(cookieParser())
 
 // Routes
-app.get("/", (req, res) => res.send("API running"));
-app.use("/api/auth", authRoutes);
-app.use("/api/gigs", gigsRoutes);
-app.use("/api", publicRoutes);
-app.use("/api", jobPostRoutes);
-app.use("/api", categoriesRoutes);
-app.use("/api", skillsRoutes);
-app.use("/api/freelancer/profile", freelancerProfileRoutes);
-app.use("/api/profile", profileRoutes);
-app.use("/api", clientDashboardRoutes);
-app.use("/api", freelancerDashboardRoutes);
+app.get("/", (req, res) => res.send("API running"))
+app.use("/api/auth", authRoutes)
+app.use("/api/gigs", gigsRoutes)
+app.use("/api", publicRoutes)
+app.use("/api", jobPostRoutes)
+app.use("/api", categoriesRoutes)
+app.use("/api", skillsRoutes)
+app.use("/api/freelancer/profile", freelancerProfileRoutes)
+app.use("/api/profile", profileRoutes)
+app.use("/api", clientDashboardRoutes)
+app.use("/api", freelancerDashboardRoutes)
 
 // Health check
-app.get("/api/health", (_req, res) => res.json({ ok: true }));
+app.get("/api/health", async (_req, res) => {
+  try {
+    const db = await getDatabase()
+    await db.admin().ping()
+    res.json({ ok: true, database: "connected" })
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message })
+  }
+})
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () =>
-  console.log(`API listening on http://localhost:${PORT}`)
-);
+const PORT = process.env.PORT || 4000
+app.listen(PORT, () => console.log(`API listening on http://localhost:${PORT}`))
