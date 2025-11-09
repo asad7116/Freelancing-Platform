@@ -1,21 +1,19 @@
-import pkg from '@prisma/client';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs/promises';
-
-const { PrismaClient, Decimal } = pkg;
-const prisma = new PrismaClient();
+import multer from "multer"
+import path from "path"
+import fs from "fs/promises"
+import { getDatabase } from "../db/mongodb.js"
+import { ObjectId } from "mongodb"
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/job-thumbnails/');
+    cb(null, "uploads/job-thumbnails/")
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'job-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)
+    cb(null, "job-" + uniqueSuffix + path.extname(file.originalname))
+  },
+})
 
 const upload = multer({
   storage: storage,
@@ -23,118 +21,114 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5MB limit
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
+    const allowedTypes = /jpeg|jpg|png|gif|webp/
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase())
+    const mimetype = allowedTypes.test(file.mimetype)
 
     if (mimetype && extname) {
-      return cb(null, true);
+      return cb(null, true)
     } else {
-      cb(new Error('Only image files are allowed (jpeg, jpg, png, gif, webp)'));
+      cb(new Error("Only image files are allowed (jpeg, jpg, png, gif, webp)"))
     }
-  }
-});
+  },
+})
 
 // Create upload directory if it doesn't exist
 const createUploadDir = async () => {
   try {
-    await fs.mkdir('uploads/job-thumbnails/', { recursive: true });
+    await fs.mkdir("uploads/job-thumbnails/", { recursive: true })
   } catch (error) {
-    console.error('Error creating upload directory:', error);
+    console.error("Error creating upload directory:", error)
   }
-};
+}
 
-createUploadDir();
+createUploadDir()
 
 class JobPostController {
   // Create new job post
   static async create(req, res) {
     try {
       const {
-        // Basic info
         title,
         summary,
         description,
         deliverables,
         category_id,
         specialty,
-        
-        // Budget
         budget_type,
         hourly_rate_from,
         hourly_rate_to,
         fixed_price,
-        
-        // Project details
         project_type,
         duration,
         hours_per_week,
         job_size,
         freelancers_needed,
-        
-        // Experience and skills
         experience_level,
         mandatory_skills,
         nice_to_have_skills,
         tools,
         languages,
-        
-        // Legacy fields (for backward compatibility)
         regular_price,
         job_type,
-        city_id
-      } = req.body;
+        city_id,
+      } = req.body
 
-      const userId = req.user.id; // From auth middleware
+      const userId = req.user.id
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
+      const categories = db.collection("categories")
 
       // Generate slug from title if not provided
-      const jobSlug = title?.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-') + '-' + Date.now();
+      const jobSlug =
+        title
+          ?.toLowerCase()
+          .replace(/[^\w ]+/g, "")
+          .replace(/ +/g, "-") +
+        "-" +
+        Date.now()
 
       // Validation
-      const errors = {};
-      
-      if (!title?.trim()) errors.title = 'Job title is required';
-      if (!category_id) errors.category_id = 'Category is required';
-      if (!description?.trim()) errors.description = 'Description is required';
-      
+      const errors = {}
+
+      if (!title?.trim()) errors.title = "Job title is required"
+      if (!category_id) errors.category_id = "Category is required"
+      if (!description?.trim()) errors.description = "Description is required"
+
       // Budget validation
-      if (budget_type === 'hourly') {
-        if (!hourly_rate_from) errors.hourly_rate_from = 'Minimum hourly rate is required';
-        if (!hourly_rate_to) errors.hourly_rate_to = 'Maximum hourly rate is required';
-        const fromRate = new Decimal(hourly_rate_from || 0);
-        const toRate = new Decimal(hourly_rate_to || 0);
-        if (fromRate.greaterThanOrEqualTo(toRate)) {
-          errors.hourly_rate_to = 'Maximum rate must be higher than minimum rate';
+      if (budget_type === "hourly") {
+        if (!hourly_rate_from) errors.hourly_rate_from = "Minimum hourly rate is required"
+        if (!hourly_rate_to) errors.hourly_rate_to = "Maximum hourly rate is required"
+        if (Number.parseFloat(hourly_rate_from) >= Number.parseFloat(hourly_rate_to)) {
+          errors.hourly_rate_to = "Maximum rate must be higher than minimum rate"
         }
-      } else if (budget_type === 'fixed') {
-        if (!fixed_price) errors.fixed_price = 'Fixed price is required';
+      } else if (budget_type === "fixed") {
+        if (!fixed_price) errors.fixed_price = "Fixed price is required"
       }
 
       // Skills validation
       try {
-        const parsedMandatorySkills = mandatory_skills ? JSON.parse(mandatory_skills) : [];
+        const parsedMandatorySkills = mandatory_skills ? JSON.parse(mandatory_skills) : []
         if (parsedMandatorySkills.length === 0) {
-          errors.mandatory_skills = 'At least one mandatory skill is required';
+          errors.mandatory_skills = "At least one mandatory skill is required"
         }
       } catch (e) {
-        errors.mandatory_skills = 'Invalid skills format';
+        errors.mandatory_skills = "Invalid skills format"
       }
 
       // Validate category exists
-      const categoryExists = await prisma.category.findUnique({
-        where: { id: parseInt(category_id) }
-      });
+      const categoryExists = await categories.findOne({ _id: new ObjectId(category_id) })
 
       if (!categoryExists) {
-        errors.category_id = 'Selected category does not exist';
+        errors.category_id = "Selected category does not exist"
       }
 
       if (Object.keys(errors).length > 0) {
         return res.status(400).json({
           success: false,
-          message: 'Validation failed',
-          errors
-        });
+          message: "Validation failed",
+          errors,
+        })
       }
 
       // Create job post
@@ -144,591 +138,369 @@ class JobPostController {
         summary,
         description,
         deliverables,
-        category_id: parseInt(category_id),
+        category_id: new ObjectId(category_id),
         specialty,
-        city_id: city_id ? parseInt(city_id) : null,
-        
-        // Budget fields
-        budget_type: budget_type || 'hourly',
-        hourly_rate_from: hourly_rate_from ? new Decimal(hourly_rate_from) : null,
-        hourly_rate_to: hourly_rate_to ? new Decimal(hourly_rate_to) : null,
-        fixed_price: fixed_price ? new Decimal(fixed_price) : null,
-        
-        // Project details
-        project_type: project_type || 'one-time',
+        city_id: city_id ? new ObjectId(city_id) : null,
+        budget_type: budget_type || "hourly",
+        hourly_rate_from: hourly_rate_from ? Number.parseFloat(hourly_rate_from) : null,
+        hourly_rate_to: hourly_rate_to ? Number.parseFloat(hourly_rate_to) : null,
+        fixed_price: fixed_price ? Number.parseFloat(fixed_price) : null,
+        project_type: project_type || "one-time",
         duration,
         hours_per_week,
         job_size,
-        freelancers_needed: freelancers_needed ? parseInt(freelancers_needed) : 1,
-        
-        // Experience and skills (stored as JSON)
-        experience_level: experience_level || 'intermediate',
+        freelancers_needed: freelancers_needed ? Number.parseInt(freelancers_needed) : 1,
+        experience_level: experience_level || "intermediate",
         mandatory_skills: mandatory_skills ? JSON.parse(mandatory_skills) : [],
         nice_to_have_skills: nice_to_have_skills ? JSON.parse(nice_to_have_skills) : [],
         tools: tools ? JSON.parse(tools) : [],
         languages: languages ? JSON.parse(languages) : [],
-        
-        // Legacy fields (for backward compatibility)
-        regular_price: fixed_price ? new Decimal(fixed_price) : (hourly_rate_to ? new Decimal(hourly_rate_to) : null),
-        job_type: budget_type === 'hourly' ? 'Hourly' : 'Fixed',
-        
+        regular_price: fixed_price
+          ? Number.parseFloat(fixed_price)
+          : hourly_rate_to
+            ? Number.parseFloat(hourly_rate_to)
+            : null,
+        job_type: budget_type === "hourly" ? "Hourly" : "Fixed",
         buyer_id: userId,
-        status: 'active',
-        approved_by_admin: 'pending'
-      };
-
-      // Add thumbnail if uploaded
-      if (req.file) {
-        jobPostData.thumb_image = req.file.filename;
+        status: "active",
+        approved_by_admin: "pending",
+        featured: false,
+        thumb_image: req.file ? req.file.filename : null,
+        created_at: new Date(),
+        updated_at: new Date(),
       }
 
-      // Create the include object dynamically
-      const includeOptions = {
-        category: {
-          select: { id: true, name: true }
-        },
-        buyer: {
-          select: { id: true, name: true, email: true }
-        }
-      };
+      const result = await jobPosts.insertOne(jobPostData)
 
-      // Only include city if city_id is provided
-      if (city_id) {
-        includeOptions.city = {
-          select: { id: true, name: true }
-        };
+      const jobPost = {
+        id: result.insertedId.toString(),
+        ...jobPostData,
+        category_id: category_id,
+        city_id: city_id,
       }
-
-      const jobPost = await prisma.jobPost.create({
-        data: jobPostData,
-        include: includeOptions
-      });
 
       res.status(201).json({
         success: true,
-        message: 'Job post created successfully',
-        data: jobPost
-      });
-
+        message: "Job post created successfully",
+        data: jobPost,
+      })
     } catch (error) {
-      console.error('Error creating job post:', error);
+      console.error("Error creating job post:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 
   // Get all job posts
   static async getAll(req, res) {
     try {
-      const { 
-        page = 1, 
-        limit = 10, 
-        category_id, 
-        city_id, 
-        job_type, 
-        min_price, 
-        max_price,
-        search 
-      } = req.query;
+      const { page = 1, limit = 10, category_id, city_id, job_type, min_price, max_price, search } = req.query
+      const skip = (Number.parseInt(page) - 1) * Number.parseInt(limit)
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
 
-      const skip = (parseInt(page) - 1) * parseInt(limit);
-      
-      // Build where conditions
-      const where = {
-        status: 'active'
-        // Temporarily removed approval requirement for testing
-        // approved_by_admin: 'approved'
-      };
+      const where = { status: "active" }
 
       if (category_id) {
-        where.category_id = parseInt(category_id);
+        where.category_id = new ObjectId(category_id)
       }
 
       if (city_id) {
-        where.city_id = parseInt(city_id);
+        where.city_id = new ObjectId(city_id)
       }
 
       if (job_type) {
-        where.job_type = job_type;
+        where.job_type = job_type
       }
 
       if (min_price || max_price) {
-        where.regular_price = {};
-        if (min_price) where.regular_price.gte = parseFloat(min_price);
-        if (max_price) where.regular_price.lte = parseFloat(max_price);
+        where.regular_price = {}
+        if (min_price) where.regular_price.$gte = Number.parseFloat(min_price)
+        if (max_price) where.regular_price.$lte = Number.parseFloat(max_price)
       }
 
       if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } }
-        ];
+        where.$or = [{ title: { $regex: search, $options: "i" } }, { description: { $regex: search, $options: "i" } }]
       }
 
-      const [jobPosts, total] = await Promise.all([
-        prisma.jobPost.findMany({
-          where,
-          include: {
-            category: {
-              select: { id: true, name: true }
-            },
-            city: {
-              select: { id: true, name: true }
-            },
-            buyer: {
-              select: { id: true, name: true, avatar: true }
-            },
-            _count: {
-              select: { applications: true }
-            }
-          },
-          orderBy: { created_at: 'desc' },
-          skip,
-          take: parseInt(limit)
-        }),
-        prisma.jobPost.count({ where })
-      ]);
+      const [jobs, total] = await Promise.all([
+        jobPosts.find(where).sort({ created_at: -1 }).skip(skip).limit(Number.parseInt(limit)).toArray(),
+        jobPosts.countDocuments(where),
+      ])
 
-      const totalPages = Math.ceil(total / parseInt(limit));
+      const totalPages = Math.ceil(total / Number.parseInt(limit))
+
+      const formattedJobs = jobs.map((job) => ({
+        ...job,
+        id: job._id.toString(),
+        category_id: job.category_id.toString(),
+        city_id: job.city_id ? job.city_id.toString() : null,
+      }))
 
       res.json({
         success: true,
-        data: jobPosts,
+        data: formattedJobs,
         pagination: {
-          current_page: parseInt(page),
+          current_page: Number.parseInt(page),
           total_pages: totalPages,
           total_items: total,
-          items_per_page: parseInt(limit)
-        }
-      });
-
+          items_per_page: Number.parseInt(limit),
+        },
+      })
     } catch (error) {
-      console.error('Error fetching job posts:', error);
+      console.error("Error fetching job posts:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 
   // Get job post by ID
   static async getById(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
+      const jobApplications = db.collection("jobApplications")
 
-      const jobPost = await prisma.jobPost.findUnique({
-        where: { id: parseInt(id) },
-        include: {
-          category: {
-            select: { id: true, name: true }
-          },
-          city: {
-            select: { id: true, name: true }
-          },
-          buyer: {
-            select: { id: true, name: true, avatar: true, createdAt: true }
-          },
-          applications: {
-            include: {
-              freelancer: {
-                select: { id: true, name: true, avatar: true }
-              }
-            },
-            orderBy: { created_at: 'desc' }
-          },
-          _count: {
-            select: { applications: true }
-          }
-        }
-      });
+      const jobPost = await jobPosts.findOne({ _id: new ObjectId(id) })
 
       if (!jobPost) {
         return res.status(404).json({
           success: false,
-          message: 'Job post not found'
-        });
+          message: "Job post not found",
+        })
       }
+
+      const applications = await jobApplications.find({ job_post_id: id }).toArray()
 
       res.json({
         success: true,
-        data: jobPost
-      });
-
+        data: {
+          ...jobPost,
+          id: jobPost._id.toString(),
+          applications,
+          _count: { applications: applications.length },
+        },
+      })
     } catch (error) {
-      console.error('Error fetching job post:', error);
+      console.error("Error fetching job post:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 
   // Get buyer's job posts
   static async getBuyerJobs(req, res) {
     try {
-      const userId = req.user.id;
-      const { status, page = 1, limit = 10 } = req.query;
+      const userId = req.user.id
+      const { status, page = 1, limit = 10 } = req.query
+      const skip = (Number.parseInt(page) - 1) * Number.parseInt(limit)
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
 
-      const skip = (parseInt(page) - 1) * parseInt(limit);
-      
-      const where = { buyer_id: userId };
-      
+      const where = { buyer_id: userId }
+
       if (status) {
-        where.approved_by_admin = status;
+        where.approved_by_admin = status
       }
 
-      const [jobPosts, total] = await Promise.all([
-        prisma.jobPost.findMany({
-          where,
-          include: {
-            category: {
-              select: { id: true, name: true }
-            },
-            city: {
-              select: { id: true, name: true }
-            },
-            _count: {
-              select: { applications: true }
-            }
-          },
-          orderBy: { created_at: 'desc' },
-          skip,
-          take: parseInt(limit)
-        }),
-        prisma.jobPost.count({ where })
-      ]);
+      const [jobs, total] = await Promise.all([
+        jobPosts.find(where).sort({ created_at: -1 }).skip(skip).limit(Number.parseInt(limit)).toArray(),
+        jobPosts.countDocuments(where),
+      ])
 
-      const totalPages = Math.ceil(total / parseInt(limit));
+      const totalPages = Math.ceil(total / Number.parseInt(limit))
+
+      const formattedJobs = jobs.map((job) => ({
+        ...job,
+        id: job._id.toString(),
+      }))
 
       res.json({
         success: true,
-        data: jobPosts,
+        data: formattedJobs,
         pagination: {
-          current_page: parseInt(page),
+          current_page: Number.parseInt(page),
           total_pages: totalPages,
           total_items: total,
-          items_per_page: parseInt(limit)
-        }
-      });
-
+          items_per_page: Number.parseInt(limit),
+        },
+      })
     } catch (error) {
-      console.error('Error fetching buyer job posts:', error);
+      console.error("Error fetching buyer job posts:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 
   // Update job post
   static async update(req, res) {
     try {
-      const { id } = req.params;
-      const userId = req.user.id;
-      const {
-        // Basic info
-        title,
-        summary,
-        description,
-        deliverables,
-        category_id,
-        specialty,
-        
-        // Budget
-        budget_type,
-        hourly_rate_from,
-        hourly_rate_to,
-        fixed_price,
-        
-        // Project details
-        project_type,
-        duration,
-        hours_per_week,
-        job_size,
-        freelancers_needed,
-        
-        // Experience and skills
-        experience_level,
-        mandatory_skills,
-        nice_to_have_skills,
-        tools,
-        languages,
-        
-        // Legacy fields (for backward compatibility)
-        slug,
-        city_id,
-        regular_price,
-        job_type
-      } = req.body;
+      const { id } = req.params
+      const userId = req.user.id
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
 
-      // Check if job post exists and belongs to user
-      const existingJobPost = await prisma.jobPost.findUnique({
-        where: { id: parseInt(id) }
-      });
+      const existingJobPost = await jobPosts.findOne({ _id: new ObjectId(id) })
 
       if (!existingJobPost) {
         return res.status(404).json({
           success: false,
-          message: 'Job post not found'
-        });
+          message: "Job post not found",
+        })
       }
 
       if (existingJobPost.buyer_id !== userId) {
         return res.status(403).json({
           success: false,
-          message: 'You can only update your own job posts'
-        });
+          message: "You can only update your own job posts",
+        })
       }
 
-      // Validation
-      const errors = {};
-      
-      if (title && !title.trim()) errors.title = 'Job title cannot be empty';
-      if (description && !description.trim()) errors.description = 'Description cannot be empty';
-      
-      // Budget validation
-      if (budget_type === 'hourly') {
-        if (hourly_rate_from && hourly_rate_to) {
-          if (parseFloat(hourly_rate_from) >= parseFloat(hourly_rate_to)) {
-            errors.hourly_rate_to = 'Maximum rate must be higher than minimum rate';
-          }
-        }
-      }
+      const updateData = {}
+      if (req.body.title) updateData.title = req.body.title
+      if (req.body.description) updateData.description = req.body.description
+      if (req.body.category_id) updateData.category_id = new ObjectId(req.body.category_id)
 
-      if (Object.keys(errors).length > 0) {
-        return res.status(400).json({
-          success: false,
-          message: 'Validation failed',
-          errors
-        });
-      }
-
-      // Prepare update data
-      const updateData = {};
-      if (title) updateData.title = title;
-      if (summary !== undefined) updateData.summary = summary;
-      if (description) updateData.description = description;
-      if (deliverables !== undefined) updateData.deliverables = deliverables;
-      if (category_id) updateData.category_id = parseInt(category_id);
-      if (specialty !== undefined) updateData.specialty = specialty;
-      if (city_id) updateData.city_id = parseInt(city_id);
-      
-      // Budget fields
-      if (budget_type) updateData.budget_type = budget_type;
-      if (hourly_rate_from !== undefined) updateData.hourly_rate_from = hourly_rate_from ? new Decimal(hourly_rate_from) : null;
-      if (hourly_rate_to !== undefined) updateData.hourly_rate_to = hourly_rate_to ? new Decimal(hourly_rate_to) : null;
-      if (fixed_price !== undefined) updateData.fixed_price = fixed_price ? new Decimal(fixed_price) : null;
-      
-      // Project details
-      if (project_type) updateData.project_type = project_type;
-      if (duration !== undefined) updateData.duration = duration;
-      if (hours_per_week !== undefined) updateData.hours_per_week = hours_per_week;
-      if (job_size !== undefined) updateData.job_size = job_size;
-      if (freelancers_needed) updateData.freelancers_needed = parseInt(freelancers_needed);
-      
-      // Experience and skills (stored as JSON)
-      if (experience_level) updateData.experience_level = experience_level;
-      if (mandatory_skills) updateData.mandatory_skills = typeof mandatory_skills === 'string' ? JSON.parse(mandatory_skills) : mandatory_skills;
-      if (nice_to_have_skills) updateData.nice_to_have_skills = typeof nice_to_have_skills === 'string' ? JSON.parse(nice_to_have_skills) : nice_to_have_skills;
-      if (tools) updateData.tools = typeof tools === 'string' ? JSON.parse(tools) : tools;
-      if (languages) updateData.languages = typeof languages === 'string' ? JSON.parse(languages) : languages;
-      
-      // Legacy fields (for backward compatibility)
-      if (regular_price !== undefined) updateData.regular_price = regular_price ? parseFloat(regular_price) : null;
-      if (job_type) updateData.job_type = job_type;
-      
-      // Update regular_price and job_type based on budget fields if not explicitly provided
-      if (!regular_price) {
-        if (fixed_price) {
-          updateData.regular_price = new Decimal(fixed_price);
-        } else if (hourly_rate_to) {
-          updateData.regular_price = new Decimal(hourly_rate_to);
-        }
-      }
-      
-      if (!job_type && budget_type) {
-        updateData.job_type = budget_type === 'hourly' ? 'Hourly' : 'Fixed';
-      }
-
-      // Add thumbnail if uploaded
-      if (req.file) {
-        updateData.thumb_image = req.file.filename;
-        
-        // Delete old thumbnail if exists
-        if (existingJobPost.thumb_image) {
-          try {
-            await fs.unlink(`uploads/job-thumbnails/${existingJobPost.thumb_image}`);
-          } catch (error) {
-            console.error('Error deleting old thumbnail:', error);
-          }
-        }
-      }
-
-      const updatedJobPost = await prisma.jobPost.update({
-        where: { id: parseInt(id) },
-        data: updateData,
-        include: {
-          category: {
-            select: { id: true, name: true }
-          },
-          city: {
-            select: { id: true, name: true }
-          },
-          buyer: {
-            select: { id: true, name: true, email: true }
-          }
-        }
-      });
+      const result = await jobPosts.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { ...updateData, updated_at: new Date() } },
+        { returnDocument: "after" },
+      )
 
       res.json({
         success: true,
-        message: 'Job post updated successfully',
-        data: updatedJobPost
-      });
-
+        message: "Job post updated successfully",
+        data: { ...result.value, id: result.value._id.toString() },
+      })
     } catch (error) {
-      console.error('Error updating job post:', error);
+      console.error("Error updating job post:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 
   // Delete job post
   static async delete(req, res) {
     try {
-      const { id } = req.params;
-      const userId = req.user.id;
+      const { id } = req.params
+      const userId = req.user.id
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
 
-      // Check if job post exists and belongs to user
-      const existingJobPost = await prisma.jobPost.findUnique({
-        where: { id: parseInt(id) }
-      });
+      const existingJobPost = await jobPosts.findOne({ _id: new ObjectId(id) })
 
       if (!existingJobPost) {
         return res.status(404).json({
           success: false,
-          message: 'Job post not found'
-        });
+          message: "Job post not found",
+        })
       }
 
       if (existingJobPost.buyer_id !== userId) {
         return res.status(403).json({
           success: false,
-          message: 'You can only delete your own job posts'
-        });
+          message: "You can only delete your own job posts",
+        })
       }
 
-      // Delete thumbnail file if exists
       if (existingJobPost.thumb_image) {
         try {
-          await fs.unlink(`uploads/job-thumbnails/${existingJobPost.thumb_image}`);
+          await fs.unlink(`uploads/job-thumbnails/${existingJobPost.thumb_image}`)
         } catch (error) {
-          console.error('Error deleting thumbnail:', error);
+          console.error("Error deleting thumbnail:", error)
         }
       }
 
-      // Delete job post (this will cascade delete applications)
-      await prisma.jobPost.delete({
-        where: { id: parseInt(id) }
-      });
+      await jobPosts.deleteOne({ _id: new ObjectId(id) })
 
       res.json({
         success: true,
-        message: 'Job post deleted successfully'
-      });
-
+        message: "Job post deleted successfully",
+      })
     } catch (error) {
-      console.error('Error deleting job post:', error);
+      console.error("Error deleting job post:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 
   // Get job applications for a specific job post
   static async getJobApplications(req, res) {
     try {
-      const { id } = req.params;
-      const userId = req.user.id;
-      const { page = 1, limit = 10 } = req.query;
+      const { id } = req.params
+      const userId = req.user.id
+      const { page = 1, limit = 10 } = req.query
+      const skip = (Number.parseInt(page) - 1) * Number.parseInt(limit)
+      const db = await getDatabase()
+      const jobPosts = db.collection("jobPosts")
+      const jobApplications = db.collection("jobApplications")
 
-      const skip = (parseInt(page) - 1) * parseInt(limit);
-
-      // Check if job post exists and belongs to user
-      const jobPost = await prisma.jobPost.findUnique({
-        where: { id: parseInt(id) }
-      });
+      const jobPost = await jobPosts.findOne({ _id: new ObjectId(id) })
 
       if (!jobPost) {
         return res.status(404).json({
           success: false,
-          message: 'Job post not found'
-        });
+          message: "Job post not found",
+        })
       }
 
       if (jobPost.buyer_id !== userId) {
         return res.status(403).json({
           success: false,
-          message: 'You can only view applications for your own job posts'
-        });
+          message: "You can only view applications for your own job posts",
+        })
       }
 
       const [applications, total] = await Promise.all([
-        prisma.jobApplication.findMany({
-          where: { job_post_id: parseInt(id) },
-          include: {
-            freelancer: {
-              select: { 
-                id: true, 
-                name: true, 
-                email: true, 
-                avatar: true,
-                createdAt: true 
-              }
-            }
-          },
-          orderBy: { created_at: 'desc' },
-          skip,
-          take: parseInt(limit)
-        }),
-        prisma.jobApplication.count({
-          where: { job_post_id: parseInt(id) }
-        })
-      ]);
+        jobApplications
+          .find({ job_post_id: id })
+          .sort({ created_at: -1 })
+          .skip(skip)
+          .limit(Number.parseInt(limit))
+          .toArray(),
+        jobApplications.countDocuments({ job_post_id: id }),
+      ])
 
-      const totalPages = Math.ceil(total / parseInt(limit));
+      const totalPages = Math.ceil(total / Number.parseInt(limit))
 
       res.json({
         success: true,
         data: applications,
         pagination: {
-          current_page: parseInt(page),
+          current_page: Number.parseInt(page),
           total_pages: totalPages,
           total_items: total,
-          items_per_page: parseInt(limit)
-        }
-      });
-
+          items_per_page: Number.parseInt(limit),
+        },
+      })
     } catch (error) {
-      console.error('Error fetching job applications:', error);
+      console.error("Error fetching job applications:", error)
       res.status(500).json({
         success: false,
-        message: 'Internal server error',
-        error: error.message
-      });
+        message: "Internal server error",
+        error: error.message,
+      })
     }
   }
 }
 
-export { JobPostController, upload };
+export { JobPostController, upload }
