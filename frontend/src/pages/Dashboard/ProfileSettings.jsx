@@ -123,8 +123,14 @@ export default function ProfileSettings() {
         // Set user role
         setUserRole(data.user.role);
         
-        // Set profile image
-        setProfileImage(data.profile?.profile_image || data.user.avatar || '');
+        // Set profile image - prepend backend URL if path exists and is relative
+        const imagePath = data.profile?.profile_image || data.user.avatar || '';
+        if (imagePath) {
+          // If path already has http, use it as is, otherwise prepend backend URL
+          setProfileImage(imagePath.startsWith('http') ? imagePath : `http://localhost:4000${imagePath}`);
+        } else {
+          setProfileImage('');
+        }
         
         // Set personal info from user
         setPersonalInfo({
