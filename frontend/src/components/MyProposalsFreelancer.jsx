@@ -269,6 +269,16 @@ const MyProposalsFreelancer = () => {
                   <Eye size={16} />
                   View Job
                 </button>
+                
+                {proposal.status === 'approved' && (
+                  <button 
+                    className="btn-submit-work"
+                    onClick={() => navigate(`/freelancer/submit-work/${proposal._id}`)}
+                  >
+                    <Send size={16} />
+                    Submit Work
+                  </button>
+                )}
               </div>
             </div>
           ))}

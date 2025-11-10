@@ -400,3 +400,82 @@ export const updateProposalStatus = async (req, res) => {
     })
   }
 }
+
+// Submit work for approved proposal
+export async function submitWorkForProposal(req, res) {
+  try {
+    const freelancerId = req.user.id
+    const { proposalId } = req.params
+    const { submission_note, deliverable_links } = req.body
+
+    // Validation
+    if (!submission_note || !submission_note.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Submission note is required",
+      })
+    }
+
+    if (!deliverable_links || deliverable_links.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one deliverable link is required",
+      })
+    }
+
+    const db = await getDatabase()
+
+    // Get proposal
+    const proposal = await JobApplicationModel.findById(db, proposalId)
+
+    if (!proposal) {
+      return res.status(404).json({
+        success: false,
+        message: "Proposal not found",
+      })
+    }
+
+    // Verify freelancer owns the proposal
+    if (proposal.freelancer_id !== freelancerId) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized to submit work for this proposal",
+      })
+    }
+
+    // Check if proposal is approved
+    if (proposal.status !== "approved") {
+      return res.status(400).json({
+        success: false,
+        message: "Only approved proposals can submit work",
+      })
+    }
+
+    // Check if already submitted
+    if (proposal.submission_status === "submitted" || proposal.status === "completed") {
+      return res.status(400).json({
+        success: false,
+        message: "Work has already been submitted for this proposal",
+      })
+    }
+
+    // Submit work
+    const updatedProposal = await JobApplicationModel.submitWork(db, proposalId, {
+      submission_note,
+      deliverable_links,
+    })
+
+    res.json({
+      success: true,
+      message: "Work submitted successfully",
+      proposal: updatedProposal,
+    })
+  } catch (error) {
+    console.error("Submit work error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to submit work",
+      error: error.message,
+    })
+  }
+}
