@@ -58,6 +58,24 @@ export class JobApplicationModel {
       freelancer_id: freelancerId,
     })
   }
+
+  static async submitWork(db, id, submissionData) {
+    const jobApplications = db.collection("jobApplications")
+    const result = await jobApplications.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          submission_note: submissionData.submission_note,
+          deliverable_links: submissionData.deliverable_links,
+          submission_status: "submitted",
+          submission_date: new Date(),
+          updated_at: new Date(),
+        },
+      },
+      { returnDocument: "after" }
+    )
+    return result.value
+  }
 }
 
 export default JobApplicationModel
