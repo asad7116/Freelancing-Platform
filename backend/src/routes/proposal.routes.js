@@ -9,6 +9,7 @@ import {
   getClientProposals,
   getProposalDetails,
   updateProposalStatus,
+  submitWorkForProposal,
 } from "../controllers/proposal.controller.js"
 
 const router = express.Router()
@@ -71,5 +72,6 @@ router.get("/job/:jobId", getJobProposals) // Get proposals for a specific job
 // Shared routes
 router.get("/:proposalId", getProposalDetails) // Get proposal details
 router.put("/:proposalId/status", updateProposalStatus) // Update proposal status (accept/reject)
+router.put("/:proposalId/submit-work", submitWorkForProposal) // Submit work for approved proposal
 
 export default router
