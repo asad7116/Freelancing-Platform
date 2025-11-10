@@ -20,7 +20,6 @@ const MENU = {
     { to: "browse-jobs", label: "Browse Jobs", icon: Search },
     { to: "gigs",       label: "Gigs",       icon: BriefcaseBusiness },
     { to: "orders",     label: "My Proposals",  icon: ClipboardList },
-    { to: "my-proposals", label: "My Proposals Old", icon: FileText },
     { to: "subscription", label: "Subscription", icon: CreditCard },
     { to: "messages",   label: "Messages",   icon: MessageSquare },
     { to: "portfolio",  label: "Portfolio",  icon: Images },
