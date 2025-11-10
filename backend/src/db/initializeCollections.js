@@ -31,6 +31,8 @@ export async function initializeCollections() {
     // JobApplication indexes
     await collections.jobApplications.createIndex({ job_post_id: 1 })
     await collections.jobApplications.createIndex({ freelancer_id: 1 })
+    await collections.jobApplications.createIndex({ client_id: 1 })
+    await collections.jobApplications.createIndex({ status: 1 })
     await collections.jobApplications.createIndex({ job_post_id: 1, freelancer_id: 1 }, { unique: true })
 
     // Profile indexes

@@ -37,6 +37,7 @@ import Profile from "./pages/Dashboard/Profile";
 import CreateGig from "./pages/Dashboard/CreateGig";
 import FreelancerProfileSetup from "./pages/Dashboard/FreelancerProfileSetup";
 import ProfileSettings from "./pages/Dashboard/ProfileSettings";
+import SubmitProposal from "./pages/SubmitProposal";
 
 export default function App() {
   return (
@@ -93,6 +94,7 @@ export default function App() {
           <Route path="overview" element={<FreelancerOverview />} />{" "}
           {/* <-- this one */}
           <Route path="browse-jobs" element={<BrowseJobs />} />
+          <Route path="apply/:jobId" element={<SubmitProposal />} />
           <Route path="profile-setup" element={<FreelancerProfileSetup />} />
           <Route path="job/:jobId" element={<JobDetail />} />
           <Route path="gig/:gigId" element={<GigDetail />} />
