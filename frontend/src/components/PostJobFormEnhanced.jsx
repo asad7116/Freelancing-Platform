@@ -488,7 +488,10 @@ const PostJobFormEnhanced = () => {
               </div>
               <select
                 onChange={(e) => {
-                  const skill = skills.find((s) => s.id === parseInt(e.target.value, 10));
+                  // skill ids from the API are strings (mapped from _id),
+                  // so compare as strings instead of parsing to number
+                  const val = e.target.value;
+                  const skill = skills.find((s) => s.id === val);
                   if (skill) addSkill('mandatory_skills', skill);
                   e.target.value = '';
                 }}
@@ -519,7 +522,8 @@ const PostJobFormEnhanced = () => {
               </div>
               <select
                 onChange={(e) => {
-                  const skill = skills.find((s) => s.id === parseInt(e.target.value, 10));
+                  const val = e.target.value;
+                  const skill = skills.find((s) => s.id === val);
                   if (skill) addSkill('nice_to_have_skills', skill);
                   e.target.value = '';
                 }}
@@ -549,7 +553,8 @@ const PostJobFormEnhanced = () => {
               </div>
               <select
                 onChange={(e) => {
-                  const tool = skills.find((s) => s.id === parseInt(e.target.value, 10));
+                  const val = e.target.value;
+                  const tool = skills.find((s) => s.id === val);
                   if (tool) addSkill('tools', tool);
                   e.target.value = '';
                 }}
