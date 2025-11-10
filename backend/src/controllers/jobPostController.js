@@ -201,8 +201,20 @@ class JobPostController {
       const skip = (Number.parseInt(page) - 1) * Number.parseInt(limit)
       const db = await getDatabase()
       const jobPosts = db.collection("jobPosts")
+      const jobApplications = db.collection("jobApplications")
 
-      const where = { status: "active" }
+      // Get job IDs that have approved applications
+      const approvedJobIds = await jobApplications
+        .find({ status: "approved" })
+        .project({ job_post_id: 1 })
+        .toArray()
+      
+      const approvedJobIdStrings = approvedJobIds.map(app => app.job_post_id)
+
+      const where = { 
+        status: "active",
+        _id: { $nin: approvedJobIdStrings.map(id => new ObjectId(id)) } // Exclude jobs with approved proposals
+      }
 
       if (category_id) {
         where.category_id = new ObjectId(category_id)
@@ -233,12 +245,24 @@ class JobPostController {
 
       const totalPages = Math.ceil(total / Number.parseInt(limit))
 
-      const formattedJobs = jobs.map((job) => ({
-        ...job,
-        id: job._id.toString(),
-        category_id: job.category_id.toString(),
-        city_id: job.city_id ? job.city_id.toString() : null,
-      }))
+      // Get application counts for each job
+      const formattedJobs = await Promise.all(
+        jobs.map(async (job) => {
+          const applicationCount = await jobApplications.countDocuments({
+            job_post_id: job._id.toString(),
+          })
+          
+          return {
+            ...job,
+            id: job._id.toString(),
+            category_id: job.category_id.toString(),
+            city_id: job.city_id ? job.city_id.toString() : null,
+            _count: {
+              applications: applicationCount,
+            },
+          }
+        })
+      )
 
       res.json({
         success: true,
@@ -306,6 +330,7 @@ class JobPostController {
       const skip = (Number.parseInt(page) - 1) * Number.parseInt(limit)
       const db = await getDatabase()
       const jobPosts = db.collection("jobPosts")
+      const jobApplications = db.collection("jobApplications")
 
       const where = { buyer_id: userId }
 
@@ -320,14 +345,26 @@ class JobPostController {
 
       const totalPages = Math.ceil(total / Number.parseInt(limit))
 
-      const formattedJobs = jobs.map((job) => ({
-        ...job,
-        id: job._id.toString(),
-      }))
+      // Get application counts for each job
+      const jobsWithCounts = await Promise.all(
+        jobs.map(async (job) => {
+          const applicationCount = await jobApplications.countDocuments({
+            job_post_id: job._id.toString(),
+          })
+          
+          return {
+            ...job,
+            id: job._id.toString(),
+            _count: {
+              applications: applicationCount,
+            },
+          }
+        })
+      )
 
       res.json({
         success: true,
-        data: formattedJobs,
+        data: jobsWithCounts,
         pagination: {
           current_page: Number.parseInt(page),
           total_pages: totalPages,

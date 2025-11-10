@@ -33,11 +33,13 @@ export async function getFreelancerDashboard(req, res) {
       status: "completed",
     })
 
+    // Active orders - proposals that have been approved
     const activeOrders = await jobApplications.countDocuments({
       freelancer_id: userId,
-      status: "active",
+      status: "approved",
     })
 
+    // Pending orders - proposals still pending review
     const pendingOrders = await jobApplications.countDocuments({
       freelancer_id: userId,
       status: "pending",

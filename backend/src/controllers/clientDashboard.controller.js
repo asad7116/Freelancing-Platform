@@ -13,17 +13,23 @@ export async function getClientDashboard(req, res) {
 
     const totalJob = await jobPosts.countDocuments({ buyer_id: userId })
 
-    const pendingOrders = await jobPosts.countDocuments({
-      buyer_id: userId,
-      approved_by_admin: "pending",
-    })
+    // Get job IDs for the user
+    const userJobIds = await jobPosts.find({ buyer_id: userId }).project({ _id: 1 }).toArray()
+    const jobIdStrings = userJobIds.map(j => j._id.toString())
 
-    const activeOrders = await jobPosts.countDocuments({
-      buyer_id: userId,
-      approved_by_admin: "approved",
-      status: "active",
-    })
+    // Count pending orders - jobs with no approved proposal
+    const approvedJobIds = await jobApplications.find({
+      job_post_id: { $in: jobIdStrings },
+      status: "approved"
+    }).project({ job_post_id: 1 }).toArray()
+    
+    const approvedJobIdSet = new Set(approvedJobIds.map(a => a.job_post_id))
+    const pendingOrders = jobIdStrings.length - approvedJobIdSet.size
 
+    // Active orders - jobs with approved proposals
+    const activeOrders = approvedJobIdSet.size
+
+    // Completed orders (jobs marked as completed)
     const completedOrders = await jobPosts.countDocuments({
       buyer_id: userId,
       status: "completed",
