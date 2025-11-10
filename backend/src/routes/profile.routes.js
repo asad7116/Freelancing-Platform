@@ -3,6 +3,7 @@ import multer from "multer"
 import path from "path"
 import { verifyJwt, authCookieName } from "../lib/jwt.js"
 import { User } from "../models/User.js"
+import { getDatabase } from "../db/mongodb.js"
 import {
   getProfile,
   updateFreelancerProfile,
@@ -32,7 +33,8 @@ const authMiddleware = async (req, res, next) => {
       })
     }
 
-    const user = await User.findById(payload.sub)
+    const db = await getDatabase()
+    const user = await User.findById(db, payload.sub)
 
     if (!user) {
       return res.status(401).json({
@@ -41,7 +43,11 @@ const authMiddleware = async (req, res, next) => {
       })
     }
 
-    req.user = user
+    // Attach user with id (string) and _id (ObjectId) for compatibility
+    req.user = {
+      ...user,
+      id: user._id.toString(),
+    }
     next()
   } catch (error) {
     console.error("Auth middleware error:", error)
