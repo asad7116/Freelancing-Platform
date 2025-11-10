@@ -15,6 +15,7 @@ import freelancerDashboardRoutes from "./routes/freelancerDashboard.routes.js"
 import freelancerProfileRoutes from "./routes/freelancerProfile.routes.js"
 import profileRoutes from "./routes/profile.routes.js"
 import clientDashboardRoutes from "./routes/clientDashboard.routes.js"
+import proposalRoutes from "./routes/proposal.routes.js"
 
 
 const app = express()
@@ -50,6 +51,7 @@ app.use("/api", categoriesRoutes)
 app.use("/api", skillsRoutes)
 app.use("/api/freelancer/profile", freelancerProfileRoutes)
 app.use("/api/profile", profileRoutes)
+app.use("/api/proposals", proposalRoutes)
 app.use("/api", clientDashboardRoutes)
 app.use("/api", freelancerDashboardRoutes)
 
