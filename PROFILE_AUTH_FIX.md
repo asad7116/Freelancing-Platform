@@ -76,6 +76,38 @@ const authMiddleware = async (req, res, next) => {
 - `backend/src/models/User.js` - User model with MongoDB queries
 - `frontend/src/pages/Dashboard/ProfileSettings.jsx` - Profile UI component
 
+## Additional Fix: Profile Image Persistence
+
+### Issue
+Profile images were uploading successfully but not persisting after page refresh or logout/login.
+
+### Root Cause
+The profile image path was stored in MongoDB as a relative path (e.g., `/uploads/1762758339569.png`), but when loading the profile data, the frontend was not prepending the backend URL to create the full image URL.
+
+### Solution
+Updated `ProfileSettings.jsx` to handle image paths correctly:
+
+```javascript
+// Before:
+setProfileImage(data.profile?.profile_image || data.user.avatar || '');
+
+// After:
+const imagePath = data.profile?.profile_image || data.user.avatar || '';
+if (imagePath) {
+  // If path already has http, use it as is, otherwise prepend backend URL
+  setProfileImage(imagePath.startsWith('http') ? imagePath : `http://localhost:4000${imagePath}`);
+} else {
+  setProfileImage('');
+}
+```
+
+This ensures:
+- Relative paths get the backend URL prepended
+- Absolute URLs (already containing http) are used as-is
+- Empty paths result in empty profile image state
+
 ## Branch
 - Branch: `fix/profile-authentication`
-- Commit: `f7d29e7` - Fix: Profile authentication error - Add MongoDB database connection to authMiddleware
+- Commits: 
+  - `f7d29e7` - Fix: Profile authentication error - Add MongoDB database connection to authMiddleware
+  - `2983ad1` - Fix: Profile image not persisting after refresh/logout
