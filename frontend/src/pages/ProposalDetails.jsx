@@ -93,6 +93,44 @@ const ProposalDetails = () => {
     }
   };
 
+  const handleSubmissionReview = async (action) => {
+    const confirmMsg = action === 'accepted' 
+      ? 'Accept this work and mark the job as completed?' 
+      : 'Request revision from the freelancer?';
+    
+    if (!window.confirm(confirmMsg)) {
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      setError('');
+
+      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}/review-submission`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ action })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSuccessMessage(data.message);
+        fetchProposalDetails(); // Refresh proposal data
+      } else {
+        setError(data.message || 'Failed to review submission');
+      }
+    } catch (err) {
+      console.error('Error reviewing submission:', err);
+      setError('Error reviewing submission');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -222,6 +260,58 @@ const ProposalDetails = () => {
             )}
           </div>
 
+          {/* Submission Section - Show if work has been submitted */}
+          {proposal.submission_status === 'submitted' && (
+            <div className="submission-section">
+              <h3>Work Submission</h3>
+              
+              <div className="submission-note">
+                <h4>Freelancer's Note:</h4>
+                <p>{proposal.submission_note}</p>
+              </div>
+
+              {proposal.deliverable_links && proposal.deliverable_links.length > 0 && (
+                <div className="deliverables">
+                  <h4>Deliverable Links:</h4>
+                  <ul className="deliverable-links-list">
+                    {proposal.deliverable_links.map((link, index) => (
+                      <li key={index}>
+                        <a 
+                          href={link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="deliverable-link"
+                        >
+                          <LinkIcon size={16} />
+                          {link}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="submission-actions">
+                <button
+                  className="btn-revision"
+                  onClick={() => handleSubmissionReview('revision')}
+                  disabled={actionLoading}
+                >
+                  <AlertCircle size={20} />
+                  Request Revision
+                </button>
+                <button
+                  className="btn-accept-work"
+                  onClick={() => handleSubmissionReview('accepted')}
+                  disabled={actionLoading}
+                >
+                  <CheckCircle size={20} />
+                  Accept Work & Complete
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
           {proposal.status === 'pending' && (
             <div className="action-buttons">
@@ -261,6 +351,15 @@ const ProposalDetails = () => {
                   <div>
                     <h4>This proposal has been rejected</h4>
                     <p>The freelancer has been notified</p>
+                  </div>
+                </>
+              )}
+              {proposal.status === 'completed' && (
+                <>
+                  <CheckCircle size={24} className="status-icon completed" />
+                  <div>
+                    <h4>This job has been completed</h4>
+                    <p>Work has been accepted and the job is now closed</p>
                   </div>
                 </>
               )}
