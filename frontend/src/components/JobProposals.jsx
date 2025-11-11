@@ -175,6 +175,12 @@ const JobProposals = () => {
                 </div>
                 <div className="proposal-status-section">
                   {getStatusBadge(proposal.status)}
+                  {proposal.submission_status === 'submitted' && (
+                    <span className="submission-badge">
+                      <CheckCircle size={14} />
+                      Work Submitted
+                    </span>
+                  )}
                   <span className="proposal-date">
                     {formatDate(proposal.created_at)}
                   </span>

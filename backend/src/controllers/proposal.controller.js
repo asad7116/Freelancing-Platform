@@ -479,3 +479,79 @@ export async function submitWorkForProposal(req, res) {
     })
   }
 }
+
+// Review submitted work (Client - Accept/Request Revision)
+export async function reviewSubmission(req, res) {
+  try {
+    const clientId = req.user.id
+    const { proposalId } = req.params
+    const { action } = req.body
+
+    // Validation
+    if (!["accepted", "revision"].includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid action. Must be 'accepted' or 'revision'",
+      })
+    }
+
+    const db = await getDatabase()
+
+    // Get proposal
+    const proposal = await JobApplicationModel.findById(db, proposalId)
+
+    if (!proposal) {
+      return res.status(404).json({
+        success: false,
+        message: "Proposal not found",
+      })
+    }
+
+    // Verify client owns the job
+    if (proposal.client_id !== clientId) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized to review this submission",
+      })
+    }
+
+    // Check if work has been submitted
+    if (proposal.submission_status !== "submitted") {
+      return res.status(400).json({
+        success: false,
+        message: "No submitted work to review",
+      })
+    }
+
+    // Handle action
+    if (action === "accepted") {
+      // Mark proposal as completed
+      const updatedProposal = await JobApplicationModel.updateStatus(db, proposalId, "completed")
+
+      // Mark job as completed
+      await JobPostModel.updateJobStatus(db, proposal.job_post_id, "completed")
+
+      res.json({
+        success: true,
+        message: "Work accepted and job marked as completed",
+        proposal: updatedProposal,
+      })
+    } else if (action === "revision") {
+      // Request revision
+      const updatedProposal = await JobApplicationModel.requestRevision(db, proposalId)
+
+      res.json({
+        success: true,
+        message: "Revision requested. Freelancer will be notified.",
+        proposal: updatedProposal,
+      })
+    }
+  } catch (error) {
+    console.error("Review submission error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to review submission",
+      error: error.message,
+    })
+  }
+}
