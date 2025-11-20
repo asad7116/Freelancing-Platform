@@ -39,8 +39,8 @@ cd backend
 
 backend/.env
 
-DATABASE_URL="postgresql://app:app_password@localhost:5432/fyp?schema=public"
-JWT_SECRET="dev_super_secret_change_me"
+DATABASE_URL=""
+JWT_SECRET=""
 FRONTEND_ORIGIN="http://localhost:3000"
 
 
@@ -108,6 +108,7 @@ Ai-Enhanced Freelancing platform/
     │   │   └── signUp.jsx
     │   └── styles/…                  # your existing CSS
     └── package.json
+
 
 
 
