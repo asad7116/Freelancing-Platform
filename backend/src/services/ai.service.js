@@ -730,6 +730,15 @@ Format your response as JSON:
     });
 
     const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Ensure enhanced is a string (AI sometimes returns nested objects)
+    if (typeof response.enhanced === 'object' && response.enhanced !== null) {
+      // If it's an object, convert it to a formatted string
+      response.enhanced = Object.entries(response.enhanced)
+        .map(([key, value]) => `**${key}**\n${value}`)
+        .join('\n\n');
+    }
+    
     return response;
   } catch (error) {
     console.error("Error enhancing job description:", error.message);
