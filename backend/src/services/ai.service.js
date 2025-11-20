@@ -641,3 +641,246 @@ IMPORTANT: Return amounts and durations as string numbers (e.g., "50" not 50) fo
     throw new Error("Failed to generate milestones with AI");
   }
 };
+
+/**
+ * Generate a professional job title from a description
+ * @param {string} description - Job description or rough idea
+ * @param {string} category - Job category
+ * @returns {Promise<Object>} - { title: string, alternatives: string[] }
+ */
+export const generateJobTitle = async (description, category = "") => {
+  try {
+    const prompt = `You are an expert job posting consultant. Generate a professional, clear, and SEO-friendly job title based on this description.
+
+Job Description: "${description}"
+Category: ${category || "General"}
+
+Requirements:
+- Create a clear, professional job title (under 80 characters)
+- Make it specific and action-oriented
+- Include key role/skill in the title
+- Avoid vague terms like "Expert needed" or "Looking for"
+- Make it attractive to qualified freelancers
+
+Provide:
+1. Best job title
+2. 2-3 alternative title options
+
+Format your response as JSON:
+{
+  "title": "your best job title",
+  "alternatives": ["alternative 1", "alternative 2", "alternative 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.7,
+      max_tokens: 300,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error generating job title:", error.message);
+    throw new Error("Failed to generate job title with AI");
+  }
+};
+
+/**
+ * Enhance a job description with AI
+ * @param {string} description - Original job description
+ * @param {string} title - Job title for context
+ * @param {string} category - Job category
+ * @returns {Promise<Object>} - { enhanced: string, improvements: string[] }
+ */
+export const enhanceJobDescription = async (description, title = "", category = "") => {
+  try {
+    const prompt = `You are an expert job posting consultant. Enhance the following job description to be more professional, detailed, and attractive to qualified freelancers.
+
+Job Title: ${title || "Not specified"}
+Category: ${category || "General"}
+Current Description: "${description}"
+
+Requirements:
+- Fix spelling and grammar errors
+- Add clear structure (Overview, Requirements, Deliverables)
+- Expand vague points with specific details
+- Keep it professional and welcoming
+- Length: 300-500 words
+- Make expectations and deliverables crystal clear
+
+Provide:
+1. Enhanced description
+2. List of key improvements made
+
+Format your response as JSON:
+{
+  "enhanced": "your enhanced description with proper structure",
+  "improvements": ["improvement 1", "improvement 2", "improvement 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.6,
+      max_tokens: 800,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error enhancing job description:", error.message);
+    throw new Error("Failed to enhance job description with AI");
+  }
+};
+
+/**
+ * Recommend a budget range for a job
+ * @param {Object} jobData - Job details
+ * @returns {Promise<Object>} - Budget recommendation with reasoning
+ */
+export const recommendJobBudget = async (jobData) => {
+  try {
+    const { title, description, category, complexity, duration } = jobData;
+
+    const prompt = `You are an expert freelancing platform budget consultant. Analyze this job and recommend a fair budget range.
+
+Job Title: ${title || "Not specified"}
+Category: ${category || "General"}
+Description: "${description}"
+Complexity: ${complexity || "Medium"}
+Expected Duration: ${duration || "Not specified"}
+
+Based on current market rates and job requirements:
+- Analyze the scope and complexity
+- Consider the skills and expertise required
+- Recommend a min and max budget range
+- Provide reasoning for your recommendation
+- Give insights about market rates
+
+Format your response as JSON:
+{
+  "recommendedMin": 500,
+  "recommendedMax": 1500,
+  "suggested": 1000,
+  "reasoning": "explanation of budget recommendation",
+  "insights": ["insight 1", "insight 2"],
+  "marketRate": "Brief market context for this type of work"
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.3,
+      max_tokens: 500,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error recommending budget:", error.message);
+    throw new Error("Failed to recommend budget with AI");
+  }
+};
+
+/**
+ * Suggest required skills for a job
+ * @param {Object} jobData - Job details
+ * @returns {Promise<Object>} - Suggested skills with categories
+ */
+export const suggestRequiredSkills = async (jobData) => {
+  try {
+    const { title, description, category } = jobData;
+
+    const prompt = `You are an expert job posting consultant. Analyze this job and suggest the required skills and qualifications.
+
+Job Title: ${title || "Not specified"}
+Category: ${category || "General"}
+Description: "${description}"
+
+Based on the job requirements:
+- Identify 5-8 key technical skills needed
+- Include relevant soft skills (2-3)
+- Categorize as "required" or "preferred"
+- Be specific (e.g., "React.js" not just "Frontend")
+
+Format your response as JSON:
+{
+  "technicalSkills": ["skill1", "skill2", "skill3", "skill4", "skill5"],
+  "softSkills": ["skill1", "skill2", "skill3"],
+  "required": ["must-have skill1", "must-have skill2"],
+  "preferred": ["nice-to-have skill1", "nice-to-have skill2"],
+  "reasoning": "Brief explanation of why these skills are important"
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.4,
+      max_tokens: 500,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error suggesting skills:", error.message);
+    throw new Error("Failed to suggest skills with AI");
+  }
+};
+
+/**
+ * Estimate project timeline/duration
+ * @param {Object} jobData - Job details
+ * @returns {Promise<Object>} - Timeline estimate with breakdown
+ */
+export const estimateProjectTimeline = async (jobData) => {
+  try {
+    const { title, description, category, budget } = jobData;
+
+    const prompt = `You are an expert project timeline consultant. Analyze this job and estimate a realistic project timeline.
+
+Job Title: ${title || "Not specified"}
+Category: ${category || "General"}
+Description: "${description}"
+Budget: ${budget ? `$${budget}` : "Not specified"}
+
+Based on the scope and complexity:
+- Estimate total project duration in days
+- Provide min and max range
+- Break down into phases if complex
+- Consider realistic work pace
+- Account for revisions and feedback
+
+Format your response as JSON:
+{
+  "estimatedDays": 14,
+  "minDays": 10,
+  "maxDays": 21,
+  "phases": [
+    {"name": "Phase 1", "days": 5, "description": "Brief description"},
+    {"name": "Phase 2", "days": 7, "description": "Brief description"}
+  ],
+  "reasoning": "Explanation of timeline estimate",
+  "considerations": ["consideration 1", "consideration 2"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.3,
+      max_tokens: 600,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error estimating timeline:", error.message);
+    throw new Error("Failed to estimate timeline with AI");
+  }
+};
