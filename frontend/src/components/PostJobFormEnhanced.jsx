@@ -3,11 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/post_job_enhanced.css';
 import { emit } from '../lib/eventBus'; // ✅ to refresh dashboard after success
-import JobTitleGenerator from './AI/JobTitleGenerator';
-import JobDescriptionEnhancer from './AI/JobDescriptionEnhancer';
-import JobBudgetRecommender from './AI/JobBudgetRecommender';
-import JobSkillsSuggester from './AI/JobSkillsSuggester';
-import JobTimelineEstimator from './AI/JobTimelineEstimator';
 
 const PostJobFormEnhanced = () => {
   const { jobId } = useParams();
@@ -355,11 +350,6 @@ const PostJobFormEnhanced = () => {
 
             <div className="form-group">
               <label>Title *</label>
-              <JobTitleGenerator
-                description={formData.description}
-                category={categories.find(c => c.id === formData.category_id)?.name || ''}
-                onApply={(title) => handleInputChange('title', title)}
-              />
               <input
                 type="text"
                 value={formData.title}
@@ -382,12 +372,6 @@ const PostJobFormEnhanced = () => {
 
             <div className="form-group">
               <label>Description *</label>
-              <JobDescriptionEnhancer
-                description={formData.description}
-                title={formData.title}
-                category={categories.find(c => c.id === formData.category_id)?.name || ''}
-                onApply={(enhanced) => handleInputChange('description', enhanced)}
-              />
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
@@ -489,24 +473,6 @@ const PostJobFormEnhanced = () => {
         {currentStep === 2 && (
           <div className="form-step">
             <h2>Freelancer Requirements</h2>
-
-            <JobSkillsSuggester
-              title={formData.title}
-              description={formData.description}
-              category={categories.find(c => c.id === formData.category_id)?.name || ''}
-              onApply={(suggestedSkills) => {
-                // Convert skill names to skill objects
-                const skillsToAdd = suggestedSkills.map(skillName => {
-                  const existingSkill = skills.find(s => s.name.toLowerCase() === skillName.toLowerCase());
-                  return existingSkill || { id: `temp-${Date.now()}-${Math.random()}`, name: skillName, type: 'skill' };
-                }).filter(skill => !formData.mandatory_skills.some(s => s.id === skill.id));
-                
-                setFormData(prev => ({
-                  ...prev,
-                  mandatory_skills: [...prev.mandatory_skills, ...skillsToAdd]
-                }));
-              }}
-            />
 
             <div className="skills-section">
               <h3>Mandatory Skills *</h3>
@@ -630,14 +596,6 @@ const PostJobFormEnhanced = () => {
           <div className="form-step">
             <h2>Budget</h2>
 
-            <JobBudgetRecommender
-              title={formData.title}
-              description={formData.description}
-              category={categories.find(c => c.id === formData.category_id)?.name || ''}
-              complexity={formData.job_size}
-              duration={formData.duration}
-            />
-
             <div className="budget-type-section">
               <h3>Project Type</h3>
               <div className="radio-group">
@@ -720,20 +678,6 @@ const PostJobFormEnhanced = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label>Duration</label>
-                  <JobTimelineEstimator
-                    title={formData.title}
-                    description={formData.description}
-                    category={categories.find(c => c.id === formData.category_id)?.name || ''}
-                    budget={formData.budget_type === 'fixed' ? formData.fixed_price : null}
-                    onApply={(days) => {
-                      // Convert days to duration option
-                      let durationValue = '';
-                      if (days <= 90) durationValue = '1-3-months';
-                      else if (days <= 180) durationValue = '3-6-months';
-                      else durationValue = '6-months-plus';
-                      handleInputChange('duration', durationValue);
-                    }}
-                  />
                   <select value={formData.duration} onChange={(e) => handleInputChange('duration', e.target.value)}>
                     <option value="">Select duration</option>
                     {durationOptions.map((option) => (
