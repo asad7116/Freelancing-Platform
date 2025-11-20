@@ -318,3 +318,158 @@ export const generateMilestonesController = async (req, res) => {
     });
   }
 };
+
+/**
+ * POST /api/ai/generate-job-title
+ * Generate a professional job title from description
+ */
+export const generateJobTitleController = async (req, res) => {
+  try {
+    const { description, category } = req.body;
+
+    if (!description || description.trim().length === 0) {
+      return res.status(400).json({ 
+        error: "Job description is required" 
+      });
+    }
+
+    const result = await aiService.generateJobTitle(description, category);
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error("Error in generateJobTitleController:", error.message);
+    res.status(500).json({ 
+      error: "Failed to generate job title. Please try again." 
+    });
+  }
+};
+
+/**
+ * POST /api/ai/enhance-job-description
+ * Enhance a job description with AI
+ */
+export const enhanceJobDescriptionController = async (req, res) => {
+  try {
+    const { description, title, category } = req.body;
+
+    if (!description || description.trim().length === 0) {
+      return res.status(400).json({ 
+        error: "Job description is required" 
+      });
+    }
+
+    const result = await aiService.enhanceJobDescription(description, title, category);
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error("Error in enhanceJobDescriptionController:", error.message);
+    res.status(500).json({ 
+      error: "Failed to enhance job description. Please try again." 
+    });
+  }
+};
+
+/**
+ * POST /api/ai/recommend-job-budget
+ * Recommend budget range for a job
+ */
+export const recommendJobBudgetController = async (req, res) => {
+  try {
+    const { title, description, category, complexity, duration } = req.body;
+
+    if (!description || description.trim().length === 0) {
+      return res.status(400).json({ 
+        error: "Job description is required" 
+      });
+    }
+
+    const result = await aiService.recommendJobBudget({
+      title,
+      description,
+      category,
+      complexity,
+      duration
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error("Error in recommendJobBudgetController:", error.message);
+    res.status(500).json({ 
+      error: "Failed to recommend budget. Please try again." 
+    });
+  }
+};
+
+/**
+ * POST /api/ai/suggest-required-skills
+ * Suggest required skills for a job
+ */
+export const suggestRequiredSkillsController = async (req, res) => {
+  try {
+    const { title, description, category } = req.body;
+
+    if (!description || description.trim().length === 0) {
+      return res.status(400).json({ 
+        error: "Job description is required" 
+      });
+    }
+
+    const result = await aiService.suggestRequiredSkills({
+      title,
+      description,
+      category
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error("Error in suggestRequiredSkillsController:", error.message);
+    res.status(500).json({ 
+      error: "Failed to suggest skills. Please try again." 
+    });
+  }
+};
+
+/**
+ * POST /api/ai/estimate-project-timeline
+ * Estimate project timeline based on job details
+ */
+export const estimateProjectTimelineController = async (req, res) => {
+  try {
+    const { title, description, category, budget } = req.body;
+
+    if (!description || description.trim().length === 0) {
+      return res.status(400).json({ 
+        error: "Job description is required" 
+      });
+    }
+
+    const result = await aiService.estimateProjectTimeline({
+      title,
+      description,
+      category,
+      budget
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error("Error in estimateProjectTimelineController:", error.message);
+    res.status(500).json({ 
+      error: "Failed to estimate timeline. Please try again." 
+    });
+  }
+};

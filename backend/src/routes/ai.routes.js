@@ -9,7 +9,12 @@ import {
   improveCoverLetterController,
   analyzeProposalController,
   analyzeBidController,
-  generateMilestonesController
+  generateMilestonesController,
+  generateJobTitleController,
+  enhanceJobDescriptionController,
+  recommendJobBudgetController,
+  suggestRequiredSkillsController,
+  estimateProjectTimelineController
 } from "../controllers/ai.controller.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -91,5 +96,42 @@ router.post("/analyze-bid", analyzeBidController);
  * Returns: { milestones: Array<{ description, amount, duration }>, tips: string[] }
  */
 router.post("/generate-milestones", generateMilestonesController);
+
+// ==================== JOB POSTING AI ROUTES ====================
+
+/**
+ * POST /api/ai/generate-job-title
+ * Body: { description: string, category?: string }
+ * Returns: { title: string, alternatives: string[] }
+ */
+router.post("/generate-job-title", generateJobTitleController);
+
+/**
+ * POST /api/ai/enhance-job-description
+ * Body: { description: string, title?: string, category?: string }
+ * Returns: { enhanced: string, improvements: string[] }
+ */
+router.post("/enhance-job-description", enhanceJobDescriptionController);
+
+/**
+ * POST /api/ai/recommend-job-budget
+ * Body: { title?: string, description: string, category?: string, complexity?: string, duration?: string }
+ * Returns: { recommendedMin: number, recommendedMax: number, suggested: number, reasoning: string, insights: string[], marketRate: string }
+ */
+router.post("/recommend-job-budget", recommendJobBudgetController);
+
+/**
+ * POST /api/ai/suggest-required-skills
+ * Body: { title?: string, description: string, category?: string }
+ * Returns: { technicalSkills: string[], softSkills: string[], required: string[], preferred: string[], reasoning: string }
+ */
+router.post("/suggest-required-skills", suggestRequiredSkillsController);
+
+/**
+ * POST /api/ai/estimate-project-timeline
+ * Body: { title?: string, description: string, category?: string, budget?: number }
+ * Returns: { estimatedDays: number, minDays: number, maxDays: number, phases: Array<{ name, days, description }>, reasoning: string, considerations: string[] }
+ */
+router.post("/estimate-project-timeline", estimateProjectTimelineController);
 
 export default router;
