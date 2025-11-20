@@ -327,9 +327,9 @@ export const generateJobTitleController = async (req, res) => {
   try {
     const { description, category } = req.body;
 
-    if (!description || description.trim().length === 0) {
+    if (!description || description.trim().length < 7) {
       return res.status(400).json({ 
-        error: "Job description is required" 
+        error: "Please provide at least 7 characters to generate a title" 
       });
     }
 
@@ -355,9 +355,9 @@ export const enhanceJobDescriptionController = async (req, res) => {
   try {
     const { description, title, category } = req.body;
 
-    if (!description || description.trim().length === 0) {
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
       return res.status(400).json({ 
-        error: "Job description is required" 
+        error: "Either job title or description is required" 
       });
     }
 
@@ -383,9 +383,9 @@ export const recommendJobBudgetController = async (req, res) => {
   try {
     const { title, description, category, complexity, duration } = req.body;
 
-    if (!description || description.trim().length === 0) {
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
       return res.status(400).json({ 
-        error: "Job description is required" 
+        error: "Either job title or description is required" 
       });
     }
 
@@ -417,9 +417,9 @@ export const suggestRequiredSkillsController = async (req, res) => {
   try {
     const { title, description, category } = req.body;
 
-    if (!description || description.trim().length === 0) {
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
       return res.status(400).json({ 
-        error: "Job description is required" 
+        error: "Either job title or description is required" 
       });
     }
 
@@ -449,9 +449,9 @@ export const estimateProjectTimelineController = async (req, res) => {
   try {
     const { title, description, category, budget } = req.body;
 
-    if (!description || description.trim().length === 0) {
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
       return res.status(400).json({ 
-        error: "Job description is required" 
+        error: "Either job title or description is required" 
       });
     }
 
