@@ -11,6 +11,10 @@ import {
   ArrowLeft 
 } from 'lucide-react';
 import '../styles/submit_proposal.css';
+import ProposalAIAssistant from '../components/AI/ProposalAIAssistant';
+import ProposalQualityChecker from '../components/AI/ProposalQualityChecker';
+import BidAnalyzer from '../components/AI/BidAnalyzer';
+import MilestoneGenerator from '../components/AI/MilestoneGenerator';
 
 const SubmitProposal = () => {
   const { jobId } = useParams();
@@ -227,6 +231,28 @@ const SubmitProposal = () => {
             required
           />
           <div className="char-count">{proposal.cover_letter.length} characters</div>
+          
+          {/* AI Assistants for Cover Letter */}
+          <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+            <ProposalAIAssistant
+              mode="generate"
+              value={proposal.cover_letter}
+              onApply={(text) => setProposal(prev => ({ ...prev, cover_letter: text }))}
+              jobTitle={jobDetails?.title}
+              jobDescription={jobDetails?.description}
+              jobBudget={jobDetails?.budget}
+              freelancerSkills=""
+            />
+            {proposal.cover_letter.trim().length > 0 && (
+              <ProposalAIAssistant
+                mode="improve"
+                value={proposal.cover_letter}
+                onApply={(text) => setProposal(prev => ({ ...prev, cover_letter: text }))}
+                jobTitle={jobDetails?.title}
+                jobDescription={jobDetails?.description}
+              />
+            )}
+          </div>
         </div>
 
         {/* Bid Amount */}
@@ -273,6 +299,15 @@ const SubmitProposal = () => {
           </div>
         </div>
 
+        {/* AI Bid Analyzer */}
+        <BidAnalyzer
+          jobDescription={jobDetails?.description}
+          jobBudget={jobDetails?.budget}
+          currentBid={proposal.proposed_price}
+          deliveryTime={proposal.delivery_time}
+          milestonesCount={proposal.milestones.length}
+        />
+
         {/* Milestones (Optional) */}
         <div className="form-section">
           <label className="form-label">
@@ -281,6 +316,19 @@ const SubmitProposal = () => {
           <p className="form-description">
             Break down your project into milestones for better project management
           </p>
+
+          {/* AI Milestone Generator */}
+          <MilestoneGenerator
+            jobDescription={jobDetails?.description}
+            deliveryTime={proposal.delivery_time}
+            totalBid={proposal.proposed_price}
+            onApplyMilestones={(milestones) => {
+              setProposal(prev => ({
+                ...prev,
+                milestones: milestones
+              }));
+            }}
+          />
 
           {proposal.milestones.length > 0 && (
             <div className="milestones-list">
@@ -336,6 +384,17 @@ const SubmitProposal = () => {
             </button>
           </div>
         </div>
+
+        {/* AI Proposal Quality Checker */}
+        <ProposalQualityChecker
+          proposalData={{
+            coverLetter: proposal.cover_letter,
+            proposedPrice: proposal.proposed_price,
+            deliveryTime: proposal.delivery_time,
+            jobBudget: jobDetails?.budget,
+            jobDuration: jobDetails?.duration
+          }}
+        />
 
         {/* Submit Button */}
         <div className="form-actions">

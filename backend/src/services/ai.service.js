@@ -299,3 +299,345 @@ Format your response as JSON:
     throw new Error("Failed to recommend price with AI");
   }
 };
+
+// ==================== PROPOSAL AI FEATURES ====================
+
+/**
+ * Generate a professional cover letter for a job proposal
+ * @param {Object} jobData - { jobTitle, jobDescription, jobBudget, freelancerSkills }
+ * @returns {Promise<Object>} - { coverLetter: string, tips: string[] }
+ */
+export const generateCoverLetter = async (jobData) => {
+  try {
+    const { jobTitle, jobDescription, jobBudget, freelancerSkills } = jobData;
+
+    const prompt = `You are an expert freelance proposal writer. Generate a compelling, professional cover letter for this job application.
+
+Job Details:
+- Title: "${jobTitle}"
+- Description: "${jobDescription}"
+- Budget: $${jobBudget || "Not specified"}
+- Freelancer Skills: ${freelancerSkills || "General skills"}
+
+Requirements for the cover letter:
+- Length: 200-400 words (professional, not too short or too long)
+- Personalized to THIS specific job
+- Show understanding of the job requirements
+- Highlight relevant skills and experience (based on provided skills)
+- Explain the approach/solution briefly
+- Professional yet conversational tone
+- Include why you're a great fit
+- End with a clear call-to-action
+- DO NOT include placeholder names like [Your Name] - write in first person ("I", "my")
+- DO NOT make up specific years of experience if not provided
+- Focus on value and problem-solving
+
+Format your response as JSON:
+{
+  "coverLetter": "Your complete professional cover letter text here. Make it compelling and job-specific.",
+  "tips": ["tip 1 for improving this proposal", "tip 2", "tip 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.8,
+      max_tokens: 800,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Ensure coverLetter is a string
+    if (typeof response.coverLetter !== 'string') {
+      response.coverLetter = String(response.coverLetter);
+    }
+    
+    return response;
+  } catch (error) {
+    console.error("Error generating cover letter:", error.message);
+    throw new Error("Failed to generate cover letter with AI");
+  }
+};
+
+/**
+ * Improve an existing cover letter draft
+ * @param {Object} data - { draft, jobTitle, jobDescription }
+ * @returns {Promise<Object>} - { improved: string, improvements: string[] }
+ */
+export const improveCoverLetter = async (data) => {
+  try {
+    const { draft, jobTitle, jobDescription } = data;
+
+    const prompt = `You are an expert freelance proposal editor. Improve the following cover letter draft.
+
+Job Context:
+- Job Title: "${jobTitle}"
+- Job Description: "${jobDescription}"
+
+Original Cover Letter Draft:
+"${draft}"
+
+IMPORTANT: The draft may contain spelling or grammar errors - fix them while preserving the author's intent.
+
+Improvements to make:
+- Fix any spelling, grammar, or punctuation errors
+- Make it more professional and compelling
+- Ensure it's personalized to the job
+- Improve clarity and structure
+- Strengthen the value proposition
+- Optimize length (aim for 200-400 words)
+- Remove any generic phrases
+- Make the call-to-action stronger
+- Keep the author's voice but make it more professional
+
+Provide:
+1. The improved cover letter
+2. List of specific improvements made
+
+Format your response as JSON:
+{
+  "improved": "The improved cover letter text here",
+  "improvements": ["improvement 1", "improvement 2", "improvement 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.7,
+      max_tokens: 800,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Ensure improved is a string
+    if (typeof response.improved !== 'string') {
+      response.improved = String(response.improved);
+    }
+    
+    return response;
+  } catch (error) {
+    console.error("Error improving cover letter:", error.message);
+    throw new Error("Failed to improve cover letter with AI");
+  }
+};
+
+/**
+ * Analyze a complete proposal and provide quality score with feedback
+ * @param {Object} proposalData - { coverLetter, proposedPrice, deliveryTime, jobBudget, jobDuration }
+ * @returns {Promise<Object>} - { score: number, strengths: string[], improvements: string[], feedback: string[] }
+ */
+export const analyzeProposal = async (proposalData) => {
+  try {
+    const { coverLetter, proposedPrice, deliveryTime, jobBudget, jobDuration } = proposalData;
+
+    const prompt = `You are an expert freelancing platform quality analyst. Analyze this job proposal and provide an HONEST, OBJECTIVE quality score.
+
+Proposal Details:
+- Cover Letter: "${coverLetter}"
+- Proposed Bid: $${proposedPrice}
+- Delivery Time: ${deliveryTime} days
+- Client's Budget: $${jobBudget || "Not specified"}
+- Expected Duration: ${jobDuration || "Not specified"}
+
+SCORING CRITERIA (Be strict and realistic):
+
+Cover Letter Quality (0-50 points):
+- Is it personalized and relevant? (0-15 pts)
+- Does it demonstrate understanding of the job? (0-15 pts)
+- Is it professional and well-written? (0-10 pts)
+- Does it highlight relevant skills? (0-10 pts)
+
+Bid Competitiveness (0-25 points):
+- Is the bid reasonable compared to budget? (0-15 pts)
+- Does it offer good value for money? (0-10 pts)
+
+Delivery Time (0-15 points):
+- Is it realistic for the scope? (0-10 pts)
+- Does it match or beat expected duration? (0-5 pts)
+
+Overall Professional Appeal (0-10 points):
+- Overall impression and professionalism (0-10 pts)
+
+IMPORTANT:
+- Be CRITICAL and HONEST
+- 85+ only for truly excellent proposals
+- 70-84: Good but needs improvement
+- 50-69: Needs significant work
+- Below 50: Major issues
+- Calculate based on actual quality
+
+Provide your honest assessment in JSON format:
+{
+  "score": [calculate actual score 0-100],
+  "strengths": ["specific strength 1", "specific strength 2", "specific strength 3"],
+  "improvements": ["specific improvement 1", "specific improvement 2", "specific improvement 3"],
+  "feedback": ["detailed actionable feedback 1", "detailed actionable feedback 2", "detailed actionable feedback 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.3,
+      max_tokens: 800,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Validate score
+    if (typeof response.score !== 'number') {
+      response.score = parseInt(response.score) || 50;
+    }
+    response.score = Math.max(0, Math.min(100, response.score));
+    
+    // Ensure arrays exist
+    response.strengths = Array.isArray(response.strengths) ? response.strengths : [];
+    response.improvements = Array.isArray(response.improvements) ? response.improvements : [];
+    response.feedback = Array.isArray(response.feedback) ? response.feedback : [];
+    
+    return response;
+  } catch (error) {
+    console.error("Error analyzing proposal:", error.message);
+    throw new Error("Failed to analyze proposal with AI");
+  }
+};
+
+/**
+ * Analyze bid amount and provide smart pricing recommendations
+ * @param {Object} bidData - { jobDescription, jobBudget, currentBid, deliveryTime, milestones }
+ * @returns {Promise<Object>} - { recommendedBid: number, bidRange: { min, max }, competitiveness: string, reasoning: string, insights: string[] }
+ */
+export const analyzeBidAmount = async (bidData) => {
+  try {
+    const { jobDescription, jobBudget, currentBid, deliveryTime, milestones } = bidData;
+
+    const prompt = `You are an expert freelancing platform pricing consultant. Analyze the bid amount and provide recommendations.
+
+Job & Bid Context:
+- Job Description: "${jobDescription}"
+- Client's Budget: $${jobBudget || "Not specified"}
+- Current Bid: $${currentBid || "Not entered yet"}
+- Delivery Time: ${deliveryTime || "Not set"} days
+- Number of Milestones: ${milestones || 0}
+
+Consider:
+1. Job complexity and required skills
+2. Client's budget expectations
+3. Market rates for similar work
+4. Delivery timeframe
+5. Whether bid is too high/low/just right
+6. How to position the bid competitively
+
+Assess competitiveness as:
+- "Too Low" if significantly underpriced (may signal low quality)
+- "Competitive" if well-positioned in sweet spot
+- "High but Justified" if premium but offers clear value
+- "Too High" if likely to lose to competitors
+
+Format your response as JSON:
+{
+  "recommendedBid": 250,
+  "bidRange": {
+    "min": 200,
+    "max": 350
+  },
+  "competitiveness": "Competitive|Too Low|High but Justified|Too High",
+  "reasoning": "Brief explanation of the recommendation",
+  "insights": ["insight 1", "insight 2", "insight 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.5,
+      max_tokens: 600,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error analyzing bid amount:", error.message);
+    throw new Error("Failed to analyze bid with AI");
+  }
+};
+
+/**
+ * Generate project milestones automatically based on job description
+ * @param {Object} projectData - { jobDescription, deliveryTime, totalBid }
+ * @returns {Promise<Object>} - { milestones: Array<{ description, amount, duration }>, tips: string[] }
+ */
+export const generateMilestones = async (projectData) => {
+  try {
+    const { jobDescription, deliveryTime, totalBid } = projectData;
+
+    const prompt = `You are an expert freelancing platform project manager. Generate realistic project milestones based on the job details.
+
+Project Details:
+- Job Description: "${jobDescription}"
+- Total Delivery Time: ${deliveryTime} days
+- Total Bid Amount: $${totalBid}
+
+Requirements:
+- Generate 2-5 logical milestones (based on project complexity)
+- Each milestone should have: description, amount ($), and duration (days)
+- Milestones should cover the full project lifecycle
+- Amounts should sum to the total bid
+- Durations should sum to total delivery time
+- Make milestone descriptions specific and measurable
+- Follow industry best practices (e.g., 30% upfront, 40% mid-project, 30% completion)
+
+Examples of good milestones:
+- "Initial research and project setup" (20%, 2 days)
+- "Core development and implementation" (50%, 5 days)
+- "Testing, revisions, and final delivery" (30%, 3 days)
+
+Format your response as JSON:
+{
+  "milestones": [
+    {
+      "description": "Milestone 1 description",
+      "amount": "50",
+      "duration": "3"
+    },
+    {
+      "description": "Milestone 2 description", 
+      "amount": "100",
+      "duration": "5"
+    }
+  ],
+  "tips": ["tip 1 about milestone planning", "tip 2", "tip 3"]
+}
+
+IMPORTANT: Return amounts and durations as string numbers (e.g., "50" not 50) for form compatibility.`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.7,
+      max_tokens: 800,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Ensure milestones is an array
+    if (!Array.isArray(response.milestones)) {
+      response.milestones = [];
+    }
+    
+    // Ensure each milestone has required fields as strings
+    response.milestones = response.milestones.map(m => ({
+      description: String(m.description || ''),
+      amount: String(m.amount || '0'),
+      duration: String(m.duration || '1')
+    }));
+    
+    return response;
+  } catch (error) {
+    console.error("Error generating milestones:", error.message);
+    throw new Error("Failed to generate milestones with AI");
+  }
+};
