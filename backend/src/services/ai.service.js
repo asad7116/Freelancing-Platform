@@ -126,9 +126,9 @@ Format your response as JSON:
  */
 export const analyzeBestPractices = async (gigData) => {
   try {
-    const { gigTitle, shortDescription, category, price, deliveryTime } = gigData;
+    const { gigTitle, shortDescription, category, price, deliveryTime, revisions } = gigData;
 
-    const prompt = `You are an expert freelancing platform consultant. Analyze this gig and provide best practices feedback.
+    const prompt = `You are an expert freelancing platform quality analyst. Carefully analyze this gig and provide an HONEST, OBJECTIVE quality score.
 
 Gig Details:
 - Title: "${gigTitle}"
@@ -136,37 +136,65 @@ Gig Details:
 - Category: ${category || "General"}
 - Price: $${price || "Not set"}
 - Delivery Time: ${deliveryTime || "Not set"} days
+- Revisions: ${revisions || "Not set"}
 
-Analyze based on:
-1. Title effectiveness (SEO, clarity, professionalism)
-2. Description quality (completeness, structure, persuasiveness)
-3. Pricing strategy (competitive, value communication)
-4. Delivery time (realistic, competitive)
-5. Overall presentation
+SCORING CRITERIA (Be strict and realistic):
 
-Provide:
-1. Overall score (0-100)
-2. Top 3 strengths
-3. Top 3 areas for improvement
-4. Specific actionable feedback
+Title Analysis (0-25 points):
+- Is it clear and specific? (0-10 pts)
+- Does it include relevant keywords? (0-8 pts)
+- Is it professional and engaging? (0-7 pts)
 
-Format your response as JSON:
+Description Analysis (0-35 points):
+- Is it detailed and comprehensive? (0-15 pts)
+- Does it explain deliverables clearly? (0-10 pts)
+- Is it well-structured and easy to read? (0-10 pts)
+
+Pricing & Value (0-20 points):
+- Is the price competitive for the service? (0-10 pts)
+- Does it communicate value clearly? (0-10 pts)
+
+Delivery & Revisions (0-20 points):
+- Is delivery time realistic? (0-10 pts)
+- Are revision terms clear? (0-10 pts)
+
+IMPORTANT: 
+- Be CRITICAL and HONEST in your assessment
+- A score of 85+ should only be given to truly excellent gigs
+- 70-84: Good but has room for improvement
+- 50-69: Needs significant improvement
+- Below 50: Major issues that need fixing
+- DO NOT default to 85 - calculate based on actual quality
+
+Provide your honest assessment in JSON format:
 {
-  "score": 85,
-  "strengths": ["strength 1", "strength 2", "strength 3"],
-  "improvements": ["improvement 1", "improvement 2", "improvement 3"],
-  "feedback": ["specific feedback 1", "specific feedback 2", "specific feedback 3"]
+  "score": [calculate actual score 0-100 based on criteria above],
+  "strengths": ["specific strength 1", "specific strength 2", "specific strength 3"],
+  "improvements": ["specific improvement 1", "specific improvement 2", "specific improvement 3"],
+  "feedback": ["detailed actionable feedback 1", "detailed actionable feedback 2", "detailed actionable feedback 3"]
 }`;
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
       model: MODEL,
-      temperature: 0.6,
-      max_tokens: 600,
+      temperature: 0.3,  // Lower temperature for more consistent, analytical scoring
+      max_tokens: 800,    // Increased for detailed feedback
       response_format: { type: "json_object" }
     });
 
     const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Validate and ensure score is a number between 0-100
+    if (typeof response.score !== 'number') {
+      response.score = parseInt(response.score) || 50;
+    }
+    response.score = Math.max(0, Math.min(100, response.score));
+    
+    // Ensure arrays exist and have content
+    response.strengths = Array.isArray(response.strengths) ? response.strengths : [];
+    response.improvements = Array.isArray(response.improvements) ? response.improvements : [];
+    response.feedback = Array.isArray(response.feedback) ? response.feedback : [];
+    
     return response;
   } catch (error) {
     console.error("Error analyzing best practices:", error.message);
