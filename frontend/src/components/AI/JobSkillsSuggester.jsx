@@ -9,8 +9,9 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
   const [error, setError] = useState(null);
 
   const handleSuggest = async () => {
-    if (!description || description.trim().length < 15) {
-      setError('Please provide a job description (at least 15 characters) to suggest skills');
+    // Can work with title alone or with description
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
+      setError('Please provide a title or description to suggest skills');
       return;
     }
 
@@ -65,9 +66,9 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
       <button
         type="button"
         onClick={handleSuggest}
-        disabled={loading || !description || description.trim().length < 15}
+        disabled={loading || ((!description || description.trim().length === 0) && (!title || title.trim().length === 0))}
         className="suggest-skills-btn"
-        title={!description || description.trim().length < 15 ? 'Add a job description first (at least 15 characters)' : 'Suggest skills with AI'}
+        title={(!description || description.trim().length === 0) && (!title || title.trim().length === 0) ? 'Add a title or description first' : 'Suggest skills with AI'}
       >
         <Code size={18} />
         {loading ? 'Analyzing...' : 'Suggest Skills with AI'}
