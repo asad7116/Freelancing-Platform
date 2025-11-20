@@ -9,8 +9,8 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
   const [error, setError] = useState(null);
 
   const handleEstimate = async () => {
-    if (!description || description.trim().length < 30) {
-      setError('Please provide a job description (at least 30 characters) to estimate timeline');
+    if (!description || description.trim().length < 15) {
+      setError('Please provide a job description (at least 15 characters) to estimate timeline');
       return;
     }
 
@@ -60,9 +60,9 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
       <button
         type="button"
         onClick={handleEstimate}
-        disabled={loading || !description || description.trim().length < 30}
+        disabled={loading || !description || description.trim().length < 15}
         className="estimate-timeline-btn"
-        title={!description || description.trim().length < 30 ? 'Add a job description first' : 'Estimate timeline with AI'}
+        title={!description || description.trim().length < 15 ? 'Add a job description first (at least 15 characters)' : 'Estimate timeline with AI'}
       >
         <Clock size={18} />
         {loading ? 'Estimating...' : 'Estimate Timeline with AI'}
