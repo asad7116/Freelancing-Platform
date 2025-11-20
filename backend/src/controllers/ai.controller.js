@@ -111,3 +111,31 @@ export const smartSuggestionsController = async (req, res) => {
     });
   }
 };
+
+/**
+ * POST /api/ai/recommend-price
+ * Recommend competitive pricing based on gig details
+ */
+export const recommendPriceController = async (req, res) => {
+  try {
+    const gigData = req.body;
+
+    if (!gigData.gigTitle || !gigData.shortDescription || !gigData.category) {
+      return res.status(400).json({ 
+        error: "Title, description, and category are required for price recommendation" 
+      });
+    }
+
+    const result = await aiService.recommendPrice(gigData);
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error("Error in recommendPriceController:", error.message);
+    res.status(500).json({ 
+      error: "Failed to recommend price. Please try again." 
+    });
+  }
+};
