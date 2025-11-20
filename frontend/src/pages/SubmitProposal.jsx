@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Send, 
   DollarSign, 
   Clock, 
   FileText, 
-  Paperclip, 
   AlertCircle,
   CheckCircle,
   ArrowLeft 
@@ -40,19 +39,16 @@ const SubmitProposal = () => {
     duration: ''
   });
 
-  useEffect(() => {
-    fetchJobDetails();
-  }, [jobId]);
-
-  const fetchJobDetails = async () => {
+  const fetchJobDetails = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:4000/api/job-posts/${jobId}`, {
         credentials: 'include'
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setJobDetails(data);
+        const result = await response.json();
+        // API returns { success: true, data: { ...jobPost } }
+        setJobDetails(result.data || result);
       } else {
         setError('Failed to load job details');
       }
@@ -62,7 +58,11 @@ const SubmitProposal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [jobId]);
+
+  useEffect(() => {
+    fetchJobDetails();
+  }, [fetchJobDetails]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -191,20 +191,22 @@ const SubmitProposal = () => {
       </div>
 
       {/* Job Details Card */}
-      <div className="job-details-card">
-        <h2>{jobDetails.title}</h2>
-        <div className="job-meta">
-          <span className="meta-item">
-            <DollarSign size={16} />
-            Budget: ${jobDetails.budget}
-          </span>
-          <span className="meta-item">
-            <Clock size={16} />
-            Duration: {jobDetails.duration}
-          </span>
+      {jobDetails && (
+        <div className="job-details-card">
+          <h2>{jobDetails.title}</h2>
+          <div className="job-meta">
+            <span className="meta-item">
+              <DollarSign size={16} />
+              Budget: ${jobDetails.budget}
+            </span>
+            <span className="meta-item">
+              <Clock size={16} />
+              Duration: {jobDetails.duration}
+            </span>
+          </div>
+          <p className="job-description">{jobDetails.description}</p>
         </div>
-        <p className="job-description">{jobDetails.description}</p>
-      </div>
+      )}
 
       {error && (
         <div className="error-alert">
@@ -214,7 +216,8 @@ const SubmitProposal = () => {
       )}
 
       {/* Proposal Form */}
-      <form onSubmit={handleSubmit} className="proposal-form">
+      {jobDetails && (
+        <form onSubmit={handleSubmit} className="proposal-form">
         {/* Cover Letter */}
         <div className="form-section">
           <label className="form-label">
@@ -422,6 +425,7 @@ const SubmitProposal = () => {
           </button>
         </div>
       </form>
+      )}
     </div>
   );
 };
