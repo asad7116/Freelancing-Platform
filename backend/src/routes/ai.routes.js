@@ -4,7 +4,12 @@ import {
   enhanceDescriptionController,
   analyzeGigController,
   smartSuggestionsController,
-  recommendPriceController
+  recommendPriceController,
+  generateCoverLetterController,
+  improveCoverLetterController,
+  analyzeProposalController,
+  analyzeBidController,
+  generateMilestonesController
 } from "../controllers/ai.controller.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -12,6 +17,8 @@ const router = Router();
 
 // All AI endpoints require authentication
 router.use(authMiddleware);
+
+// ==================== GIG AI ROUTES ====================
 
 /**
  * POST /api/ai/improve-title
@@ -47,5 +54,42 @@ router.post("/smart-suggestions", smartSuggestionsController);
  * Returns: { recommendedPrice: number, priceRange: { min: number, max: number }, reasoning: string, marketInsights: string[] }
  */
 router.post("/recommend-price", recommendPriceController);
+
+// ==================== PROPOSAL AI ROUTES ====================
+
+/**
+ * POST /api/ai/generate-cover-letter
+ * Body: { jobTitle: string, jobDescription: string, jobBudget?: number, freelancerSkills?: string }
+ * Returns: { coverLetter: string, tips: string[] }
+ */
+router.post("/generate-cover-letter", generateCoverLetterController);
+
+/**
+ * POST /api/ai/improve-cover-letter
+ * Body: { draft: string, jobTitle: string, jobDescription: string }
+ * Returns: { improved: string, improvements: string[] }
+ */
+router.post("/improve-cover-letter", improveCoverLetterController);
+
+/**
+ * POST /api/ai/analyze-proposal
+ * Body: { coverLetter: string, proposedPrice: number, deliveryTime: number, jobBudget?: number, jobDuration?: string }
+ * Returns: { score: number, strengths: string[], improvements: string[], feedback: string[] }
+ */
+router.post("/analyze-proposal", analyzeProposalController);
+
+/**
+ * POST /api/ai/analyze-bid
+ * Body: { jobDescription: string, jobBudget?: number, currentBid?: number, deliveryTime?: number, milestones?: number }
+ * Returns: { recommendedBid: number, bidRange: { min, max }, competitiveness: string, reasoning: string, insights: string[] }
+ */
+router.post("/analyze-bid", analyzeBidController);
+
+/**
+ * POST /api/ai/generate-milestones
+ * Body: { jobDescription: string, deliveryTime: number, totalBid: number }
+ * Returns: { milestones: Array<{ description, amount, duration }>, tips: string[] }
+ */
+router.post("/generate-milestones", generateMilestonesController);
 
 export default router;
