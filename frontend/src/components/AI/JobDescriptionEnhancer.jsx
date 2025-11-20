@@ -9,8 +9,8 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
   const [error, setError] = useState(null);
 
   const handleEnhance = async () => {
-    if (!description || description.trim().length < 30) {
-      setError('Please provide a job description (at least 30 characters) to enhance');
+    if (!description || description.trim().length < 15) {
+      setError('Please provide a job description (at least 15 characters) to enhance');
       return;
     }
 
@@ -60,9 +60,9 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
       <button
         type="button"
         onClick={handleEnhance}
-        disabled={loading || !description || description.trim().length < 30}
+        disabled={loading || !description || description.trim().length < 15}
         className="enhance-description-btn"
-        title={!description || description.trim().length < 30 ? 'Add a job description first (at least 30 characters)' : 'Enhance with AI'}
+        title={!description || description.trim().length < 15 ? 'Add a job description first (at least 15 characters)' : 'Enhance with AI'}
       >
         <Wand2 size={18} />
         {loading ? 'Enhancing...' : 'Enhance with AI'}

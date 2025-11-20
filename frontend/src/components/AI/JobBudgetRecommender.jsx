@@ -10,7 +10,7 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
 
   // Auto-analyze when there's enough context (debounced)
   useEffect(() => {
-    if (!description || description.trim().length < 30) {
+    if (!description || description.trim().length < 20) {
       setResult(null);
       setHasAnalyzed(false);
       return;
@@ -26,8 +26,8 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
   }, [description, title, category, complexity, duration]);
 
   const handleAnalyze = async () => {
-    if (!description || description.trim().length < 30) {
-      setError('Please provide a job description (at least 30 characters) to get budget recommendations');
+    if (!description || description.trim().length < 20) {
+      setError('Please provide a job description (at least 20 characters) to get budget recommendations');
       return;
     }
 
@@ -94,7 +94,7 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
         <button
           type="button"
           onClick={handleAnalyze}
-          disabled={!description || description.trim().length < 30}
+          disabled={!description || description.trim().length < 20}
           className="analyze-budget-btn"
         >
           <DollarSign size={18} />
