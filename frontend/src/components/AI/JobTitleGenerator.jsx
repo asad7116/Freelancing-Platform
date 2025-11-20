@@ -9,8 +9,8 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
   const [error, setError] = useState(null);
 
   const handleGenerate = async () => {
-    if (!description || description.trim().length < 10) {
-      setError('Please provide a brief job description (at least 10 characters) to generate a title');
+    if (!description || description.trim().length < 7) {
+      setError('Please provide at least 7 characters to generate a title');
       return;
     }
 
@@ -60,9 +60,9 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
       <button
         type="button"
         onClick={handleGenerate}
-        disabled={loading || !description || description.trim().length < 10}
+        disabled={loading || !description || description.trim().length < 7}
         className="generate-title-btn"
-        title={!description || description.trim().length < 10 ? 'Add a brief job description first (at least 10 characters)' : 'Generate AI title'}
+        title={!description || description.trim().length < 7 ? 'Enter at least 7 characters (e.g., "web dev")' : 'Generate AI title'}
       >
         <Sparkles size={18} />
         {loading ? 'Generating...' : 'Generate Title with AI'}

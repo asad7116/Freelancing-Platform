@@ -10,7 +10,8 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
 
   // Auto-analyze when there's enough context (debounced)
   useEffect(() => {
-    if (!description || description.trim().length < 20) {
+    // Can work with title alone or with description
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
       setResult(null);
       setHasAnalyzed(false);
       return;
@@ -26,8 +27,9 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
   }, [description, title, category, complexity, duration]);
 
   const handleAnalyze = async () => {
-    if (!description || description.trim().length < 20) {
-      setError('Please provide a job description (at least 20 characters) to get budget recommendations');
+    // Can work with title alone or with description
+    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
+      setError('Please provide a title or description to get budget recommendations');
       return;
     }
 
@@ -94,8 +96,9 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
         <button
           type="button"
           onClick={handleAnalyze}
-          disabled={!description || description.trim().length < 20}
+          disabled={(!description || description.trim().length === 0) && (!title || title.trim().length === 0)}
           className="analyze-budget-btn"
+          title={(!description || description.trim().length === 0) && (!title || title.trim().length === 0) ? 'Add a title or description first' : 'Get AI budget recommendation'}
         >
           <DollarSign size={18} />
           Get AI Budget Recommendation
