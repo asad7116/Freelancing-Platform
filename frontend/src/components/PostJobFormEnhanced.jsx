@@ -3,6 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/post_job_enhanced.css';
 import { emit } from '../lib/eventBus'; // ✅ to refresh dashboard after success
+import JobTitleGenerator from './AI/JobTitleGenerator';
+import JobDescriptionEnhancer from './AI/JobDescriptionEnhancer';
+import JobBudgetRecommender from './AI/JobBudgetRecommender';
+import JobSkillsSuggester from './AI/JobSkillsSuggester';
+import JobTimelineEstimator from './AI/JobTimelineEstimator';
 
 const PostJobFormEnhanced = () => {
   const { jobId } = useParams();
@@ -350,6 +355,11 @@ const PostJobFormEnhanced = () => {
 
             <div className="form-group">
               <label>Title *</label>
+              <JobTitleGenerator
+                description={formData.description || formData.summary}
+                category={categories.find(c => c.id === formData.category_id)?.name}
+                onApply={(title) => handleInputChange('title', title)}
+              />
               <input
                 type="text"
                 value={formData.title}
@@ -372,6 +382,12 @@ const PostJobFormEnhanced = () => {
 
             <div className="form-group">
               <label>Description *</label>
+              <JobDescriptionEnhancer
+                description={formData.description}
+                title={formData.title}
+                category={categories.find(c => c.id === formData.category_id)?.name}
+                onApply={(description) => handleInputChange('description', description)}
+              />
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
@@ -473,6 +489,26 @@ const PostJobFormEnhanced = () => {
         {currentStep === 2 && (
           <div className="form-step">
             <h2>Freelancer Requirements</h2>
+
+            <JobSkillsSuggester
+              title={formData.title}
+              description={formData.description}
+              category={categories.find(c => c.id === formData.category_id)?.name}
+              onApply={(suggestedSkills) => {
+                // Convert suggested skill names to skill objects from available skills
+                const skillsToAdd = suggestedSkills
+                  .map(skillName => skills.find(s => s.name.toLowerCase() === skillName.toLowerCase()))
+                  .filter(Boolean);
+                
+                // Add to mandatory skills (avoiding duplicates)
+                const existingIds = formData.mandatory_skills.map(s => s.id);
+                const newSkills = skillsToAdd.filter(s => !existingIds.includes(s.id));
+                
+                if (newSkills.length > 0) {
+                  handleInputChange('mandatory_skills', [...formData.mandatory_skills, ...newSkills]);
+                }
+              }}
+            />
 
             <div className="skills-section">
               <h3>Mandatory Skills *</h3>
@@ -596,6 +632,14 @@ const PostJobFormEnhanced = () => {
           <div className="form-step">
             <h2>Budget</h2>
 
+            <JobBudgetRecommender
+              title={formData.title}
+              description={formData.description}
+              category={categories.find(c => c.id === formData.category_id)?.name}
+              complexity={formData.job_size}
+              duration={formData.duration}
+            />
+
             <div className="budget-type-section">
               <h3>Project Type</h3>
               <div className="radio-group">
@@ -674,6 +718,23 @@ const PostJobFormEnhanced = () => {
 
             <div className="project-details-section">
               <h3>Project Details</h3>
+
+              <JobTimelineEstimator
+                title={formData.title}
+                description={formData.description}
+                category={categories.find(c => c.id === formData.category_id)?.name}
+                budget={formData.budget_type === 'fixed' ? formData.fixed_price : `${formData.hourly_rate_from}-${formData.hourly_rate_to}`}
+                onApply={(estimatedDays) => {
+                  // Convert estimated days to duration option
+                  if (estimatedDays <= 90) {
+                    handleInputChange('duration', '1-3-months');
+                  } else if (estimatedDays <= 180) {
+                    handleInputChange('duration', '3-6-months');
+                  } else {
+                    handleInputChange('duration', '6-months-plus');
+                  }
+                }}
+              />
 
               <div className="form-row">
                 <div className="form-group">
