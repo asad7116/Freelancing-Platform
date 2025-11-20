@@ -8,10 +8,9 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
   const [error, setError] = useState(null);
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
 
-  // Auto-analyze when there's enough context (debounced)
+  // Auto-analyze when there's content (debounced)
   useEffect(() => {
-    // Can work with title alone or with description
-    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
+    if (!description && !title) {
       setResult(null);
       setHasAnalyzed(false);
       return;
@@ -27,9 +26,8 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
   }, [description, title, category, complexity, duration]);
 
   const handleAnalyze = async () => {
-    // Can work with title alone or with description
-    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
-      setError('Please provide a title or description to get budget recommendations');
+    if (!description && !title) {
+      setError('Please enter a title or description first');
       return;
     }
 
@@ -37,13 +35,12 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/ai/recommend-job-budget', {
+      const response = await fetch('http://localhost:4000/api/ai/recommend-job-budget', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({ title, description, category, complexity, duration })
       });
 
@@ -96,9 +93,9 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
         <button
           type="button"
           onClick={handleAnalyze}
-          disabled={(!description || description.trim().length === 0) && (!title || title.trim().length === 0)}
+          disabled={!description && !title}
           className="analyze-budget-btn"
-          title={(!description || description.trim().length === 0) && (!title || title.trim().length === 0) ? 'Add a title or description first' : 'Get AI budget recommendation'}
+          title="Get AI budget recommendation"
         >
           <DollarSign size={18} />
           Get AI Budget Recommendation

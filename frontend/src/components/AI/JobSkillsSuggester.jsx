@@ -9,9 +9,8 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
   const [error, setError] = useState(null);
 
   const handleSuggest = async () => {
-    // Can work with title alone or with description
-    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
-      setError('Please provide a title or description to suggest skills');
+    if (!description && !title) {
+      setError('Please enter a title or description first');
       return;
     }
 
@@ -19,13 +18,12 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/ai/suggest-required-skills', {
+      const response = await fetch('http://localhost:4000/api/ai/suggest-required-skills', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({ title, description, category })
       });
 
@@ -66,9 +64,9 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
       <button
         type="button"
         onClick={handleSuggest}
-        disabled={loading || ((!description || description.trim().length === 0) && (!title || title.trim().length === 0))}
+        disabled={loading || (!description && !title)}
         className="suggest-skills-btn"
-        title={(!description || description.trim().length === 0) && (!title || title.trim().length === 0) ? 'Add a title or description first' : 'Suggest skills with AI'}
+        title="Suggest skills with AI"
       >
         <Code size={18} />
         {loading ? 'Analyzing...' : 'Suggest Skills with AI'}

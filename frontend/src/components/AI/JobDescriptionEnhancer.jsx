@@ -9,9 +9,8 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
   const [error, setError] = useState(null);
 
   const handleEnhance = async () => {
-    // Can work with title alone or with description
-    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
-      setError('Please provide either a title or description to enhance');
+    if (!description && !title) {
+      setError('Please enter a title or description first');
       return;
     }
 
@@ -19,13 +18,12 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/ai/enhance-job-description', {
+      const response = await fetch('http://localhost:4000/api/ai/enhance-job-description', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({ description, title, category })
       });
 
@@ -61,9 +59,9 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
       <button
         type="button"
         onClick={handleEnhance}
-        disabled={loading || ((!description || description.trim().length === 0) && (!title || title.trim().length === 0))}
+        disabled={loading || (!description && !title)}
         className="enhance-description-btn"
-        title={(!description || description.trim().length === 0) && (!title || title.trim().length === 0) ? 'Add a title or description first' : 'Enhance with AI'}
+        title="Enhance with AI"
       >
         <Wand2 size={18} />
         {loading ? 'Enhancing...' : 'Enhance with AI'}
