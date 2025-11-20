@@ -62,27 +62,32 @@ Format your response as JSON:
  */
 export const enhanceDescription = async (description, title = "", category = "") => {
   try {
-    const prompt = `You are an expert freelancing platform consultant. Enhance the following gig description to be more compelling and professional.
+    const prompt = `You are an expert freelancing platform consultant. The user has provided a gig description that may contain spelling or grammar errors. First, understand their intent, then enhance it to be more compelling and professional.
 
 Title: "${title}"
 Category: ${category || "General"}
 Original Description: "${description}"
 
+IMPORTANT: The user's text may have spelling mistakes or grammar errors - interpret the meaning and improve it.
+
 Requirements:
+- Fix any spelling or grammar errors
 - Expand the description to 150-300 words
-- Use clear structure with paragraphs
+- Use clear structure with paragraphs (use \\n\\n for paragraph breaks)
 - Highlight key benefits and deliverables
 - Use professional but friendly tone
 - Include what makes this service unique
 - End with a call-to-action
 
 Provide:
-1. An enhanced description
+1. An enhanced description AS A SINGLE STRING (not an object)
 2. 3 quick tips for improvement
+
+CRITICAL: The "enhanced" field must be a plain text string, not an object or array.
 
 Format your response as JSON:
 {
-  "enhanced": "your enhanced description with proper formatting",
+  "enhanced": "Your enhanced description text here as a single string with proper formatting. Use double line breaks for paragraphs.",
   "tips": ["tip 1", "tip 2", "tip 3"]
 }`;
 
@@ -95,6 +100,18 @@ Format your response as JSON:
     });
 
     const response = JSON.parse(chatCompletion.choices[0].message.content);
+    
+    // Ensure enhanced is a string (defensive programming)
+    if (typeof response.enhanced !== 'string') {
+      if (typeof response.enhanced === 'object' && response.enhanced.description) {
+        response.enhanced = response.enhanced.description;
+      } else if (Array.isArray(response.enhanced)) {
+        response.enhanced = response.enhanced.join('\n\n');
+      } else {
+        response.enhanced = String(response.enhanced);
+      }
+    }
+    
     return response;
   } catch (error) {
     console.error("Error enhancing description:", error.message);
@@ -193,5 +210,64 @@ Format your response as JSON:
   } catch (error) {
     console.error("Error generating smart suggestions:", error.message);
     throw new Error("Failed to generate suggestions with AI");
+  }
+};
+
+/**
+ * Recommend competitive pricing based on gig details and market trends
+ * @param {Object} gigData - { title, description, category, deliveryTime, revisions }
+ * @returns {Promise<Object>} - { recommendedPrice: number, priceRange: { min: number, max: number }, reasoning: string, marketInsights: string[] }
+ */
+export const recommendPrice = async (gigData) => {
+  try {
+    const { gigTitle, shortDescription, category, deliveryTime, revisions } = gigData;
+
+    const prompt = `You are an expert freelancing platform pricing consultant. Based on the gig details provided, recommend a competitive price based on current 2025 market trends.
+
+Gig Details:
+- Title: "${gigTitle}"
+- Description: "${shortDescription}"
+- Category: ${category || "General"}
+- Delivery Time: ${deliveryTime || "Not set"} days
+- Revisions: ${revisions || "Not set"}
+
+Consider:
+1. Complexity and skill level required
+2. Category market rates (2025 standards)
+3. Delivery time commitment
+4. Number of revisions included
+5. Market competitiveness
+6. Entry-level vs Expert pricing
+
+Provide realistic pricing recommendations in USD. For context:
+- Simple tasks (data entry, basic editing): $5-$50
+- Standard services (logo design, basic websites): $50-$300
+- Professional services (full websites, complex designs): $300-$1000
+- Expert services (enterprise solutions, specialized work): $1000+
+
+Format your response as JSON:
+{
+  "recommendedPrice": 150,
+  "priceRange": {
+    "min": 100,
+    "max": 250
+  },
+  "reasoning": "Brief explanation of why this price range",
+  "marketInsights": ["insight 1", "insight 2", "insight 3"]
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.5,
+      max_tokens: 600,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error recommending price:", error.message);
+    throw new Error("Failed to recommend price with AI");
   }
 };
