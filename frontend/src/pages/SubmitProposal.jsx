@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Send, 
   DollarSign, 
   Clock, 
   FileText, 
-  Paperclip, 
   AlertCircle,
   CheckCircle,
   ArrowLeft 
 } from 'lucide-react';
 import '../styles/submit_proposal.css';
+import ProposalAIAssistant from '../components/AI/ProposalAIAssistant';
+import ProposalQualityChecker from '../components/AI/ProposalQualityChecker';
+import BidAnalyzer from '../components/AI/BidAnalyzer';
+import MilestoneGenerator from '../components/AI/MilestoneGenerator';
 
 const SubmitProposal = () => {
   const { jobId } = useParams();
@@ -36,19 +39,16 @@ const SubmitProposal = () => {
     duration: ''
   });
 
-  useEffect(() => {
-    fetchJobDetails();
-  }, [jobId]);
-
-  const fetchJobDetails = async () => {
+  const fetchJobDetails = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:4000/api/job-posts/${jobId}`, {
         credentials: 'include'
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setJobDetails(data);
+        const result = await response.json();
+        // API returns { success: true, data: { ...jobPost } }
+        setJobDetails(result.data || result);
       } else {
         setError('Failed to load job details');
       }
@@ -58,7 +58,11 @@ const SubmitProposal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [jobId]);
+
+  useEffect(() => {
+    fetchJobDetails();
+  }, [fetchJobDetails]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -187,20 +191,22 @@ const SubmitProposal = () => {
       </div>
 
       {/* Job Details Card */}
-      <div className="job-details-card">
-        <h2>{jobDetails.title}</h2>
-        <div className="job-meta">
-          <span className="meta-item">
-            <DollarSign size={16} />
-            Budget: ${jobDetails.budget}
-          </span>
-          <span className="meta-item">
-            <Clock size={16} />
-            Duration: {jobDetails.duration}
-          </span>
+      {jobDetails && (
+        <div className="job-details-card">
+          <h2>{jobDetails.title}</h2>
+          <div className="job-meta">
+            <span className="meta-item">
+              <DollarSign size={16} />
+              Budget: ${jobDetails.budget}
+            </span>
+            <span className="meta-item">
+              <Clock size={16} />
+              Duration: {jobDetails.duration}
+            </span>
+          </div>
+          <p className="job-description">{jobDetails.description}</p>
         </div>
-        <p className="job-description">{jobDetails.description}</p>
-      </div>
+      )}
 
       {error && (
         <div className="error-alert">
@@ -210,7 +216,8 @@ const SubmitProposal = () => {
       )}
 
       {/* Proposal Form */}
-      <form onSubmit={handleSubmit} className="proposal-form">
+      {jobDetails && (
+        <form onSubmit={handleSubmit} className="proposal-form">
         {/* Cover Letter */}
         <div className="form-section">
           <label className="form-label">
@@ -227,6 +234,28 @@ const SubmitProposal = () => {
             required
           />
           <div className="char-count">{proposal.cover_letter.length} characters</div>
+          
+          {/* AI Assistants for Cover Letter */}
+          <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+            <ProposalAIAssistant
+              mode="generate"
+              value={proposal.cover_letter}
+              onApply={(text) => setProposal(prev => ({ ...prev, cover_letter: text }))}
+              jobTitle={jobDetails?.title}
+              jobDescription={jobDetails?.description}
+              jobBudget={jobDetails?.budget}
+              freelancerSkills=""
+            />
+            {proposal.cover_letter.trim().length > 0 && (
+              <ProposalAIAssistant
+                mode="improve"
+                value={proposal.cover_letter}
+                onApply={(text) => setProposal(prev => ({ ...prev, cover_letter: text }))}
+                jobTitle={jobDetails?.title}
+                jobDescription={jobDetails?.description}
+              />
+            )}
+          </div>
         </div>
 
         {/* Bid Amount */}
@@ -273,6 +302,15 @@ const SubmitProposal = () => {
           </div>
         </div>
 
+        {/* AI Bid Analyzer */}
+        <BidAnalyzer
+          jobDescription={jobDetails?.description}
+          jobBudget={jobDetails?.budget}
+          currentBid={proposal.proposed_price}
+          deliveryTime={proposal.delivery_time}
+          milestonesCount={proposal.milestones.length}
+        />
+
         {/* Milestones (Optional) */}
         <div className="form-section">
           <label className="form-label">
@@ -281,6 +319,19 @@ const SubmitProposal = () => {
           <p className="form-description">
             Break down your project into milestones for better project management
           </p>
+
+          {/* AI Milestone Generator */}
+          <MilestoneGenerator
+            jobDescription={jobDetails?.description}
+            deliveryTime={proposal.delivery_time}
+            totalBid={proposal.proposed_price}
+            onApplyMilestones={(milestones) => {
+              setProposal(prev => ({
+                ...prev,
+                milestones: milestones
+              }));
+            }}
+          />
 
           {proposal.milestones.length > 0 && (
             <div className="milestones-list">
@@ -337,6 +388,17 @@ const SubmitProposal = () => {
           </div>
         </div>
 
+        {/* AI Proposal Quality Checker */}
+        <ProposalQualityChecker
+          proposalData={{
+            coverLetter: proposal.cover_letter,
+            proposedPrice: proposal.proposed_price,
+            deliveryTime: proposal.delivery_time,
+            jobBudget: jobDetails?.budget,
+            jobDuration: jobDetails?.duration
+          }}
+        />
+
         {/* Submit Button */}
         <div className="form-actions">
           <button
@@ -363,6 +425,7 @@ const SubmitProposal = () => {
           </button>
         </div>
       </form>
+      )}
     </div>
   );
 };
