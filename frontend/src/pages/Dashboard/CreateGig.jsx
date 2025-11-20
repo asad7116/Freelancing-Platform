@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/CreateGig.css";
+import AIAssistant from "../../components/AI/AIAssistant";
+import GigAnalyzer from "../../components/AI/GigAnalyzer";
 
 export default function CreateGig() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -143,6 +145,14 @@ export default function CreateGig() {
           placeholder="Enter your gig title"
           required
         />
+        <AIAssistant
+          type="title"
+          value={formData.gigTitle}
+          category={formData.category}
+          onApply={(improvedTitle) => {
+            setFormData(prev => ({ ...prev, gigTitle: improvedTitle }));
+          }}
+        />
       </div>
 
       <div className="form-group">
@@ -174,7 +184,19 @@ export default function CreateGig() {
           rows="4"
           required
         />
+        <AIAssistant
+          type="description"
+          value={formData.shortDescription}
+          category={formData.category}
+          title={formData.gigTitle}
+          onApply={(enhancedDescription) => {
+            setFormData(prev => ({ ...prev, shortDescription: enhancedDescription }));
+          }}
+        />
       </div>
+
+      {/* AI Gig Analyzer */}
+      <GigAnalyzer gigData={formData} />
     </div>
   );
 
