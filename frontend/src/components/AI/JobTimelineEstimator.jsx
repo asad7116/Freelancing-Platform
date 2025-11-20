@@ -9,9 +9,8 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
   const [error, setError] = useState(null);
 
   const handleEstimate = async () => {
-    // Can work with title alone or with description
-    if ((!description || description.trim().length === 0) && (!title || title.trim().length === 0)) {
-      setError('Please provide a title or description to estimate timeline');
+    if (!description && !title) {
+      setError('Please enter a title or description first');
       return;
     }
 
@@ -19,13 +18,12 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/ai/estimate-project-timeline', {
+      const response = await fetch('http://localhost:4000/api/ai/estimate-project-timeline', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({ title, description, category, budget })
       });
 
@@ -61,9 +59,9 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
       <button
         type="button"
         onClick={handleEstimate}
-        disabled={loading || ((!description || description.trim().length === 0) && (!title || title.trim().length === 0))}
+        disabled={loading || (!description && !title)}
         className="estimate-timeline-btn"
-        title={(!description || description.trim().length === 0) && (!title || title.trim().length === 0) ? 'Add a title or description first' : 'Estimate timeline with AI'}
+        title="Estimate timeline with AI"
       >
         <Clock size={18} />
         {loading ? 'Estimating...' : 'Estimate Timeline with AI'}

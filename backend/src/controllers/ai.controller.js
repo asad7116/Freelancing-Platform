@@ -327,9 +327,9 @@ export const generateJobTitleController = async (req, res) => {
   try {
     const { description, category } = req.body;
 
-    if (!description || description.trim().length < 7) {
+    if (!description) {
       return res.status(400).json({ 
-        error: "Please provide at least 7 characters to generate a title" 
+        error: "Description is required" 
       });
     }
 

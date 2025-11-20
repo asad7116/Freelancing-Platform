@@ -9,8 +9,8 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
   const [error, setError] = useState(null);
 
   const handleGenerate = async () => {
-    if (!description || description.trim().length < 7) {
-      setError('Please provide at least 7 characters to generate a title');
+    if (!description) {
+      setError('Please enter a description first');
       return;
     }
 
@@ -18,13 +18,12 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
     setError(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/ai/generate-job-title', {
+      const response = await fetch('http://localhost:4000/api/ai/generate-job-title', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({ description, category })
       });
 
@@ -60,9 +59,9 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
       <button
         type="button"
         onClick={handleGenerate}
-        disabled={loading || !description || description.trim().length < 7}
+        disabled={loading || !description}
         className="generate-title-btn"
-        title={!description || description.trim().length < 7 ? 'Enter at least 7 characters (e.g., "web dev")' : 'Generate AI title'}
+        title="Generate AI title"
       >
         <Sparkles size={18} />
         {loading ? 'Generating...' : 'Generate Title with AI'}
