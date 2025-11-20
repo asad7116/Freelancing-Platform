@@ -3,7 +3,8 @@ import {
   improveTitleController,
   enhanceDescriptionController,
   analyzeGigController,
-  smartSuggestionsController
+  smartSuggestionsController,
+  recommendPriceController
 } from "../controllers/ai.controller.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -39,5 +40,12 @@ router.post("/analyze-gig", analyzeGigController);
  * Returns: { titles: string[], descriptionOutline: string }
  */
 router.post("/smart-suggestions", smartSuggestionsController);
+
+/**
+ * POST /api/ai/recommend-price
+ * Body: { gigTitle: string, shortDescription: string, category: string, deliveryTime?: number, revisions?: string }
+ * Returns: { recommendedPrice: number, priceRange: { min: number, max: number }, reasoning: string, marketInsights: string[] }
+ */
+router.post("/recommend-price", recommendPriceController);
 
 export default router;
