@@ -9,7 +9,8 @@
 }
 
 /* Loading and Error States */
-.loading-state, .error-state {
+.loading-state,
+.error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,15 +23,20 @@
   width: 40px;
   height: 40px;
   border: 3px solid #e5e7eb;
-  border-top: 3px solid #4f46e5;
+  border-top: 3px solid #00a86b;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-state h3 {
@@ -95,7 +101,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   font-size: 3rem;
 }
@@ -119,12 +125,12 @@
 }
 
 .job-category-badge {
-  background: #eff6ff;
-  color: #2563eb;
+  background: rgba(0, 168, 107, 0.1);
+  color: #00a86b;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .job-status-badge {
@@ -374,7 +380,7 @@
 
 /* Buttons */
 .btn-primary {
-  background: #4f46e5;
+  background: #00a86b !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -386,7 +392,7 @@
 }
 
 .btn-primary:hover {
-  background: #4338ca;
+  background: #007a52 !important;
 }
 
 .btn-secondary {
@@ -415,7 +421,7 @@
   .job-detail-content {
     grid-template-columns: 1fr;
   }
-  
+
   .job-sidebar {
     order: -1;
   }
@@ -425,31 +431,31 @@
   .job-detail-container {
     padding: 1rem;
   }
-  
+
   .job-detail-header {
     padding: 1.5rem;
   }
-  
+
   .job-header-content {
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   .job-thumbnail-large {
     width: 100%;
     max-width: 300px;
     align-self: center;
   }
-  
+
   .job-stats-header {
     flex-wrap: wrap;
     gap: 1rem;
   }
-  
+
   .content-section {
     padding: 1.5rem;
   }
-  
+
   .project-details-grid {
     grid-template-columns: 1fr;
   }
@@ -459,16 +465,16 @@
   .job-title-large {
     font-size: 1.5rem;
   }
-  
+
   .job-meta-info {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .job-stats-header {
     justify-content: space-around;
   }
-  
+
   .content-section {
     padding: 1rem;
   }

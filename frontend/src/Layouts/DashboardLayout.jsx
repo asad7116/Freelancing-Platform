@@ -1,21 +1,35 @@
 // src/layouts/DashboardLayout.jsx
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 import DashboardSidebar from "../components/Dashboard_sidebar";
 import DashboardTopbar from "../components/DashboardTopbar";
 import "../styles/DashboardIndex.css";
 
 export default function DashboardLayout({ role }) {
-  // DEBUG: remove later — lets us confirm the role is reaching the layout
-  console.log("DashboardLayout role =", role);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
 
   return (
     <div className="dash-shell dashboard">
-      <aside className="dash-aside">
-        {/* pass role down to the sidebar */}
-        <DashboardSidebar role={role} />
+      {/* Sidebar backdrop for mobile */}
+      <div 
+        className={`sidebar-backdrop ${sidebarOpen ? 'active' : ''}`}
+        onClick={closeSidebar}
+      />
+      
+      <aside className={`dash-aside ${sidebarOpen ? 'mobile-open' : ''}`}>
+        <DashboardSidebar role={role} onLinkClick={closeSidebar} />
       </aside>
+      
       <main className="dash-main">
-        <DashboardTopbar />
+        <DashboardTopbar onMenuClick={toggleSidebar} />
         <div className="dash-content">
           <Outlet />
         </div>

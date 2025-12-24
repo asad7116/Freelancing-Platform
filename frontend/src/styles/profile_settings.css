@@ -82,14 +82,14 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #6366f1;
+  border: 4px solid #00a86b;
 }
 
 .profile-picture-placeholder {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,7 +118,7 @@
 .btn-upload-image {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background: #6366f1;
+  background: #00a86b;
   color: white;
   border-radius: 8px;
   font-weight: 500;
@@ -128,9 +128,9 @@
 }
 
 .btn-upload-image:hover {
-  background: #4f46e5;
+  background: #007a52 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 168, 107, 0.3);
 }
 
 .image-hint {
@@ -166,7 +166,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #00a86b 0%, #007a52 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -178,7 +178,7 @@
 
 .btn-save-profile:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 168, 107, 0.4);
 }
 
 .btn-save-profile:disabled {
@@ -210,12 +210,12 @@
 }
 
 .tab-btn:hover {
-  color: #6366f1;
+  color: #00a86b;
 }
 
 .tab-btn.active {
-  color: #6366f1;
-  border-bottom-color: #6366f1;
+  color: #00a86b;
+  border-bottom-color: #00a86b;
 }
 
 /* Tab Content */
@@ -228,6 +228,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -287,8 +288,8 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #00a86b;
+  box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.1);
 }
 
 .form-group input:disabled {
@@ -318,7 +319,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -353,7 +354,7 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.75rem 1.25rem;
-  background: #6366f1;
+  background: #00a86b;
   color: white;
   border: none;
   border-radius: 6px;
@@ -363,7 +364,7 @@
 }
 
 .add-skill-form button:hover {
-  background: #4f46e5;
+  background: #007a52 !important;
 }
 
 /* Languages Section */
@@ -411,7 +412,7 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.75rem 1.25rem;
-  background: #6366f1;
+  background: #00a86b;
   color: white;
   border: none;
   border-radius: 6px;
@@ -427,7 +428,7 @@
 .bank-item,
 .payment-item {
   background: #f9fafb;
-  border-left: 4px solid #6366f1;
+  border-left: 4px solid #00a86b;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -478,7 +479,7 @@
 }
 
 .certification-item a {
-  color: #6366f1;
+  color: #00a86b;
   text-decoration: none;
   font-weight: 500;
 }
@@ -551,7 +552,7 @@
 }
 
 .portfolio-item a {
-  color: #6366f1;
+  color: #00a86b;
   text-decoration: none;
   font-weight: 500;
   display: inline-block;

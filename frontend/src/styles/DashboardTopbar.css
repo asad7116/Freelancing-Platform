@@ -1,11 +1,22 @@
 .dash-topbar {
   height: 64px;
-  padding: 0 28px;                 /* aligns with .dash-content sides */
+  padding: 0 28px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;       /* icons to the right */
+  justify-content: space-between;
   gap: 14px;
-  background: transparent;         /* content bg shows through */
+  background: transparent;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+.dash-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
 }
 
 .dash-iconbtn {
@@ -19,14 +30,17 @@
   background: #fff;
   color: #2b2b2b;
   cursor: pointer;
+  transition: filter 0.2s ease;
 }
 
 .dash-iconbtn:hover {
   filter: brightness(0.98);
 }
 
-.dash-iconbtn i {
-  font-size: 16px;
+.dash-iconbtn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .dash-iconbtn.has-badge .dash-badge {
@@ -36,14 +50,14 @@
   min-width: 18px;
   height: 18px;
   border-radius: 999px;
-  background: #22c55e;            /* green like Workzone */
+  background: #22c55e;
   color: #fff;
   font-size: 11px;
   font-weight: 700;
   display: grid;
   place-items: center;
   padding: 0 5px;
-  border: 2px solid #fff;         /* ring to separate from btn */
+  border: 2px solid #fff;
 }
 
 .dash-avatar {
@@ -60,4 +74,62 @@
   height: 100%;
   object-fit: cover;
 }
-.dash-iconbtn svg { width: 18px; height: 18px; }
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .dash-topbar {
+    padding: 0 20px;
+    height: 56px;
+  }
+
+  .mobile-menu-btn {
+    display: grid;
+  }
+
+  .dash-topbar-actions {
+    gap: 10px;
+  }
+
+  .dash-iconbtn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dash-iconbtn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .dash-topbar {
+    padding: 0 16px;
+    height: 52px;
+    gap: 8px;
+  }
+
+  .dash-topbar-actions {
+    gap: 8px;
+  }
+
+  .dash-iconbtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .dash-iconbtn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .dash-iconbtn.has-badge .dash-badge {
+    min-width: 16px;
+    height: 16px;
+    font-size: 10px;
+    top: -4px;
+    right: -2px;
+  }
+}

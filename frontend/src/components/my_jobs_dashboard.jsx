@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Plus, Edit, ClipboardList, MapPin } from "lucide-react";
 import DashboardSidebar from "./Dashboard_sidebar";
 import "../styles/my_jobs_dashboard.css";
-import "../styles/job_cards.css"; // New card-based layout
+import "../styles/job_cards.css";
 
 export default function MyJobs() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function MyJobs() {
 
   const handleViewJob = (jobId) => {
     navigate(`/client/job/${jobId}`);
-  };  useEffect(() => {
+  }; useEffect(() => {
     fetchJobPosts();
   }, []);
 
@@ -30,10 +31,10 @@ export default function MyJobs() {
       const response = await fetch('/api/job-posts/my-jobs', {
         credentials: 'include' // Include cookies for authentication
       });
-      
+
       const data = await response.json();
       console.log('Job posts response:', data);
-      
+
       if (data.success) {
         setJobPosts(data.data);
       } else {
@@ -78,9 +79,12 @@ export default function MyJobs() {
               <h1>My jobs</h1>
               <p className="dz-breadcrumb">Dashboard &gt; My jobs</p>
             </div>
-            <button className="mj-post-btn" onClick={handlePostJob}>Post a Job</button>
+            <button className="mj-post-btn" onClick={handlePostJob}>
+              <Plus size={18} />
+              Post a Job
+            </button>
           </div>
-          <div style={{padding: '2rem', textAlign: 'center'}}>Loading your job posts...</div>
+          <div style={{ padding: '2rem', textAlign: 'center' }}>Loading your job posts...</div>
         </main>
       </div>
     );
@@ -97,7 +101,7 @@ export default function MyJobs() {
             </div>
             <button className="mj-post-btn" onClick={handlePostJob}>Post a Job</button>
           </div>
-          <div style={{padding: '2rem', textAlign: 'center', color: 'red'}}>
+          <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>
             Error: {error}
           </div>
         </main>
@@ -123,7 +127,9 @@ export default function MyJobs() {
         <section className="jobs-container">
           {jobPosts.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📋</div>
+              <div className="empty-icon">
+                <ClipboardList size={48} />
+              </div>
               <h3>No job posts yet</h3>
               <p>Start by posting your first job to find the perfect freelancer</p>
               <button className="mj-post-btn" onClick={handlePostJob}>
@@ -137,25 +143,25 @@ export default function MyJobs() {
                   {/* Thumbnail Section */}
                   <div className="job-thumbnail">
                     {job.thumb_image ? (
-                      <img 
-                        src={`/uploads/job-thumbnails/${job.thumb_image}`} 
+                      <img
+                        src={`/uploads/job-thumbnails/${job.thumb_image}`}
                         alt={job.title}
                       />
                     ) : (
                       <div className="placeholder-thumbnail">
-                        <span>📋</span>
+                        <ClipboardList size={32} />
                       </div>
                     )}
                     <div className="job-actions">
-                      <button 
-                        className="action-btn edit-btn" 
+                      <button
+                        className="action-btn edit-btn"
                         title="Edit Job"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleEditJob(job.id);
                         }}
                       >
-                        ✏️
+                        <Edit size={16} />
                       </button>
                     </div>
                   </div>
@@ -174,7 +180,7 @@ export default function MyJobs() {
                         <span className="stat-label">Price:</span>
                         <span className="stat-value price">${parseFloat(job.regular_price || job.fixed_price || 0).toFixed(2)}</span>
                       </div>
-                      
+
                       <div className="stat-item">
                         <span className="stat-label">Applications:</span>
                         <span className="stat-value applications">

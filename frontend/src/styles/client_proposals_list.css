@@ -28,7 +28,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -78,11 +78,11 @@
 }
 
 .stat-icon-large.jobs {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
 }
 
 .stat-icon-large.proposals {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #00a86b 0%, #00a86b 100%);
 }
 
 .stat-icon-large.pending {
@@ -194,7 +194,7 @@
 }
 
 .stat-icon-small.total {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #00a86b 0%, #00a86b 100%);
 }
 
 .stat-icon-small.pending-small {
@@ -236,7 +236,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -302,7 +302,7 @@
   align-items: center;
   gap: 8px;
   padding: 14px 28px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -398,3 +398,4 @@
     font-size: 28px;
   }
 }
+

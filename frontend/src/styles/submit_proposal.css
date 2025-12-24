@@ -43,7 +43,7 @@
 
 /* Job Details Card */
 .job-details-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   padding: 30px;
   border-radius: 12px;
@@ -232,7 +232,7 @@
 }
 
 .btn-add-milestone:hover:not(:disabled) {
-  background-color: #4f46e5;
+  background-color: #00a86b !important;
 }
 
 .btn-add-milestone:disabled {
@@ -271,7 +271,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -394,3 +394,4 @@
     justify-content: center;
   }
 }
+

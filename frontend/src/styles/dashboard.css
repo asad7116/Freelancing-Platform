@@ -1,116 +1,280 @@
 /* ===== Page shell (content + footer offset) ===== */
-:root{
-  --dz-sidebar-w: 220px;   /* must match sidebar */
-  --dz-topbar-h: 64px;     /* must match sidebar */
+:root {
+  --dz-sidebar-w: 220px;
+  --dz-topbar-h: 64px;
   --dz-bg: #f6f4ef;
   --dz-card-border: #ecebe7;
-  --dz-card-shadow: 0 1px 4px rgba(0,0,0,.04);
+  --dz-card-shadow: 0 1px 4px rgba(0, 0, 0, .04);
   --dz-text-strong: #15241c;
   --dz-text-muted: #6f7f75;
   --dz-accent-bg: #0f4a33;
   --dz-accent-fg: #d8fff0;
+  --dz-primary: #00a86b;
+  --dz-primary-hover: #007a52;
 }
 
-.dz-with-shell{
+.dz-with-shell {
   min-height: 100vh;
   background: var(--dz-bg);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-/* main area sits to the right of the fixed sidebar and below the fixed topbar */
-/* .dz-main{
-  margin-left: var(--dz-sidebar-w);
-  padding: 24px 28px;
-}
-.dz-shell-main-padding{
-  padding-top: calc(var(--dz-topbar-h) + 16px);
-} */
-
 /* utility for any element (e.g., Footer) that should align with main area */
-.dz-offset{
+.dz-offset {
   margin-left: var(--dz-sidebar-w);
   padding-top: var(--dz-topbar-h);
 }
 
 /* ===== header band (title + breadcrumb look like screenshot) ===== */
-.dz-headerband{
+.dz-headerband {
   background: #f0ebe1;
   border-radius: 10px;
   padding: 18px 20px;
   margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
-.dz-headerband h1{
-  font-size: 26px; font-weight: 800; color:#1b2a22; margin:0 0 6px 0;
+
+.dz-headerband>div {
+  flex: 1;
+  min-width: 200px;
 }
-.dz-breadcrumb{
-  color:#7a8b81; font-size:14px;
+
+.dz-headerband h1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1b2a22;
+  margin: 0 0 6px 0;
+}
+
+.dz-breadcrumb {
+  color: #7a8b81;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ===== Buttons ===== */
+.dz-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--dz-primary);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.dz-refresh-btn:hover {
+  background: var(--dz-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
+}
+
+.dz-refresh-btn:active {
+  transform: translateY(0);
+}
+
+.dz-refresh-btn svg {
+  flex-shrink: 0;
+}
+
+/* Loading state */
+.dz-loading {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--dz-text-muted);
+  font-size: 16px;
 }
 
 /* ===== Cards ===== */
-.dz-cards{ display:grid; gap:16px; }
+.dz-cards {
+  display: grid;
+  gap: 16px;
+}
 
-.dz-cards--top{
+.dz-cards--top {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   margin-bottom: 14px;
 }
-.dz-card{
-  background:#fff; border:1px solid var(--dz-card-border); border-radius:14px;
+
+.dz-card {
+  background: #fff;
+  border: 1px solid var(--dz-card-border);
+  border-radius: 14px;
   box-shadow: var(--dz-card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.dz-card--big{
-  display:grid; grid-template-columns: 1fr auto; align-items:center;
-  padding:16px 18px;
+
+.dz-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
 }
-.dz-card-body{ display:grid; gap:4px; }
-.dz-value{ font-size:28px; font-weight:900; color:var(--dz-text-strong); }
-.dz-label{ color:var(--dz-text-muted); font-weight:600; }
-.dz-card-icon{
-  width:44px; height:44px; display:grid; place-items:center;
-  border-radius:10px; background:var(--dz-accent-bg); color:var(--dz-accent-fg); font-size:18px;
+
+.dz-card--big {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 16px 18px;
+}
+
+.dz-card-body {
+  display: grid;
+  gap: 4px;
+}
+
+.dz-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--dz-text-strong);
+}
+
+.dz-label {
+  color: var(--dz-text-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dz-card-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--dz-accent-bg);
+  color: var(--dz-accent-fg);
+  flex-shrink: 0;
+}
+
+.dz-card-icon svg {
+  flex-shrink: 0;
 }
 
 /* mini grid */
-.dz-cards--mini{ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.dz-card--mini{ padding:18px; display:grid; gap:10px; }
-.dz-mini-value{ font-size:30px; font-weight:900; color:var(--dz-text-strong); }
-.dz-mini-row{ display:flex; justify-content:space-between; align-items:center; }
-.dz-mini-label{ color:var(--dz-text-muted); font-weight:600; }
-.dz-mini-icon{
-  width:40px; height:40px; display:grid; place-items:center;
-  border-radius:10px; background:var(--dz-accent-bg); color:var(--dz-accent-fg);
+.dz-cards--mini {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
-/* responsive: when sidebar collapses we shift content */
-@media (max-width: 980px){
-  :root{ --dz-sidebar-w: 72px; }
-  .dz-main{ margin-left: var(--dz-sidebar-w); padding: 18px 16px; }
-  .dz-offset{ margin-left: var(--dz-sidebar-w); }
-}
-
-@media (max-width: 560px){
-  .dz-cards--top{ grid-template-columns: 1fr; }
-}
-/* Grid */
-.dash-shell {
+.dz-card--mini {
+  padding: 18px;
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 0;                       /* kill any column gap */
-  min-height: 100vh;
-  background: #f6f4ee;          /* tan bg like reference */
+  gap: 10px;
 }
 
-.dash-aside {
-  background: #fff;
-  border-right: 1px solid #eae7de;
-  /* no padding or margin here so it touches the main column */
+.dz-mini-value {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--dz-text-strong);
 }
 
-.dash-main {
-  min-width: 0;
-  background: #f6f4ee;
-  padding: 0;                   /* <<< important: remove left padding that made the “gap” */
+.dz-mini-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.dash-content {
-  padding: 24px 28px;           /* keep page padding inside content, not on the main */
+.dz-mini-label {
+  color: var(--dz-text-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dz-mini-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--dz-accent-bg);
+  color: var(--dz-accent-fg);
+  flex-shrink: 0;
+}
+
+.dz-mini-icon svg {
+  flex-shrink: 0;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .dz-headerband {
+    padding: 14px 16px;
+  }
+
+  .dz-headerband h1 {
+    font-size: 22px;
+  }
+
+  .dz-breadcrumb {
+    font-size: 13px;
+  }
+
+  .dz-refresh-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .dz-cards--top {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .dz-value {
+    font-size: 24px;
+  }
+
+  .dz-mini-value {
+    font-size: 26px;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .dz-headerband {
+    padding: 12px 14px;
+  }
+
+  .dz-headerband h1 {
+    font-size: 20px;
+  }
+
+  .dz-refresh-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dz-cards--top,
+  .dz-cards--mini {
+    grid-template-columns: 1fr;
+  }
+
+  .dz-card--big {
+    padding: 14px 16px;
+  }
+
+  .dz-value {
+    font-size: 22px;
+  }
+
+  .dz-mini-value {
+    font-size: 24px;
+  }
+
+  .dz-card-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dz-mini-icon {
+    width: 36px;
+    height: 36px;
+  }
 }

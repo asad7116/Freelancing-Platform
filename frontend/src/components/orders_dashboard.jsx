@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Plus, Edit, ClipboardList, MapPin } from "lucide-react";
 import DashboardSidebar from "../components/Dashboard_sidebar";
-import "../styles/orders_dashboard.css"; // table styles only
-import "../styles/job_cards.css"; // New card-based layout
+import "../styles/orders_dashboard.css";
+import "../styles/job_cards.css";
 
 export default function Orders() {
   const navigate = useNavigate();
@@ -20,10 +21,10 @@ export default function Orders() {
       const response = await fetch('/api/job-posts/my-jobs', {
         credentials: 'include' // Include cookies for authentication
       });
-      
+
       const data = await response.json();
       console.log('Job posts response:', data);
-      
+
       if (data.success) {
         setJobPosts(data.data);
       } else {
@@ -85,7 +86,7 @@ export default function Orders() {
             <h1>My Job Posts</h1>
             <p className="dz-breadcrumb">Dashboard &gt; My Job Posts</p>
           </div>
-          <div style={{padding: '2rem', textAlign: 'center'}}>Loading...</div>
+          <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
         </main>
       </div>
     );
@@ -99,7 +100,7 @@ export default function Orders() {
             <h1>My Job Posts</h1>
             <p className="dz-breadcrumb">Dashboard &gt; My Job Posts</p>
           </div>
-          <div style={{padding: '2rem', textAlign: 'center', color: 'red'}}>
+          <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>
             Error: {error}
           </div>
         </main>
@@ -121,6 +122,7 @@ export default function Orders() {
             <p className="dz-breadcrumb">Dashboard &gt; My Job Posts</p>
           </div>
           <button className="post-job-btn" onClick={handlePostJob}>
+            <Plus size={18} />
             Post a Job
           </button>
         </div>
@@ -128,7 +130,9 @@ export default function Orders() {
         <section className="jobs-container">
           {jobPosts.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📋</div>
+              <div className="empty-icon">
+                <ClipboardList size={48} />
+              </div>
               <h3>No job posts yet</h3>
               <p>Start by posting your first job to find the perfect freelancer</p>
               <button className="post-job-btn" onClick={handlePostJob}>
@@ -142,22 +146,22 @@ export default function Orders() {
                   {/* Thumbnail Section */}
                   <div className="job-thumbnail">
                     {job.thumb_image ? (
-                      <img 
-                        src={`/uploads/job-thumbnails/${job.thumb_image}`} 
+                      <img
+                        src={`/uploads/job-thumbnails/${job.thumb_image}`}
                         alt={job.title}
                       />
                     ) : (
                       <div className="placeholder-thumbnail">
-                        <span>📋</span>
+                        <ClipboardList size={32} />
                       </div>
                     )}
                     <div className="job-actions">
-                      <button 
-                        className="action-btn edit-btn" 
+                      <button
+                        className="action-btn edit-btn"
                         title="Edit Job"
                         onClick={() => handleEditJob(job.id)}
                       >
-                        ✏️
+                        <Edit size={16} />
                       </button>
                     </div>
                   </div>
@@ -168,7 +172,12 @@ export default function Orders() {
                       <h3 className="job-title">{job.title}</h3>
                       <div className="job-meta">
                         <span className="job-category">{job.category?.name || 'General'}</span>
-                        {job.city && <span className="job-location">📍 {job.city.name}</span>}
+                        {job.city && (
+                          <span className="job-location">
+                            <MapPin size={14} />
+                            {job.city.name}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -177,7 +186,7 @@ export default function Orders() {
                         <span className="stat-label">Price:</span>
                         <span className="stat-value price">${job.regular_price || job.fixed_price || 'TBD'}</span>
                       </div>
-                      
+
                       <div className="stat-item">
                         <span className="stat-label">Applications:</span>
                         <span className="stat-value applications">

@@ -28,7 +28,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -78,7 +78,7 @@
 }
 
 .stat-icon.all {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
 }
 
 .stat-icon.pending {
@@ -353,7 +353,7 @@
 
 .btn-browse {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -458,3 +458,4 @@
     justify-content: center;
   }
 }
+

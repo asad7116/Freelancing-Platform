@@ -9,28 +9,27 @@ const MENU = {
   client: [
     { to: "overview", label: "Dashboard", icon: Home },
     { to: "browse-gigs", label: "Browse Gigs", icon: Search },
-    { to: "orders",   label: "Add Jobs",    icon: List },
+    { to: "orders", label: "Add Jobs", icon: List },
     { to: "MyProposals", label: "My Proposals", icon: FileText },
-    { to: "messages", label: "Messages",  icon: MessageSquare },
-    { to: "billing",  label: "Billing",   icon: CreditCard },
-    { to: "profile",  label: "Profile",   icon: UserRound },
+    { to: "messages", label: "Messages", icon: MessageSquare },
+    { to: "billing", label: "Billing", icon: CreditCard },
+    { to: "profile", label: "Profile", icon: UserRound },
   ],
   freelancer: [
-    { to: "overview",   label: "Dashboard",  icon: Home },
+    { to: "overview", label: "Dashboard", icon: Home },
     { to: "browse-jobs", label: "Browse Jobs", icon: Search },
-    { to: "gigs",       label: "Gigs",       icon: BriefcaseBusiness },
-    { to: "orders",     label: "My Proposals",  icon: ClipboardList },
+    { to: "gigs", label: "Gigs", icon: BriefcaseBusiness },
+    { to: "orders", label: "My Proposals", icon: ClipboardList },
     { to: "subscription", label: "Subscription", icon: CreditCard },
-    { to: "messages",   label: "Messages",   icon: MessageSquare },
-    { to: "portfolio",  label: "Portfolio",  icon: Images },
-    { to: "wishlist",   label: "Wishlist",   icon: Star },
-    { to: "payouts",    label: "Payouts",    icon: Wallet },
-    { to: "profile",    label: "Profile",    icon: UserRound },
+    { to: "messages", label: "Messages", icon: MessageSquare },
+    { to: "portfolio", label: "Portfolio", icon: Images },
+    { to: "wishlist", label: "Wishlist", icon: Star },
+    { to: "payouts", label: "Payouts", icon: Wallet },
+    { to: "profile", label: "Profile", icon: UserRound },
   ],
 };
 
-export default function DashboardSidebar({ role }) {
-  console.log("DashboardSidebar role =", role); // DEBUG: remove later
+export default function DashboardSidebar({ role, onLinkClick }) {
   const items = MENU[role] || MENU.freelancer;
 
   return (
@@ -49,6 +48,7 @@ export default function DashboardSidebar({ role }) {
             key={to}
             to={to}
             end
+            onClick={onLinkClick}
             className={({ isActive }) => "wz-link" + (isActive ? " is-active" : "")}
           >
             <Icon className="wz-ic" size={18} />

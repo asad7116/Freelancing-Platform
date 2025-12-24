@@ -53,7 +53,7 @@
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid #00a86b;
 }
 
 .quick-stat.pending {
@@ -124,7 +124,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -317,7 +317,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -436,3 +436,4 @@
     justify-content: center;
   }
 }
+

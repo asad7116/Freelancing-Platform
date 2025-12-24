@@ -1,88 +1,77 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios for API calls
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import { Plus, Edit, Star, Eye } from "lucide-react";
 import "../styles/gigs_dashboard.css";
 
 export default function GigsDashboard() {
-  const [gigs, setGigs] = useState([]); // State to store fetched gigs
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [gigs, setGigs] = useState([]);
+  const navigate = useNavigate();
 
-  // Fetch gigs from the backend when the component mounts
   useEffect(() => {
     const fetchGigs = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/gigs'); // Full API URL to fetch gigs
-        setGigs(response.data.gigs); // Assuming the response contains a 'gigs' field
+        const response = await axios.get('http://localhost:4000/api/gigs');
+        setGigs(response.data.gigs);
       } catch (error) {
         console.error("Error fetching gigs:", error);
       }
     };
 
-    fetchGigs(); // Call the function to fetch gigs
-  }, []); // Empty dependency array ensures it runs once on component mount
+    fetchGigs();
+  }, []);
 
-  // Navigate to the CreateGig page
   const createGigHandler = () => {
-    navigate('/freelancer/CreateGig'); // Use navigate to redirect to the CreateGig page
+    navigate('/freelancer/CreateGig');
   };
 
-  // Navigate to gig details page
   const handleGigClick = (gigId) => {
     navigate(`/freelancer/gig/${gigId}`);
   };
 
-  // Navigate to edit gig page
   const handleEditGig = (e, gigId) => {
-    e.stopPropagation(); // Prevent card click when edit button is clicked
+    e.stopPropagation();
     navigate(`/freelancer/edit-gig/${gigId}`);
   };
 
   return (
     <div className="dz-with-shell">
-      {/* Shared Sidebar + Topbar */}
-      {/* <DashboardSidebar user={{ name: "Alex", avatar: "/assets/avatar.png" }} /> */}
-
-      {/* Main */}
       <main className="dz-main dz-shell-main-padding">
-        {/* Title band */}
         <div className="dz-headerband">
           <h1>Manage Gig</h1>
           <p className="dz-breadcrumb">Dashboard &gt; Manage Gig</p>
           <button
             className="gd-new-gig"
-            onClick={createGigHandler} // Navigate to the CreateGig page
+            onClick={createGigHandler}
           >
+            <Plus size={18} />
             Create a new Gig
           </button>
         </div>
 
-        {/* Gig cards */}
         <section className="gd-cards">
           {gigs.length === 0 ? (
-            <p>No gigs found.</p> // Display message when no gigs are available
+            <p className="gd-empty">No gigs found.</p>
           ) : (
             gigs.map((gig) => (
-              <article 
-                className="gd-card" 
+              <article
+                className="gd-card"
                 key={gig.id}
                 onClick={() => handleGigClick(gig.id)}
-                style={{ cursor: 'pointer' }}
               >
-                {/* Ensure the correct image path */}
                 <img
                   src={`http://localhost:4000/uploads/${gig.thumbnailImage}`}
-                  alt={gig.gigTitle} // Use gigTitle as alt text
+                  alt={gig.gigTitle}
                   className="gd-card-img"
                 />
                 <div className="gd-card-body">
                   <div className="gd-price">${gig.price.toLocaleString()}</div>
 
-                  {/* Render rating if available */}
                   <div className="gd-rating">
-                    ⭐ {gig.rating ? gig.rating.toFixed(1) : "0"} ({gig.reviews || 0})
+                    <Star size={14} fill="currentColor" />
+                    {gig.rating ? gig.rating.toFixed(1) : "0"} ({gig.reviews || 0})
                   </div>
 
-                  {/* Correctly referencing gigTitle */}
                   <h3 className="gd-title">{gig.gigTitle}</h3>
 
                   <div className="gd-seller">
@@ -99,10 +88,11 @@ export default function GigsDashboard() {
                       Status:
                       <input type="checkbox" checked={gig.active} readOnly />
                     </label>
-                    <button 
+                    <button
                       className="gd-edit"
                       onClick={(e) => handleEditGig(e, gig.id)}
                     >
+                      <Edit size={16} />
                       Edit Gig
                     </button>
                   </div>
