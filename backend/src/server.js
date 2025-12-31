@@ -17,6 +17,7 @@ import profileRoutes from "./routes/profile.routes.js"
 import clientDashboardRoutes from "./routes/clientDashboard.routes.js"
 import proposalRoutes from "./routes/proposal.routes.js"
 import aiRoutes from "./routes/ai.routes.js"
+import chatbotRoutes from "./routes/chatbot.routes.js"
 
 
 const app = express()
@@ -47,6 +48,7 @@ app.get("/", (req, res) => res.send("API running"))
 app.use("/api/auth", authRoutes)
 app.use("/api/gigs", gigsRoutes)
 app.use("/api/ai", aiRoutes)
+app.use("/api/chatbot", chatbotRoutes)
 app.use("/api", publicRoutes)
 app.use("/api", jobPostRoutes)
 app.use("/api", categoriesRoutes)

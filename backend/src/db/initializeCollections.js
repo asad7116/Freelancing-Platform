@@ -46,6 +46,26 @@ export async function initializeCollections() {
     // Specialty indexes
     await collections.specialties.createIndex({ category_id: 1 })
 
+    // Chatbot collections and indexes
+    const chatbotCollections = {
+      chatbot_sessions: db.collection("chatbot_sessions"),
+      chatbot_messages: db.collection("chatbot_messages"),
+      chatbot_chunks: db.collection("chatbot_chunks"),
+      chatbot_stats: db.collection("chatbot_stats"),
+    }
+
+    // Chatbot session indexes
+    await chatbotCollections.chatbot_sessions.createIndex({ userId: 1 })
+    await chatbotCollections.chatbot_sessions.createIndex({ updatedAt: -1 })
+
+    // Chatbot message indexes
+    await chatbotCollections.chatbot_messages.createIndex({ sessionId: 1 })
+    await chatbotCollections.chatbot_messages.createIndex({ timestamp: 1 })
+
+    // Chatbot chunks indexes (for hybrid retrieval)
+    await chatbotCollections.chatbot_chunks.createIndex({ documentId: 1 })
+    await chatbotCollections.chatbot_chunks.createIndex({ "metadata.type": 1 })
+
     console.log("[MongoDB] Collections initialized with indexes")
   } catch (error) {
     console.error("[MongoDB] Error initializing collections:", error)
