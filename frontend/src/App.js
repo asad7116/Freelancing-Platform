@@ -1,17 +1,13 @@
 // src/App.js
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// ---------- Public pages (keep your existing ones) ----------
+// ---------- Public pages ----------
 import HomePage from "./pages/HomePage";
-import ServicesPage from "./pages/services";
-import JobsPage from "./pages/Jobs_page";
 import PricingPage from "./pages/Pricing_page";
 import SignIn from "./pages/Signin";
 import SignUp from "./pages/signUp";
 import Contact from "./pages/contact";
 import About from "./pages/About_Page";
-import Freelancer from "./pages/Freelancer";
-import SellerDetails from "./pages/SellerDetails";
 
 // ---------- Shared dashboard layout & guards ----------
 import DashboardLayout from "./Layouts/DashboardLayout";
@@ -49,15 +45,11 @@ export default function App() {
       <Routes>
         {/* ===== Public routes ===== */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/jobs" element={<JobsPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
-        <Route path="/freelancers" element={<Freelancer />} />
-        <Route path="/seller/:username" element={<SellerDetails />} />
 
         {/* ===== Client dashboard ===== */}
         <Route

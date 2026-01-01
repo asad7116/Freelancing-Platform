@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/Header.css";
 import { Link } from "react-router-dom";
-import { ChevronDown, Globe, DollarSign, Menu, X } from "lucide-react";
+import { Globe, DollarSign, Menu, X } from "lucide-react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -23,28 +23,9 @@ const Header = () => {
 
         <nav className={`nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
           <Link to="/">Home</Link>
-
-          <Link to="/services">Services</Link>
-          <Link to="/jobs">Jobs</Link>
-          <Link to="/freelancers">Freelancers</Link>
-
-          {/* ▼ Pages dropdown (hover) */}
-          <div className="pages-dropdown">
-            <button type="button" className="pages-trigger">
-              Pages <ChevronDown size={16} />
-            </button>
-            <div className="pages-menu">
-              <Link to="/dashboard">User Dashboard</Link>
-              <Link to="/pricing">Pricing</Link>
-              <Link to="/faq">Faq</Link>
-              <Link to="/signin">Login</Link>
-              <Link to="/signUp">SignUp</Link>
-              <Link to="/not-found">404 Page</Link>
-            </div>
-          </div>
-
-          <Link to="/Contact">Contact</Link>
-          <Link to="/about">About Us</Link>
+          <Link to="/about">About</Link>
+          <Link to="/pricing">Pricing</Link>
+          <Link to="/contact">Contact</Link>
         </nav>
 
         <div className="right-side">
