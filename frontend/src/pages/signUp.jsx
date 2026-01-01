@@ -1,35 +1,40 @@
-// src/pages/signUp.jsx
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import PageHeader from "../components/PageHeader";
-import ToggleButtons from "../components/Login_Toggle"; // import toggle
 import "../styles/Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
+import ToggleButtons from "../components/Login_Toggle";
 
 export default function SignUp() {
-  // IMPORTANT: start as empty so you NOTICE if toggle never sets it
-  const [role, setRole] = useState(""); // "Buyer" | "Seller"/"Freelancer"
+  const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isGoogleMode, setIsGoogleMode] = useState(false); // New flag
+  const [isGoogleMode, setIsGoogleMode] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const navigate = useNavigate();
+
+  // Mouse tracking for animated shapes
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   // Check if we're in Google auth mode
   useEffect(() => {
     const googleAuthMode = localStorage.getItem('googleAuthNewUser') === 'true';
-    console.log('🔍 Checking Google auth mode:', googleAuthMode);
     if (googleAuthMode) {
       setIsGoogleMode(true);
-      console.log('✅ In Google auth mode - showing role selection only');
-      // Clear the flag immediately so if user comes back to signup page normally, they see full form
       localStorage.removeItem('googleAuthNewUser');
     } else {
       setIsGoogleMode(false);
@@ -44,7 +49,6 @@ export default function SignUp() {
       return;
     }
 
-    // Load script if not already loaded
     const existing = document.getElementById('google-identity-script');
     if (!existing) {
       const script = document.createElement('script');
@@ -53,33 +57,25 @@ export default function SignUp() {
       script.defer = true;
       script.id = 'google-identity-script';
       script.onload = () => {
-        console.log('✅ Google Identity script loaded');
         if (window.google && window.google.accounts && window.google.accounts.id) {
           window.google.accounts.id.initialize({
             client_id: clientId,
             callback: handleGoogleResponse,
           });
-          console.log('✅ Google Identity initialized');
-          // Render button into the container
-          const btn = document.getElementById('google-button');
+          const btn = document.getElementById('google-button-signup');
           if (btn) {
             window.google.accounts.id.renderButton(btn, { 
               theme: 'outline', 
               size: 'large',
               width: '100%'
             });
-            console.log('✅ Google button rendered');
           }
         }
-      };
-      script.onerror = () => {
-        console.error('❌ Failed to load Google Identity script');
       };
       document.body.appendChild(script);
     }
   }, []);
 
-  // Fallback: if Google button doesn't render, use this manual handler
   const handleGoogleManualClick = () => {
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     if (!clientId) {
@@ -95,30 +91,21 @@ export default function SignUp() {
 
   async function handleGoogleResponse(response) {
     try {
-      console.log('📨 Google response received');
       setLoading(true);
       const id_token = response?.credential;
       if (!id_token) throw new Error('No id_token received from Google');
 
-      console.log('🔒 Sending token to backend...');
       const data = await api.post('/api/auth/google', { id_token });
       const user = data.user;
       if (user) {
-        console.log('✅ User authenticated:', user);
-        
-        // If new user has no role yet, show role selection on signup page
         if (user.isNewUser && !user.role) {
-          console.log('📋 New user - showing role selection');
-          // Set a flag so form shows role selection
           localStorage.setItem('googleAuthNewUser', 'true');
-          setIsGoogleMode(true); // Immediately show Google mode UI
-          setRole(''); // Reset form to show role selection
-          setError('Please select your role (Buyer or Seller)');
-          setLoading(false); // Don't stay in loading state
+          setIsGoogleMode(true);
+          setRole('');
+          setError('Please select your role (Buyer or Freelancer)');
+          setLoading(false);
         } else {
-          // Existing user or already has role
           localStorage.setItem('role', user.role);
-          console.log('✅ Redirecting to dashboard with role:', user.role);
           const dest = user.role === 'client' ? '/client/overview' : '/freelancer/overview';
           navigate(dest, { replace: true });
         }
@@ -126,21 +113,18 @@ export default function SignUp() {
         throw new Error('Google sign-in failed');
       }
     } catch (err) {
-      console.error('❌ Google sign-in error:', err);
       setError(err.message || 'Google sign-in failed');
       setLoading(false);
     }
   }
 
-  // UI label -> backend value
   function normalizeRole(label) {
     const v = String(label || "").trim().toLowerCase();
     if (["buyer", "client"].includes(v)) return "client";
     if (["seller", "freelancer", "provider"].includes(v)) return "freelancer";
-    return ""; // return empty so we can block submit if toggle didn't work
+    return "";
   }
 
-  // this is what we will send to backend
   const backendRole = normalizeRole(role);
 
   async function handleSubmit(e) {
@@ -148,55 +132,34 @@ export default function SignUp() {
     setError("");
 
     if (!backendRole) {
-      setError("Please choose Buyer or Seller before continuing.");
+      setError("Please choose Buyer or Freelancer before continuing.");
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (!isGoogleMode && password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
     setLoading(true);
     try {
-      // Check if this is a Google auth user setting their role
       const isGoogleAuthNewUser = localStorage.getItem('googleAuthNewUser') === 'true';
-      console.log('🔍 isGoogleAuthNewUser:', isGoogleAuthNewUser);
       
       if (isGoogleAuthNewUser) {
-        // Call set-role endpoint
-        console.log("📝 Setting role for Google auth user:", backendRole);
         const response = await api.put("/api/auth/set-role", { role: backendRole });
-        console.log('📥 PUT /api/auth/set-role response:', response);
-        
         const { user } = response;
-        console.log('👤 User from response:', user);
-        console.log('👤 user.role:', user?.role);
         
-        // Clear Google auth flag first
         localStorage.removeItem('googleAuthNewUser');
-        
-        // Set role in localStorage BEFORE navigating
         if (user.role) {
           localStorage.setItem('role', user.role);
-          console.log('✅ Role saved to localStorage:', user.role);
         } else {
-          console.error('❌ user.role is missing or null:', user);
           throw new Error('Failed to update role - server response missing role field');
         }
         
-        // Set Google mode to false so next time page loads normally
         setIsGoogleMode(false);
-        
-        const dest = user.role === 'client' ? '/client' : '/freelancer';
-        console.log('🎯 Destination:', dest);
-        console.log('🚀 About to navigate to:', dest);
-        
-        // Use window.location to force a full page reload
+        const dest = user.role === 'client' ? '/client/overview' : '/freelancer/overview';
         window.location.href = dest;
       } else {
-        // Regular sign-up flow
-        console.log("UI role:", role, "=> backend role:", backendRole);
         const { user } = await api.post("/api/auth/signup", {
           name,
           email,
@@ -204,165 +167,157 @@ export default function SignUp() {
           role: backendRole,
         });
 
-        // TEMP: keep your current guard working
         localStorage.setItem("role", user.role);
-
         const dest = user.role === "client" ? "/client/overview" : "/freelancer/overview";
         navigate(dest, { replace: true });
       }
     } catch (err) {
-      console.error('❌ handleSubmit error:', err);
-      setError(err.message || "Sign up failed");
+      const errMsg = err.response?.data?.error || err.message || "Sign-up failed. Try again.";
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <>
-      <Header />
-      <PageHeader title="Sign Up" />
-      <div className="signup-container">
-        <div className="signup-box">
-          {/* Left - Form */}
-          <div className="signup-form">
-            <h2>Sign Up</h2>
-            <p className="welcome-text">Welcome to Tixe</p>
+    <div className="auth-page">
+      {/* Animated gradient background */}
+      <div className="gradient-bg"></div>
+      
+      {/* Floating animated shapes */}
+      <div 
+        className="decorative-circle circle-1"
+        style={{
+          transform: `translate(${mousePosition.x / 20}px, ${mousePosition.y / 20}px)`
+        }}
+      ></div>
+      <div 
+        className="decorative-circle circle-2"
+        style={{
+          transform: `translate(${-mousePosition.x / 15}px, ${mousePosition.y / 15}px)`
+        }}
+      ></div>
+      <div 
+        className="decorative-circle circle-3"
+        style={{
+          transform: `translate(${mousePosition.x / 10}px, ${-mousePosition.y / 10}px)`
+        }}
+      ></div>
+      <div 
+        className="decorative-cube cube-1"
+        style={{
+          transform: `translate(${mousePosition.x / 25}px, ${mousePosition.y / 25}px) rotateX(${mousePosition.y / 5}deg) rotateY(${mousePosition.x / 5}deg)`
+        }}
+      ></div>
 
-            {isGoogleMode ? (
-              // Simplified form for Google auth users - just role selection
-              <>
-                <h3 style={{ marginTop: 20, marginBottom: 10 }}>Complete Your Profile</h3>
-                <p style={{ color: '#666', marginBottom: 20 }}>Select whether you want to be a Buyer or Seller</p>
-                
-                {/* Toggle: pass BOTH selected + onSelect so it's controlled */}
-                <ToggleButtons
-                  selected={role}
-                  onSelect={(r) => {
-                    setRole(r);
-                    console.log("Toggle selected:", r);
-                  }}
-                />
+      {/* Signup Card */}
+      <div className="auth-card">
+        <div className="auth-card-header">
+          <h1 className="auth-title">Create Account</h1>
+          <p className="auth-subtitle">Join our platform to get started</p>
+        </div>
 
-                <form onSubmit={handleSubmit} className="signup-form-inner">
-                  {/* Show what the UI thinks is selected (debug text, no CSS change) */}
-                  <div style={{ fontSize: 12, color: "#555", marginBottom: 8 }}>
-                    Selected role: <strong>{role || "— nothing selected —"}</strong>
-                  </div>
+        {error && <div className="error-message">{error}</div>}
 
-                  {/* Hidden input keeps normalized value for inspection/devtools */}
-                  <input type="hidden" name="role" value={backendRole} />
-
-                  {error && (
-                    <div className="form-error" style={{ color: "#d33", marginTop: 6 }}>
-                      {error}
-                    </div>
-                  )}
-
-                  <button type="submit" className="signup-btn" disabled={loading || !backendRole}>
-                    {loading ? "Completing..." : "Complete Sign Up"}
-                  </button>
-                </form>
-              </>
-            ) : (
-              // Full signup form
-              <>
-                {/* Toggle: pass BOTH selected + onSelect so it's controlled */}
-                <ToggleButtons
-                  selected={role}
-                  onSelect={(r) => {
-                    setRole(r);
-                    console.log("Toggle selected:", r);
-                  }}
-                />
-
-                {/* SignUp Form */}
-                <form onSubmit={handleSubmit} className="signup-form-inner">
-                  {/* Show what the UI thinks is selected (debug text, no CSS change) */}
-                  <div style={{ fontSize: 12, color: "#555", marginBottom: 8 }}>
-                    Selected role: <strong>{role || "— nothing selected —"}</strong>
-                  </div>
-
-                  {/* Hidden input keeps normalized value for inspection/devtools */}
-                  <input type="hidden" name="role" value={backendRole} />
-
-                  <label>Name *</label>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-
-                  <label>Email *</label>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-
-                  <label>Password *</label>
-                  <input
-                    type="password"
-                    placeholder="********"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-
-                  <label>Confirm Password *</label>
-                  <input
-                    type="password"
-                    placeholder="********"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-
-                  {error && (
-                    <div className="form-error" style={{ color: "#d33", marginTop: 6 }}>
-                      {error}
-                    </div>
-                  )}
-
-                  <button type="submit" className="signup-btn" disabled={loading}>
-                    {loading ? "Creating account..." : "Sign Up"}
-                  </button>
-                </form>
-
-                <div className="divider">OR</div>
-
-                <div className="social-login">
-                  {/* <button className="social-btn">f</button> */}
-                  <div id="google-button" style={{ display: 'inline-block' }}>
-                    <button 
-                      type="button" 
-                      className="social-btn" 
-                      onClick={handleGoogleManualClick}
-                      title="Sign up with Google"
-                    >
-                      G
-                    </button>
-                  </div>
-                </div>
-
-                <p className="already-account">
-                  Already have an account? <Link to="/signin">Sign In</Link>
-                </p>
-              </>
-            )}
+        <form className="auth-form" onSubmit={handleSubmit}>
+          {/* Role Selection - Always visible */}
+          <div className="form-group">
+            <label className="form-label">I want to</label>
+            <ToggleButtons value={role} onChange={setRole} />
           </div>
 
-          {/* Right - Image */}
-          <div className="signup-image">
-            <img src="assets/img/Login/1.png" alt="Sign up" />
-          </div>
+          {/* Full signup form (hidden in Google mode) */}
+          {!isGoogleMode && (
+            <>
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="form-input"
+                />
+              </div>
+            </>
+          )}
+
+          <button type="submit" disabled={loading} className="auth-submit-btn">
+            {loading ? "Creating account..." : isGoogleMode ? "Continue" : "Sign Up"}
+          </button>
+        </form>
+
+        {!isGoogleMode && (
+          <>
+            <div className="divider">
+              <span>OR</span>
+            </div>
+
+            <div className="social-signin">
+              <div id="google-button-signup" className="google-signin-wrapper"></div>
+              <button 
+                onClick={handleGoogleManualClick} 
+                className="google-fallback-btn"
+                type="button"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Sign up with Google
+              </button>
+            </div>
+          </>
+        )}
+
+        <div className="auth-footer">
+          <p>
+            Already have an account?{" "}
+            <Link to="/signin" className="auth-link">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 }
