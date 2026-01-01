@@ -1,4 +1,4 @@
-.toggle-container {
+.toggle-buttons {
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -6,34 +6,26 @@
 }
 
 .toggle-btn {
-  padding: 10px 24px;
-  border-radius: 25px;
-  border: 2px solid #00c853;
-  background: white;
-  color: #333;
+  padding: 12px 32px;
+  border-radius: 12px;
+  border: 2px solid rgba(34, 190, 13, 0.5);
+  background: rgba(34, 190, 13, 0.15);
+  color: #000000;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .toggle-btn:hover {
-  background: #f1f1f1;
+  background: rgba(34, 190, 13, 0.25);
+  border-color: rgba(34, 190, 13, 0.7);
 }
 
-.active-buyer {
-  background: white;
-  color: #333;
-  border: 2px solid #00c853;
-}
-
-.active-seller {
-  background: #00c853;
-  color: white;
-  border: 2px solid #00c853;
-}
-.inactive {
-  background: white;
-  color: #333;
-  border: 2px solid #00c853;
+.toggle-btn.active {
+  background: rgba(34, 190, 13, 0.7);
+  color: #000000;
+  border: 2px solid #22be0d;
+  box-shadow: 0 0 0 4px rgba(34, 190, 13, 0.3);
+  font-weight: 700;
 }

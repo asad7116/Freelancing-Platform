@@ -7,8 +7,8 @@
 
 header {
   width: 100%;
-  background: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: #0c1216;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -36,6 +36,12 @@ header {
   height: 70px;
   width: auto;
   object-fit: contain;
+  animation: floatHeaderLogo 3s ease-in-out infinite;
+}
+
+@keyframes floatHeaderLogo {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 .logo .green {
@@ -48,7 +54,7 @@ header {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #333;
+  color: #ffffff;
   padding: 8px;
 }
 
@@ -68,7 +74,7 @@ header {
 
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color: #ffffff;
   font-weight: 500;
   transition: color 0.3s;
   white-space: nowrap;
@@ -95,10 +101,11 @@ header {
   align-items: center;
   gap: 6px;
   font-size: 0.95rem;
-  color: #333;
+  color: #ffffff;
   cursor: pointer;
   transition: color 0.3s;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .currency-selector:hover,
@@ -142,7 +149,7 @@ header {
   border: 0;
   cursor: pointer;
   font: inherit;
-  color: #333;
+  color: #ffffff;
   font-weight: 500;
   transition: color 0.3s;
   display: flex;

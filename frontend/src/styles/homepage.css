@@ -1,3 +1,74 @@
+.homepage-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Animated Dark Green Gradient Background */
+.homepage-gradient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    #0a3d2e 0%, 
+    #0f4a33 25%, 
+    #1a5c42 50%, 
+    #0b5345 75%, 
+    #0d3d2a 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShiftHomepage 15s ease infinite;
+  z-index: -2;
+}
+
+@keyframes gradientShiftHomepage {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Decorative Floating Elements */
+.homepage-decorative-circle {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(34, 190, 13, 0.05);
+  backdrop-filter: blur(5px);
+  animation: floatHomepage 6s ease-in-out infinite;
+  pointer-events: none;
+  transition: transform 0.3s ease-out;
+  z-index: -1;
+}
+
+.homepage-decorative-circle.circle-1 {
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.homepage-decorative-circle.circle-2 {
+  width: 300px;
+  height: 300px;
+  bottom: -80px;
+  right: -80px;
+  animation-delay: 2s;
+}
+
+.homepage-decorative-circle.circle-3 {
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  right: -50px;
+  animation-delay: 4s;
+}
+
+@keyframes floatHomepage {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-20px) translateX(10px); }
+}
+
 .hero {
   /*background: url("/frontend/public/assets/banner.jpg") no-repeat center center/cover;*/
   height: 500px;

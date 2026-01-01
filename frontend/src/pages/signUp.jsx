@@ -213,6 +213,7 @@ export default function SignUp() {
       {/* Signup Card */}
       <div className="auth-card">
         <div className="auth-card-header">
+          <img src="/assets/logo/logo.png" alt="Tixe" className="auth-logo" />
           <h1 className="auth-title">Create Account</h1>
           <p className="auth-subtitle">Join our platform to get started</p>
         </div>
@@ -222,7 +223,6 @@ export default function SignUp() {
         <form className="auth-form" onSubmit={handleSubmit}>
           {/* Role Selection - Always visible */}
           <div className="form-group">
-            <label className="form-label">I want to</label>
             <ToggleButtons value={role} onChange={setRole} />
           </div>
 

@@ -156,6 +156,7 @@ export default function SignIn() {
       {/* Signin Card */}
       <div className="auth-card">
         <div className="auth-card-header">
+          <img src="/assets/logo/logo.png" alt="Tixe" className="auth-logo" />
           <h1 className="auth-title">Welcome Back</h1>
           <p className="auth-subtitle">Sign in to continue to your account</p>
         </div>
