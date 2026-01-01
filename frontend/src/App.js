@@ -39,6 +39,7 @@ import SubmitWork from "./pages/SubmitWork";
 import ClientProposalsList from "./components/ClientProposalsList";
 import JobProposals from "./components/JobProposals";
 import ProposalDetails from "./pages/ProposalDetails";
+import ChatbotWidget from "./components/ChatbotWidget";
 
 export default function App() {
   return (
@@ -67,15 +68,15 @@ export default function App() {
           {/* <-- this one */}
           <Route path="browse-gigs" element={<BrowseGigs />} />
           <Route path="gig/:gigId" element={<GigDetail />} />
-          <Route path="PostJob" element={<PostJob/>} />
-          <Route path="PostJob/edit/:jobId" element={<PostJob/>} />
-          <Route path="job/:jobId" element={<JobDetail/>} />
-          <Route path="MyProposals" element={<ClientProposalsList/>} />
-          <Route path="proposals/job/:jobId" element={<JobProposals/>} />
-          <Route path="proposals/:proposalId" element={<ProposalDetails/>} />
+          <Route path="PostJob" element={<PostJob />} />
+          <Route path="PostJob/edit/:jobId" element={<PostJob />} />
+          <Route path="job/:jobId" element={<JobDetail />} />
+          <Route path="MyProposals" element={<ClientProposalsList />} />
+          <Route path="proposals/job/:jobId" element={<JobProposals />} />
+          <Route path="proposals/:proposalId" element={<ProposalDetails />} />
           <Route path="Orders" element={<MyJobs />} />
-          <Route path="Messages" element={<Messages/>}/>
-          <Route path="Profile" element={<ProfileSettings/>} />
+          <Route path="Messages" element={<Messages />} />
+          <Route path="Profile" element={<ProfileSettings />} />
 
           <Route path="*" element={<div>Client page not found</div>} />
         </Route>
@@ -100,21 +101,24 @@ export default function App() {
           <Route path="job/:jobId" element={<JobDetail />} />
           <Route path="gig/:gigId" element={<GigDetail />} />
           <Route path="edit-gig/:gigId" element={<EditGig />} />
-          <Route path="Gigs" element={<Gigs/>} />
-          <Route path="CreateGig" element={<CreateGig/>} />
-          <Route path="MyProposals" element={<MyProposals/>} />
-          <Route path="Subscription" element={<Subscription/>} />
-          <Route path="Wishlist" element={<Wishlist/>} />
-          <Route path="Payouts" element={<Payouts/>} />
-          <Route path="Orders" element={<Orders/>} />
-          <Route path="Messages" element={<Messages/>}/>
-          <Route path="Profile" element={<ProfileSettings/>} />
+          <Route path="Gigs" element={<Gigs />} />
+          <Route path="CreateGig" element={<CreateGig />} />
+          <Route path="MyProposals" element={<MyProposals />} />
+          <Route path="Subscription" element={<Subscription />} />
+          <Route path="Wishlist" element={<Wishlist />} />
+          <Route path="Payouts" element={<Payouts />} />
+          <Route path="Orders" element={<Orders />} />
+          <Route path="Messages" element={<Messages />} />
+          <Route path="Profile" element={<ProfileSettings />} />
           <Route path="*" element={<div>Freelancer page not found</div>} />
         </Route>
 
         {/* ===== Global catch-all ===== */}
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
+
+      {/* Chatbot Widget - appears on all pages */}
+      <ChatbotWidget />
     </BrowserRouter>
   );
 }

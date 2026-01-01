@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node -r dotenv/config src/server.js",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "init-chatbot": "node scripts/init-chatbot.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^7.0.0",
     "multer": "^2.0.2",
+    "openai": "^6.15.0",
     "zod": "^4.1.9"
   },
   "devDependencies": {
