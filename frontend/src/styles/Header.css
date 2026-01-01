@@ -130,30 +130,6 @@ header {
   background: #007a52;
 }
 
-/* Sub Navbar */
-.sub-navbar {
-  background: #f8f8f8;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  padding: 10px 20px;
-  border-top: 1px solid #eaeaea;
-  flex-wrap: wrap;
-  overflow-x: auto;
-}
-
-.sub-navbar a {
-  text-decoration: none;
-  color: #555;
-  font-size: 14px;
-  transition: color 0.3s;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.sub-navbar a:hover {
-  color: #00a86b;
-}
 
 /* --- Pages Dropdown --- */
 .pages-dropdown {

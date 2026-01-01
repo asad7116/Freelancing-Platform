@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/CallToAction.css";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function CallToAction() {
   return (
@@ -16,10 +17,10 @@ export default function CallToAction() {
             your projects. Scale your business with vetted talent from around
             the world.
           </p>
-          <button className="cta-btn">
+          <Link to="/signup?role=freelancer" className="cta-btn">
             <span>Get Started</span>
             <ArrowRight size={18} />
-          </button>
+          </Link>
         </div>
 
         {/* Right Side Image */}

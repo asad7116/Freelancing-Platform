@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/Hero.css";
-import { Search, Star } from "lucide-react";
+import { Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -18,40 +19,14 @@ export default function Hero() {
             Find Your Perfect <span>Freelancer</span> Quick and Easy
           </h1>
 
-          {/* Search Form */}
-          <div className="hero-search-form">
-            <form className="form" action="/services">
-              <div className="hero-form-wrapper">
-                <select className="form-select" name="category">
-                  <option value="">All Categories</option>
-                  <option value="marketing">Marketing</option>
-                  <option value="architecture">Architecture</option>
-                  <option value="web-design">Web Design</option>
-                  <option value="ai-services">AI Services</option>
-                  <option value="business-style">Business Style</option>
-                  <option value="development-it">Development & IT</option>
-                  <option value="photography">Photography</option>
-                  <option value="design-creative">Design & Creative</option>
-                  <option value="programming">Programming</option>
-                  <option value="animation">Animation</option>
-                  <option value="digital-marketing">Digital Marketing</option>
-                  <option value="graphics-design">Graphics & Design</option>
-                </select>
-
-                <div className="hero-search-bar">
-                  <input
-                    type="text"
-                    className="form-search-input"
-                    placeholder="Search for any service"
-                    name="search"
-                  />
-                  <button className="hero-form-btn" type="submit">
-                    <Search size={19} />
-                    Search
-                  </button>
-                </div>
-              </div>
-            </form>
+          {/* Auth Buttons */}
+          <div className="hero-auth-buttons">
+            <Link to="/signin" className="hero-btn hero-login-btn">
+              Login
+            </Link>
+            <Link to="/signup" className="hero-btn hero-signup-btn">
+              Sign Up
+            </Link>
           </div>
 
           {/* Stats */}

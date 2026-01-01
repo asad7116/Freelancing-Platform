@@ -37,38 +37,10 @@ const Header = () => {
             <Globe size={18} />
             <span>English</span>
           </div>
-          <Link to="/signin" className="signin-btn">
-            Sign In
-          </Link>
         </div>
       </div>
 
-      <div className="sub-navbar">
-        <Link to="/#" className="marketing">
-          Marketing
-        </Link>
-        <Link to="/#" className="architecture">
-          Architecture
-        </Link>
-        <Link to="/#" className="web-design">
-          Web Design
-        </Link>
-        <Link to="/#" className="ai-services">
-          AI Services
-        </Link>
-        <Link to="/#" className="business-style">
-          Business Style
-        </Link>
-        <Link to="/#" className="development-it">
-          Development & IT
-        </Link>
-        <Link to="/#" className="photography">
-          Photography
-        </Link>
-        <Link to="/#" className="design-creative">
-          Design & Creative
-        </Link>
-      </div>
+     
     </header>
   );
 };

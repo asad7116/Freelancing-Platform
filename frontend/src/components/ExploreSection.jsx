@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/exploreSection.css";
 import { ArrowRight, Users, CheckCircle, TrendingUp } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ExploreSection() {
   return (
@@ -17,10 +18,10 @@ export default function ExploreSection() {
             by companies looking for talented professionals like you.
           </p>
 
-          <button className="explore-btn">
+          <Link to="/signup?role=client" className="explore-btn">
             <span>Job Post Now</span>
             <ArrowRight size={18} />
-          </button>
+          </Link>
 
           {/* Stats */}
           <div className="explore-stats">

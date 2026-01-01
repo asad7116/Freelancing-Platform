@@ -62,6 +62,7 @@
   align-items: center;
   gap: 8px;
   width: fit-content;
+  text-decoration: none;
 }
 
 .explore-btn:hover {
