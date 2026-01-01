@@ -1,0 +1,396 @@
+/* Auth Choice Page - Microsoft Edge Inspired Design */
+
+.auth-choice-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+.auth-choice-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animated Gradient Background */
+.gradient-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    #0f4a33 0%,
+    #1a5c42 25%,
+    #22be0d 50%,
+    #0d3d2a 75%,
+    #0b5345 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  z-index: 1;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Decorative Circles */
+.decorative-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  animation: float 20s ease-in-out infinite;
+  z-index: 2;
+}
+
+.circle-1 {
+  width: 500px;
+  height: 500px;
+  top: -250px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 350px;
+  height: 350px;
+  bottom: -100px;
+  left: -50px;
+  animation-delay: 5s;
+}
+
+.circle-3 {
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 10s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-30px) scale(1.05);
+    opacity: 0.5;
+  }
+}
+
+/* Content Container */
+.auth-choice-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 60px 40px;
+  max-width: 700px;
+  width: 90%;
+  animation: fadeInUp 1s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Brand Section */
+.brand-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.auth-logo {
+  height: 80px;
+  width: auto;
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.auth-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.auth-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+}
+
+/* Welcome Message */
+.auth-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fadeIn 1.5s ease;
+}
+
+.welcome-heading {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.welcome-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  text-align: center;
+  max-width: 500px;
+}
+
+/* Button Container */
+.auth-buttons-container {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  animation: fadeIn 1.8s ease;
+}
+
+/* Auth Choice Buttons */
+.auth-choice-btn {
+  position: relative;
+  padding: 18px 48px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  border: 2px solid transparent;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+}
+
+.auth-choice-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.auth-choice-btn:hover::before {
+  left: 100%;
+}
+
+/* Sign In Button */
+.signin-choice-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.signin-choice-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Sign Up Button */
+.signup-choice-btn {
+  background: linear-gradient(135deg, #22be0d 0%, #1a9b0a 100%);
+  color: #fff;
+  border-color: #22be0d;
+}
+
+.signup-choice-btn:hover {
+  background: linear-gradient(135deg, #1a9b0a 0%, #157a08 100%);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(34, 190, 13, 0.4);
+}
+
+.btn-text {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-arrow {
+  font-size: 24px;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-choice-btn:hover .btn-arrow {
+  transform: translateX(8px);
+}
+
+/* Hint Text */
+.auth-hint {
+  animation: fadeIn 2s ease;
+}
+
+.auth-hint p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablets and below */
+@media (max-width: 768px) {
+  .auth-title {
+    font-size: 36px;
+  }
+
+  .auth-subtitle {
+    font-size: 16px;
+  }
+
+  .welcome-heading {
+    font-size: 26px;
+  }
+
+  .welcome-text {
+    font-size: 14px;
+  }
+
+  .auth-buttons-container {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .auth-choice-btn {
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 16px;
+  }
+
+  .circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    right: -100px;
+  }
+
+  .circle-2 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-3 {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 480px) {
+  .auth-choice-content {
+    padding: 40px 20px;
+    gap: 30px;
+  }
+
+  .auth-logo {
+    height: 60px;
+  }
+
+  .auth-title {
+    font-size: 28px;
+  }
+
+  .auth-subtitle {
+    font-size: 14px;
+  }
+
+  .welcome-heading {
+    font-size: 22px;
+  }
+
+  .welcome-text {
+    font-size: 13px;
+  }
+
+  .auth-choice-btn {
+    padding: 14px 28px;
+    font-size: 15px;
+    min-width: 150px;
+  }
+}

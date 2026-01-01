@@ -21,10 +21,10 @@ export default function Hero() {
 
           {/* Auth Buttons */}
           <div className="hero-auth-buttons">
-            <Link to="/signin" className="hero-btn hero-login-btn">
+            <Link to="/auth" className="hero-btn hero-login-btn">
               Login
             </Link>
-            <Link to="/signup" className="hero-btn hero-signup-btn">
+            <Link to="/auth" className="hero-btn hero-signup-btn">
               Sign Up
             </Link>
           </div>

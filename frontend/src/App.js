@@ -8,6 +8,7 @@ import SignIn from "./pages/Signin";
 import SignUp from "./pages/signUp";
 import Contact from "./pages/contact";
 import About from "./pages/About_Page";
+import AuthChoice from "./pages/AuthChoice";
 
 // ---------- Shared dashboard layout & guards ----------
 import DashboardLayout from "./Layouts/DashboardLayout";
@@ -45,6 +46,7 @@ export default function App() {
       <Routes>
         {/* ===== Public routes ===== */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/auth" element={<AuthChoice />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
