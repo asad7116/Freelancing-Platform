@@ -1,60 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PageHeader from "../components/PageHeader";
 import "../styles/SellerDetails.css";
 
 export default function SellerDetails() {
+  const { username } = useParams();
   const [activeTab, setActiveTab] = useState('Gigs');
+  const [sellerData, setSellerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const sellerData = {
-    name: "Matthew Anderson",
-    rating: 4.4,
-    totalReviews: 7,
-    location: "Egypt",
-    memberSince: "June 16, 2024",
-    avatar: "/assets/Freelancers/david.png", // Replace with actual path
-    isTopSeller: true,
-    description: "There are many variations of Lorem Ipsum passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need. Fusce eget pulvinar lorem. Quisque suscipit ante ac nisl rutrum nec mollis nulla.",
-    skills: ["Brand Design", "Graphics & Design", "AI Service", "Digital Marketing"]
-  };
+  useEffect(() => {
+    fetchSellerDetails();
+  }, [username]);
 
-  const gigs = [
-    {
-      id: 1,
-      title: "App icon Design For Android And iOS",
-      price: "90.00$",
-      rating: 4.3,
-      reviews: 6,
-      image: "/assets/Freelancers/Freelancer1/gig-img (1).png", // Replace with actual path
-      favorite: false
-    },
-    {
-      id: 2,
-      title: "Custom Typography Design for your Product",
-      price: "90.00$",
-      rating: 5.0,
-      reviews: 1,
-      image: "/assets/Freelancers/Freelancer1/gig-img (1).jpg", // Replace with actual path
-      favorite: true
-    },
-    {
-      id: 3,
-      title: "Instagram Reel Marketing for Your Niche",
-      price: "90.00$",
-      rating: 0.0,
-      reviews: 0,
-      image: "/assets/Freelancers/Freelancer1/gig-img (2).jpg", // Replace with actual path
-      favorite: false
+  const fetchSellerDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://localhost:4000/api/freelancers/${username}`, {
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch freelancer details");
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setSellerData(data.data);
+      } else {
+        throw new Error(data.message || "Failed to load freelancer");
+      }
+    } catch (err) {
+      console.error("Error fetching freelancer details:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   const toggleFavorite = (gigId) => {
-    // Handle favorite toggle logic here
     console.log(`Toggle favorite for gig ${gigId}`);
   };
 
@@ -79,6 +71,33 @@ export default function SellerDetails() {
     return stars;
   };
 
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <PageHeader title="Seller Details" />
+        <div className="container" style={{ textAlign: "center", padding: "50px" }}>
+          <p>Loading freelancer details...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error || !sellerData) {
+    return (
+      <>
+        <Header />
+        <PageHeader title="Seller Details" />
+        <div className="container" style={{ textAlign: "center", padding: "50px" }}>
+          <p style={{ color: "red" }}>Error: {error || "Freelancer not found"}</p>
+          <button onClick={fetchSellerDetails}>Retry</button>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -91,13 +110,20 @@ export default function SellerDetails() {
             )}
             
             <div className="seller-avatar">
-              <img src={sellerData.avatar} alt={sellerData.name} />
+              <img 
+                src={sellerData.avatar?.startsWith('/uploads') ? `http://localhost:4000${sellerData.avatar}` : sellerData.avatar} 
+                alt={sellerData.name}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/assets/Freelancers/default-avatar.png';
+                }}
+              />
             </div>
 
             <h2 className="seller-name">{sellerData.name}</h2>
             
             <div className="seller-rating">
-              {renderStars(sellerData.rating)}
+              {renderStars(sellerData.rating || 0)}
               <span className="rating-text">
                 {sellerData.rating} ({sellerData.totalReviews} Reviews)
               </span>
@@ -110,11 +136,15 @@ export default function SellerDetails() {
               </div>
               <div className="stat-item">
                 <span className="stat-label">Gigs</span>
-                <span className="stat-value">3</span>
+                <span className="stat-value">{sellerData.totalGigs || 0}</span>
               </div>
               <div className="stat-item">
-                <span className="stat-label">Jobs</span>
-                <span className="stat-value">2</span>
+                <span className="stat-label">Proposals</span>
+                <span className="stat-value">{sellerData.proposalsCount || 0}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Hourly Rate</span>
+                <span className="stat-value">${sellerData.hourlyRate || 0}/hr</span>
               </div>
             </div>
 
@@ -127,6 +157,12 @@ export default function SellerDetails() {
                 <span className="info-label">Member Since:</span>
                 <span className="info-value">{sellerData.memberSince}</span>
               </div>
+              {sellerData.yearsOfExperience > 0 && (
+                <div className="info-row">
+                  <span className="info-label">Experience:</span>
+                  <span className="info-value">{sellerData.yearsOfExperience} years</span>
+                </div>
+              )}
             </div>
 
             <button className="contact-btn">
@@ -135,19 +171,34 @@ export default function SellerDetails() {
 
             <div className="about-section">
               <h3>About Description</h3>
-              <p>{sellerData.description}</p>
+              <p>{sellerData.description || "No description available."}</p>
             </div>
 
-            <div className="skills-section">
-              <h3>Skills</h3>
-              <div className="skills-tags">
-                {sellerData.skills.map((skill, index) => (
-                  <span key={index} className="skill-tag">
-                    {skill}
-                  </span>
-                ))}
+            {sellerData.skills && sellerData.skills.length > 0 && (
+              <div className="skills-section">
+                <h3>Skills</h3>
+                <div className="skills-tags">
+                  {sellerData.skills.map((skill, index) => (
+                    <span key={index} className="skill-tag">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+
+            {sellerData.languages && sellerData.languages.length > 0 && (
+              <div className="skills-section">
+                <h3>Languages</h3>
+                <div className="skills-tags">
+                  {sellerData.languages.map((lang, index) => (
+                    <span key={index} className="skill-tag">
+                      {typeof lang === 'string' ? lang : lang.language}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -182,55 +233,98 @@ export default function SellerDetails() {
           <div className="tab-content">
             {activeTab === 'Gigs' && (
               <div className="gigs-grid">
-                {gigs.map((gig) => (
-                  <div key={gig.id} className="gig-card">
-                    <div className="gig-image">
-                      <img src={gig.image} alt={gig.title} />
-                      <button 
-                        className={`favorite-btn ${gig.favorite ? 'active' : ''}`}
-                        onClick={() => toggleFavorite(gig.id)}
-                      >
-                        ♡
-                      </button>
-                    </div>
-                    
-                    <div className="gig-content">
-                      <div className="gig-price">{gig.price}</div>
+                {sellerData.gigs && sellerData.gigs.length > 0 ? (
+                  sellerData.gigs.map((gig) => (
+                    <div key={gig.id} className="gig-card">
+                      <div className="gig-image">
+                        <img 
+                          src={gig.image?.startsWith('/uploads') ? `http://localhost:4000${gig.image}` : gig.image} 
+                          alt={gig.title}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/assets/default-gig.png';
+                          }}
+                        />
+                        <button 
+                          className={`favorite-btn ${gig.favorite ? 'active' : ''}`}
+                          onClick={() => toggleFavorite(gig.id)}
+                        >
+                          ♡
+                        </button>
+                      </div>
                       
-                      <div className="gig-rating">
-                        {renderStars(gig.rating)}
-                        <span className="rating-text">
-                          {gig.rating} ({gig.reviews})
-                        </span>
-                      </div>
+                      <div className="gig-content">
+                        <div className="gig-price">${gig.price}</div>
+                        
+                        <div className="gig-rating">
+                          {renderStars(gig.rating || 0)}
+                          <span className="rating-text">
+                            {(gig.rating || 0).toFixed(1)} ({gig.reviews || 0})
+                          </span>
+                        </div>
 
-                      <h4 className="gig-title">{gig.title}</h4>
+                        <h4 className="gig-title">{gig.title}</h4>
 
-                      <div className="gig-seller">
-                        <img src={sellerData.avatar} alt={sellerData.name} />
-                        <span>{sellerData.name}</span>
+                        <div className="gig-seller">
+                          <img 
+                            src={sellerData.avatar?.startsWith('/uploads') ? `http://localhost:4000${sellerData.avatar}` : sellerData.avatar} 
+                            alt={sellerData.name}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/assets/Freelancers/default-avatar.png';
+                            }}
+                          />
+                          <span>{sellerData.name}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>No gigs available yet.</p>
+                )}
               </div>
             )}
 
             {activeTab === 'Portfolio' && (
               <div className="portfolio-content">
-                <p>Portfolio content will be displayed here.</p>
+                {sellerData.portfolio && sellerData.portfolio.length > 0 ? (
+                  <div className="portfolio-grid">
+                    {sellerData.portfolio.map((item, index) => (
+                      <div key={index} className="portfolio-item">
+                        <h4>{item.title}</h4>
+                        <p>{item.description}</p>
+                        {item.url && (
+                          <a href={item.url} target="_blank" rel="noopener noreferrer">
+                            View Project →
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No portfolio items available yet.</p>
+                )}
               </div>
             )}
 
             {activeTab === 'Reviews' && (
               <div className="reviews-content">
-                <p>Reviews content will be displayed here.</p>
+                <div className="reviews-summary">
+                  <h3>Reviews Summary</h3>
+                  <p>Rating: {(sellerData.rating || 0).toFixed(1)} / 5.0</p>
+                  <p>Total Reviews: {sellerData.totalReviews || 0}</p>
+                </div>
+                <p style={{marginTop: "20px"}}>Detailed reviews will be displayed here once review system is implemented.</p>
               </div>
             )}
 
             {activeTab === 'Jobs' && (
               <div className="jobs-content">
-                <p>Jobs content will be displayed here.</p>
+                <div className="jobs-info">
+                  <h3>Active Proposals</h3>
+                  <p>Total Proposals Submitted: {sellerData.proposalsCount || 0}</p>
+                  <p>Detailed job applications and history will be displayed here.</p>
+                </div>
               </div>
             )}
           </div>

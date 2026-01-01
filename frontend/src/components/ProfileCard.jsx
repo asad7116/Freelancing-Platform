@@ -7,15 +7,25 @@ export default function ProfileCard({
   rating, 
   reviews, 
   image, 
-  price, 
+  price,
+  hourlyRate, 
   isTopSeller 
 }) {
+  const displayPrice = hourlyRate || price || 0;
+  
   return (
     <div className="profile-card">
       {isTopSeller && <span className="badge">Top Seller</span>}
       
       <div className="profile-img">
-        <img src={image} alt={name} />
+        <img 
+          src={image?.startsWith('/uploads') ? `http://localhost:4000${image}` : image} 
+          alt={name}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/assets/Freelancers/default-avatar.png';
+          }}
+        />
       </div>
 
       <div className="profile-content">
@@ -25,10 +35,12 @@ export default function ProfileCard({
         <p className="profile-role">{role}</p>
         
         <div className="profile-rating">
-          ⭐ {rating} ({reviews} Reviews)
+          ⭐ {rating ? rating.toFixed(1) : '0.0'} ({reviews} Reviews)
         </div>
 
-        <div className="profile-price">From: <span>${price}</span></div>
+        <div className="profile-price">
+          Hourly Rate: <span>${displayPrice}/hr</span>
+        </div>
       </div>
     </div>
   );
