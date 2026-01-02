@@ -11,6 +11,9 @@ import {
   updateProposalStatus,
   submitWorkForProposal,
   reviewSubmission,
+  getPendingPayments,
+  createCheckoutSession,
+  confirmPaymentReceived,
 } from "../controllers/proposal.controller.js"
 
 const router = express.Router()
@@ -75,5 +78,8 @@ router.get("/:proposalId", getProposalDetails) // Get proposal details
 router.put("/:proposalId/status", updateProposalStatus) // Update proposal status (accept/reject)
 router.put("/:proposalId/submit-work", submitWorkForProposal) // Submit work for approved proposal
 router.put("/:proposalId/review-submission", reviewSubmission) // Review submitted work (client)
+router.get("/client/pending-payments", getPendingPayments) // Get pending payments (client)
+router.post("/:proposalId/create-checkout-session", createCheckoutSession) // Create Stripe session (client)
+router.put("/:proposalId/confirm-receipt", confirmPaymentReceived) // Confirm receipt (freelancer)
 
 export default router

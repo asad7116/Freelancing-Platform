@@ -2,6 +2,9 @@ import { getDatabase } from "../db/mongodb.js"
 import { ObjectId } from "mongodb"
 import JobApplicationModel from "../models/JobApplication.js"
 import JobPostModel from "../models/JobPost.js"
+import Stripe from "stripe"
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 // Submit a proposal (Freelancer)
 export const submitProposal = async (req, res) => {
@@ -177,7 +180,7 @@ export const getJobProposals = async (req, res) => {
       proposals.map(async (proposal) => {
         const freelancer = await users.findOne({ _id: new ObjectId(proposal.freelancer_id) })
         const profile = await freelancerProfiles.findOne({ user_id: proposal.freelancer_id })
-        
+
         return {
           ...proposal,
           id: proposal._id.toString(),
@@ -229,16 +232,16 @@ export const getClientProposals = async (req, res) => {
 
     // Get all client's jobs
     const jobs = await JobPostModel.findMany(db, { buyer_id: clientId }, 0, 1000)
-    
+
     // Get proposals count for each job
     const jobsWithProposals = await Promise.all(
       jobs.map(async (job) => {
         const totalProposals = await JobApplicationModel.count(db, { job_post_id: job._id.toString() })
-        const pendingProposals = await JobApplicationModel.count(db, { 
+        const pendingProposals = await JobApplicationModel.count(db, {
           job_post_id: job._id.toString(),
-          status: "pending" 
+          status: "pending"
         })
-        
+
         return {
           id: job._id.toString(),
           title: job.title,
@@ -305,7 +308,7 @@ export const getProposalDetails = async (req, res) => {
     // Get freelancer details
     const users = db.collection("users")
     const freelancerProfiles = db.collection("freelancerProfiles")
-    
+
     const freelancer = await users.findOne({ _id: new ObjectId(proposal.freelancer_id) })
     const profile = await freelancerProfiles.findOne({ user_id: proposal.freelancer_id })
 
@@ -340,6 +343,10 @@ export const getProposalDetails = async (req, res) => {
           } : null,
         } : null,
       },
+      currentUser: {
+        id: userId,
+        role: userRole
+      }
     })
   } catch (error) {
     console.error("Get proposal details error:", error)
@@ -525,7 +532,7 @@ export async function reviewSubmission(req, res) {
 
     // Handle action
     if (action === "accepted") {
-      // Mark proposal as completed
+      // Mark proposal as completed (work approved)
       const updatedProposal = await JobApplicationModel.updateStatus(db, proposalId, "completed")
 
       // Mark job as completed
@@ -533,7 +540,7 @@ export async function reviewSubmission(req, res) {
 
       res.json({
         success: true,
-        message: "Work accepted and job marked as completed",
+        message: "Work accepted. Please proceed to payment.",
         proposal: updatedProposal,
       })
     } else if (action === "revision") {
@@ -552,6 +559,175 @@ export async function reviewSubmission(req, res) {
       success: false,
       message: "Failed to review submission",
       error: error.message,
+    })
+  }
+}
+
+// Get pending payments (Client)
+export const getPendingPayments = async (req, res) => {
+  try {
+    const clientId = req.user.id
+    const db = await getDatabase()
+
+    // Find all completed proposals (work approved) that are unpaid
+    const pendingProposals = await JobApplicationModel.findMany(
+      db,
+      {
+        client_id: clientId,
+        status: "completed",
+        payment_status: { $in: ["unpaid", null] }
+      },
+      0,
+      100
+    )
+
+    const pendingWithDetails = await Promise.all(
+      pendingProposals.map(async (proposal) => {
+        const job = await JobPostModel.findById(db, proposal.job_post_id)
+        return {
+          id: proposal._id.toString(),
+          job_title: job?.title || "Unknown Job",
+          freelancer_name: proposal.freelancer_name,
+          amount: proposal.proposed_price,
+          date: proposal.updated_at
+        }
+      })
+    )
+
+    res.json({
+      success: true,
+      pendingPayments: pendingWithDetails
+    })
+  } catch (error) {
+    console.error("Get pending payments error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch pending payments",
+    })
+  }
+}
+
+// Create Stripe Checkout Session (Client)
+export const createCheckoutSession = async (req, res) => {
+  try {
+    const clientId = req.user.id
+    const { proposalId } = req.params
+
+    const db = await getDatabase()
+    const proposal = await JobApplicationModel.findById(db, proposalId)
+
+    if (!proposal || proposal.client_id !== clientId) {
+      return res.status(404).json({ success: false, message: "Proposal not found" })
+    }
+
+    if (proposal.status !== "completed") {
+      return res.status(400).json({ success: false, message: "Work must be approved before payment" })
+    }
+
+    const job = await JobPostModel.findById(db, proposal.job_post_id)
+    const frontendUrl = process.env.FRONTEND_ORIGIN || "http://localhost:3000"
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `Payment for ${job?.title || "Project"}`,
+              description: `Freelancer: ${proposal.freelancer_name}`,
+            },
+            unit_amount: Math.round(proposal.proposed_price * 100), // Stripe expects amount in cents
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${frontendUrl}/client/checkout?success=true&proposalId=${proposalId}`,
+      cancel_url: `${frontendUrl}/client/checkout?canceled=true`,
+      metadata: {
+        proposalId: proposalId,
+        clientId: clientId,
+      },
+    })
+
+    res.json({
+      success: true,
+      url: session.url,
+    })
+  } catch (error) {
+    console.error("Create checkout session error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to create checkout session",
+    })
+  }
+}
+
+// Stripe Webhook Handler
+export const handleStripeWebhook = async (req, res) => {
+  const sig = req.headers["stripe-signature"]
+  let event
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+  } catch (err) {
+    console.error(`Webhook Error: ${err.message}`)
+    return res.status(400).send(`Webhook Error: ${err.message}`)
+  }
+
+  // Handle the event
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object
+    const proposalId = session.metadata.proposalId
+
+    try {
+      const db = await getDatabase()
+      // Update payment status to 'paid'
+      await JobApplicationModel.updatePaymentStatus(db, proposalId, "paid")
+      console.log(`Payment confirmed for proposal: ${proposalId}`)
+    } catch (dbError) {
+      console.error("Database update error in webhook:", dbError)
+      return res.status(500).json({ message: "Failed to update database" })
+    }
+  }
+
+  res.json({ received: true })
+}
+
+// Confirm receipt (Freelancer)
+export const confirmPaymentReceived = async (req, res) => {
+  try {
+    const freelancerId = req.user.id
+    const { proposalId } = req.params
+
+    const db = await getDatabase()
+    const proposal = await JobApplicationModel.findById(db, proposalId)
+
+    if (!proposal || proposal.freelancer_id !== freelancerId) {
+      return res.status(404).json({ success: false, message: "Proposal not found" })
+    }
+
+    if (proposal.payment_status !== "paid") {
+      return res.status(400).json({ success: false, message: "Payment has not been made yet" })
+    }
+
+    // Update payment status to 'confirmed'
+    const updated = await JobApplicationModel.updatePaymentStatus(db, proposalId, "confirmed")
+
+    // Final status update to both dashboards
+    await JobApplicationModel.updateStatus(db, proposalId, "completed & paid")
+
+    res.json({
+      success: true,
+      message: "Payment receipt confirmed",
+      proposal: updated
+    })
+  } catch (error) {
+    console.error("Confirm payment error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to confirm payment",
     })
   }
 }

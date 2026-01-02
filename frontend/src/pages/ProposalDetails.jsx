@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
+import {
   ArrowLeft,
   User,
-  DollarSign, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
+  DollarSign,
+  Clock,
+  CheckCircle,
+  XCircle,
   AlertCircle,
   Mail,
   MapPin,
@@ -43,7 +43,10 @@ const ProposalDetails = () => {
       const data = await response.json();
 
       if (data.success) {
-        setProposal(data.proposal);
+        setProposal({
+          ...data.proposal,
+          currentUser: data.currentUser
+        });
       } else {
         setError(data.message || 'Failed to fetch proposal');
       }
@@ -78,7 +81,7 @@ const ProposalDetails = () => {
       if (data.success) {
         setSuccessMessage(`Proposal ${status} successfully!`);
         setProposal(prev => ({ ...prev, status }));
-        
+
         setTimeout(() => {
           navigate(-1);
         }, 2000);
@@ -94,10 +97,10 @@ const ProposalDetails = () => {
   };
 
   const handleSubmissionReview = async (action) => {
-    const confirmMsg = action === 'accepted' 
-      ? 'Accept this work and mark the job as completed?' 
+    const confirmMsg = action === 'accepted'
+      ? 'Accept this work and mark the job as completed?'
       : 'Request revision from the freelancer?';
-    
+
     if (!window.confirm(confirmMsg)) {
       return;
     }
@@ -126,6 +129,40 @@ const ProposalDetails = () => {
     } catch (err) {
       console.error('Error reviewing submission:', err);
       setError('Error reviewing submission');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handlePayment = async () => {
+    navigate('/client/checkout');
+  };
+
+  const handleConfirmReceipt = async () => {
+    if (!window.confirm('Confirm that you have received the payment?')) {
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      setError('');
+
+      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}/confirm-receipt`, {
+        method: 'PUT',
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSuccessMessage('Payment receipt confirmed! Project completed.');
+        fetchProposalDetails();
+      } else {
+        setError(data.message || 'Failed to confirm receipt');
+      }
+    } catch (err) {
+      console.error('Error confirming receipt:', err);
+      setError('Error confirming payment receipt');
     } finally {
       setActionLoading(false);
     }
@@ -264,7 +301,7 @@ const ProposalDetails = () => {
           {proposal.submission_status === 'submitted' && (
             <div className="submission-section">
               <h3>Work Submission</h3>
-              
+
               <div className="submission-note">
                 <h4>Freelancer's Note:</h4>
                 <p>{proposal.submission_note}</p>
@@ -276,9 +313,9 @@ const ProposalDetails = () => {
                   <ul className="deliverable-links-list">
                     {proposal.deliverable_links.map((link, index) => (
                       <li key={index}>
-                        <a 
-                          href={link} 
-                          target="_blank" 
+                        <a
+                          href={link}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="deliverable-link"
                         >
@@ -315,7 +352,7 @@ const ProposalDetails = () => {
           {/* Action Buttons */}
           {proposal.status === 'pending' && (
             <div className="action-buttons">
-              <button 
+              <button
                 className="btn-reject"
                 onClick={() => handleStatusUpdate('rejected')}
                 disabled={actionLoading}
@@ -323,7 +360,7 @@ const ProposalDetails = () => {
                 <XCircle size={20} />
                 Reject Proposal
               </button>
-              <button 
+              <button
                 className="btn-approve"
                 onClick={() => handleStatusUpdate('approved')}
                 disabled={actionLoading}
@@ -340,8 +377,8 @@ const ProposalDetails = () => {
                 <>
                   <CheckCircle size={24} className="status-icon approved" />
                   <div>
-                    <h4>This proposal has been approved</h4>
-                    <p>You can now proceed to work with this freelancer</p>
+                    <h4>Approved</h4>
+                    <p>Proposal accepted. Freelancer is working.</p>
                   </div>
                 </>
               )}
@@ -349,22 +386,50 @@ const ProposalDetails = () => {
                 <>
                   <XCircle size={24} className="status-icon rejected" />
                   <div>
-                    <h4>This proposal has been rejected</h4>
-                    <p>The freelancer has been notified</p>
+                    <h4>Rejected</h4>
+                    <p>The freelancer has been notified.</p>
                   </div>
                 </>
               )}
-              {proposal.status === 'completed' && (
+              {(proposal.status === 'completed' || proposal.status === 'completed & paid') && (
                 <>
-                  <CheckCircle size={24} className="status-icon completed" />
+                  <CheckCircle size={24} className={`status-icon ${proposal.payment_status === 'confirmed' ? 'paid' : 'completed'}`} />
                   <div>
-                    <h4>This job has been completed</h4>
-                    <p>Work has been accepted and the job is now closed</p>
+                    <h4>{proposal.status === 'completed & paid' ? 'Completed & Paid' : 'Work Approved'}</h4>
+                    <p>
+                      {proposal.payment_status === 'confirmed'
+                        ? 'Project finished and payment settled.'
+                        : (proposal.payment_status === 'paid'
+                          ? 'Payment sent. Waiting for freelancer confirmation.'
+                          : 'Work accepted. Pending payment.')}
+                    </p>
                   </div>
                 </>
               )}
             </div>
           )}
+
+          {/* Payment Actions */}
+          <div className="payment-actions-section">
+            {/* Client: Pay Now */}
+            {proposal.client_id === proposal.currentUser?.id &&
+              proposal.status === 'completed' &&
+              (proposal.payment_status === 'unpaid' || !proposal.payment_status) && (
+                <button className="btn-pay-now-large" onClick={handlePayment}>
+                  <CreditCard size={20} />
+                  Checkout / Pay Now (${proposal.proposed_price})
+                </button>
+              )}
+
+            {/* Freelancer: Confirm Receipt */}
+            {proposal.freelancer_id === proposal.currentUser?.id &&
+              proposal.payment_status === 'paid' && (
+                <button className="btn-confirm-receipt" onClick={handleConfirmReceipt} disabled={actionLoading}>
+                  <CheckCircle size={20} />
+                  Confirm Receipt of Payment
+                </button>
+              )}
+          </div>
         </div>
 
         {/* Sidebar - Freelancer Profile */}
@@ -372,17 +437,17 @@ const ProposalDetails = () => {
           <div className="freelancer-profile-card">
             <div className="freelancer-avatar-large">
               {profile?.profile_image ? (
-                <img 
-                  src={`http://localhost:4000${profile.profile_image}`} 
+                <img
+                  src={`http://localhost:4000${profile.profile_image}`}
                   alt={freelancer.name}
                 />
               ) : (
                 <User size={40} />
               )}
             </div>
-            
+
             <h3>{freelancer.name}</h3>
-            
+
             {profile?.title && (
               <p className="freelancer-title-sidebar">{profile.title}</p>
             )}

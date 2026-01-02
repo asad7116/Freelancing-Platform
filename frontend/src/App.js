@@ -39,6 +39,7 @@ import SubmitWork from "./pages/SubmitWork";
 import ClientProposalsList from "./components/ClientProposalsList";
 import JobProposals from "./components/JobProposals";
 import ProposalDetails from "./pages/ProposalDetails";
+import Checkout from "./pages/Checkout";
 import ChatbotWidget from "./components/ChatbotWidget";
 
 export default function App() {
@@ -74,6 +75,7 @@ export default function App() {
           <Route path="MyProposals" element={<ClientProposalsList />} />
           <Route path="proposals/job/:jobId" element={<JobProposals />} />
           <Route path="proposals/:proposalId" element={<ProposalDetails />} />
+          <Route path="checkout" element={<Checkout />} />
           <Route path="Orders" element={<MyJobs />} />
           <Route path="Messages" element={<Messages />} />
           <Route path="Profile" element={<ProfileSettings />} />

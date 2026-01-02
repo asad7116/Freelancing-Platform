@@ -14,7 +14,8 @@ export class JobApplicationModel {
       delivery_time: appData.delivery_time,
       attachments: appData.attachments || [],
       milestones: appData.milestones || [],
-      status: appData.status || "pending", // pending, approved, rejected, withdrawn
+      status: appData.status || "pending", // pending, approved, rejected, withdrawn, completed
+      payment_status: "unpaid", // unpaid, paid, confirmed
       created_at: new Date(),
       updated_at: new Date(),
     })
@@ -51,6 +52,16 @@ export class JobApplicationModel {
     return result.value
   }
 
+  static async updatePaymentStatus(db, id, payment_status) {
+    const jobApplications = db.collection("jobApplications")
+    const result = await jobApplications.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { payment_status, updated_at: new Date() } },
+      { returnDocument: "after" }
+    )
+    return result.value
+  }
+
   static async findByJobAndFreelancer(db, jobPostId, freelancerId) {
     const jobApplications = db.collection("jobApplications")
     return await jobApplications.findOne({
@@ -69,6 +80,21 @@ export class JobApplicationModel {
           deliverable_links: submissionData.deliverable_links,
           submission_status: "submitted",
           submission_date: new Date(),
+          updated_at: new Date(),
+        },
+      },
+      { returnDocument: "after" }
+    )
+    return result.value
+  }
+
+  static async requestRevision(db, id) {
+    const jobApplications = db.collection("jobApplications")
+    const result = await jobApplications.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          submission_status: "revision_requested",
           updated_at: new Date(),
         },
       },

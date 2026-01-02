@@ -11,6 +11,7 @@ const MENU = {
     { to: "browse-gigs", label: "Browse Gigs", icon: Search },
     { to: "orders", label: "Add Jobs", icon: List },
     { to: "MyProposals", label: "My Proposals", icon: FileText },
+    { to: "checkout", label: "Checkout", icon: Wallet },
     { to: "messages", label: "Messages", icon: MessageSquare },
     { to: "billing", label: "Billing", icon: CreditCard },
     { to: "profile", label: "Profile", icon: UserRound },

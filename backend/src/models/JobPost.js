@@ -86,12 +86,12 @@ export class JobPostModel {
         city: city ? { id: city._id.toString(), name: city.name } : null,
         buyer: buyer
           ? {
-              id: buyer._id.toString(),
-              name: buyer.name,
-              email: buyer.email,
-              avatar: buyer.avatar,
-              createdAt: buyer.createdAt,
-            }
+            id: buyer._id.toString(),
+            name: buyer.name,
+            email: buyer.email,
+            avatar: buyer.avatar,
+            createdAt: buyer.createdAt,
+          }
           : null,
         applications: applications.map((app) => ({
           ...app,
@@ -136,6 +136,20 @@ export class JobPostModel {
       return result.deletedCount > 0
     } catch {
       return false
+    }
+  }
+
+  static async updateJobStatus(db, id, status) {
+    const jobPosts = db.collection("jobPosts")
+    try {
+      const result = await jobPosts.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { status, updated_at: new Date() } },
+        { returnDocument: "after" }
+      )
+      return result.value
+    } catch {
+      return null
     }
   }
 }

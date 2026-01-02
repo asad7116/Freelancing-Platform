@@ -701,3 +701,69 @@
   }
 }
 
+.status-icon.completed {
+  color: #3b82f6;
+}
+
+.status-icon.paid {
+  color: #05cd99;
+}
+
+/* Payment Actions Section */
+.payment-actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.btn-pay-now-large {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px;
+  background: linear-gradient(135deg, #4318ff 0%, #3311db 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(67, 24, 255, 0.2);
+}
+
+.btn-pay-now-large:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(67, 24, 255, 0.3);
+}
+
+.btn-confirm-receipt {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px;
+  background: linear-gradient(135deg, #05cd99 0%, #04b086 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(5, 205, 153, 0.2);
+}
+
+.btn-confirm-receipt:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(5, 205, 153, 0.3);
+}
+
+.btn-confirm-receipt:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

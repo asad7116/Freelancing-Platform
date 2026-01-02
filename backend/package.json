@@ -26,6 +26,7 @@
     "mongodb": "^7.0.0",
     "multer": "^2.0.2",
     "openai": "^6.15.0",
+    "stripe": "^20.1.0",
     "zod": "^4.1.9"
   },
   "devDependencies": {
