@@ -1,61 +1,13 @@
-/* Only card/grid styles – layout handled by dashboard.css */
+/* 3D Card Design for Dashboard Cards */
 
-/* Header band button */
-.gd-new-gig {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #00a86b;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.gd-new-gig:hover {
-  background: #007a52;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
-}
-
-.gd-new-gig:active {
-  transform: translateY(0);
-}
-
-.gd-new-gig svg {
-  flex-shrink: 0;
-}
-
-/* Empty state */
-.gd-empty {
-  text-align: center;
-  padding: 3rem 2rem;
-  color: #6f7f75;
-  font-size: 16px;
-}
-
-/* Cards grid */
-.gd-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 25px;
-  margin-top: 20px;
-}
-
-/* 3D Card Wrapper */
-.gd-card {
+/* Parent wrapper for 3D effect */
+.card-3d-parent {
   width: 100%;
   min-height: 280px;
   perspective: 1000px;
-  cursor: pointer;
 }
 
-.gd-card-inner {
+.card-3d {
   height: 100%;
   min-height: 280px;
   border-radius: 30px;
@@ -66,7 +18,7 @@
   position: relative;
 }
 
-.gd-card-glass {
+.card-3d-glass {
   transform-style: preserve-3d;
   position: absolute;
   inset: 8px;
@@ -79,69 +31,52 @@
   transition: all 0.5s ease-in-out;
 }
 
-.gd-card-body {
-  padding: 30px 20px 70px 25px;
+.card-3d-content {
+  padding: 30px 20px 20px 25px;
   transform: translate3d(0, 0, 26px);
   position: relative;
   z-index: 10;
 }
 
-.gd-price {
+.card-3d-title {
+  display: block;
   color: #00894d;
   font-weight: 900;
-  font-size: 20px;
-  margin-bottom: 8px;
-}
-
-.gd-rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  color: rgba(0, 137, 78, 0.7);
-  margin-bottom: 12px;
-}
-
-.gd-rating svg {
-  color: #ffa500;
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-}
-
-.gd-title {
-  font-size: 17px;
-  font-weight: 900;
-  margin: 0 0 12px 0;
-  color: #00894d;
+  font-size: 18px;
+  margin-bottom: 10px;
   line-height: 1.3;
 }
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+
+.card-3d-text {
+  display: block;
+  color: rgba(0, 137, 78, 0.85);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
 }
 
-/* Seller */
-.gd-seller {
+.card-3d-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 15px;
+  font-size: 13px;
+  color: rgba(0, 137, 78, 0.7);
+}
+
+.card-3d-meta-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  margin-bottom: 12px;
-  color: #6f7f75;
+  gap: 5px;
 }
 
-.gd-avatar {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
+.card-3d-meta-item svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
 }
 
-/* Actions */
-.gd-footer {
+.card-3d-bottom {
   padding: 10px 15px;
   transform-style: preserve-3d;
   position: absolute;
@@ -154,31 +89,35 @@
   transform: translate3d(0, 0, 26px);
 }
 
-.gd-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.card-3d-status {
+  padding: 6px 14px;
+  border-radius: 20px;
   font-size: 12px;
-  color: rgba(0, 137, 78, 0.7);
-  padding: 5px 12px;
+  font-weight: 600;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 15px;
   box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
+  transition: all 0.2s ease-in-out;
 }
 
-.gd-status input {
-  margin: 0;
-  cursor: pointer;
+.card-3d-status.active {
+  color: #00894d;
 }
 
-.gd-actions {
+.card-3d-status.pending {
+  color: #f59e0b;
+}
+
+.card-3d-status.rejected {
+  color: #dc2626;
+}
+
+.card-3d-actions {
   display: flex;
   gap: 8px;
   transform-style: preserve-3d;
 }
 
-.gd-edit,
-.gd-action-btn {
+.card-3d-action-btn {
   width: 32px;
   height: 32px;
   padding: 6px;
@@ -192,43 +131,50 @@
   transition: all 0.3s ease-in-out;
 }
 
-.gd-edit:first-child,
-.gd-action-btn:first-child {
+.card-3d-action-btn:first-child {
   transition: transform 0.2s ease-in-out 0.2s, box-shadow 0.2s ease-in-out 0.2s, background 0.2s;
 }
 
-.gd-edit:nth-child(2),
-.gd-action-btn:nth-child(2) {
+.card-3d-action-btn:nth-child(2) {
   transition: transform 0.2s ease-in-out 0.3s, box-shadow 0.2s ease-in-out 0.3s, background 0.2s;
 }
 
-.gd-edit svg,
-.gd-action-btn svg {
+.card-3d-action-btn:nth-child(3) {
+  transition: transform 0.2s ease-in-out 0.4s, box-shadow 0.2s ease-in-out 0.4s, background 0.2s;
+}
+
+.card-3d-action-btn svg {
   width: 16px;
   height: 16px;
   fill: #00894d;
   transition: fill 0.2s;
 }
 
-.gd-edit:hover,
-.gd-action-btn:hover {
+.card-3d-action-btn:hover {
   background: #00894d;
   transform: scale(1.1);
 }
 
-.gd-edit:hover svg,
-.gd-action-btn:hover svg {
+.card-3d-action-btn:hover svg {
   fill: white;
 }
 
-.gd-badge {
+.card-3d-action-btn:active {
+  background: rgb(255, 234, 0);
+}
+
+.card-3d-action-btn:active svg {
+  fill: black;
+}
+
+.card-3d-badge {
   position: absolute;
   right: 0;
   top: 0;
   transform-style: preserve-3d;
 }
 
-.gd-circle {
+.card-3d-circle {
   display: block;
   position: absolute;
   aspect-ratio: 1;
@@ -241,14 +187,14 @@
   transition: all 0.5s ease-in-out;
 }
 
-.gd-circle1 {
+.card-3d-circle1 {
   width: 140px;
   transform: translate3d(0, 0, 20px);
   top: 8px;
   right: 8px;
 }
 
-.gd-circle2 {
+.card-3d-circle2 {
   width: 110px;
   transform: translate3d(0, 0, 40px);
   top: 10px;
@@ -257,7 +203,7 @@
   transition-delay: 0.2s;
 }
 
-.gd-circle3 {
+.card-3d-circle3 {
   width: 85px;
   transform: translate3d(0, 0, 60px);
   top: 17px;
@@ -265,7 +211,7 @@
   transition-delay: 0.4s;
 }
 
-.gd-circle4 {
+.card-3d-circle4 {
   width: 60px;
   transform: translate3d(0, 0, 80px);
   top: 23px;
@@ -273,7 +219,7 @@
   transition-delay: 0.6s;
 }
 
-.gd-circle5 {
+.card-3d-circle5 {
   width: 40px;
   transform: translate3d(0, 0, 100px);
   top: 28px;
@@ -283,75 +229,83 @@
   transition-delay: 0.8s;
 }
 
-.gd-circle5 svg,
-.gd-circle5 .gd-icon {
+.card-3d-circle5 svg {
   width: 18px;
-  height: 18px;
   fill: white;
-  color: white;
-  font-size: 18px;
 }
 
 /* Hover Effects */
-.gd-card:hover .gd-card-inner {
+.card-3d-parent:hover .card-3d {
   transform: rotate3d(1, 1, 0, 20deg);
   box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
 }
 
-.gd-card:hover .gd-edit,
-.gd-card:hover .gd-action-btn {
+.card-3d-parent:hover .card-3d-action-btn {
   transform: translate3d(0, 0, 30px);
   box-shadow: rgba(5, 71, 17, 0.2) -5px 15px 10px 0px;
 }
 
-.gd-card:hover .gd-circle2 {
+.card-3d-parent:hover .card-3d-circle2 {
   transform: translate3d(0, 0, 60px);
 }
 
-.gd-card:hover .gd-circle3 {
+.card-3d-parent:hover .card-3d-circle3 {
   transform: translate3d(0, 0, 80px);
 }
 
-.gd-card:hover .gd-circle4 {
+.card-3d-parent:hover .card-3d-circle4 {
   transform: translate3d(0, 0, 100px);
 }
 
-.gd-card:hover .gd-circle5 {
+.card-3d-parent:hover .card-3d-circle5 {
   transform: translate3d(0, 0, 120px);
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
-
-/* Tablets (768px and below) */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .gd-cards {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+  .card-3d-parent {
+    min-height: 250px;
   }
-
-  .gd-new-gig {
-    padding: 8px 14px;
+  
+  .card-3d {
+    min-height: 250px;
+    border-radius: 20px;
+  }
+  
+  .card-3d-glass {
+    border-radius: 18px;
+    border-top-right-radius: 60px;
+  }
+  
+  .card-3d-content {
+    padding: 25px 15px 15px 20px;
+  }
+  
+  .card-3d-title {
+    font-size: 16px;
+  }
+  
+  .card-3d-text {
     font-size: 13px;
   }
-}
-
-/* Mobile (480px and below) */
-@media (max-width: 480px) {
-  .gd-cards {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  
+  .card-3d-circle1 {
+    width: 110px;
   }
-
-  .gd-card-img {
-    height: 140px;
+  
+  .card-3d-circle2 {
+    width: 85px;
   }
-
-  .gd-title {
-    font-size: 15px;
+  
+  .card-3d-circle3 {
+    width: 65px;
   }
-
-  .gd-new-gig {
-    width: 100%;
-    justify-content: center;
+  
+  .card-3d-circle4 {
+    width: 45px;
+  }
+  
+  .card-3d-circle5 {
+    width: 30px;
   }
 }
