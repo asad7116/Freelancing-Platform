@@ -119,14 +119,6 @@ export default function BrowseGigs() {
     navigate(`/client/gig/${gigId}`);
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
   if (loading) {
     return (
       <div className="browse-container">
@@ -258,75 +250,63 @@ export default function BrowseGigs() {
           <div className="gigs-grid">
             {filteredGigs.map((gig) => (
               <div key={gig.id} className="gig-card" onClick={() => handleGigClick(gig.id)}>
-                {/* Gig Thumbnail */}
-                <div className="gig-thumbnail">
-                  {gig.thumbnailImage ? (
-                    <img 
-                      src={`/uploads/${gig.thumbnailImage}`} 
-                      alt={gig.gigTitle}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
-                  ) : null}
-                  <div className="placeholder-thumbnail" style={{ display: gig.thumbnailImage ? 'none' : 'flex' }}>
-                    <span>🎨</span>
-                  </div>
+                <div className="gig-card-inner">
+                  <div className="gig-card-glass"></div>
                   
-                  <div className="gig-overlay">
-                    <button 
-                      className="favorite-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Add to favorites functionality
-                      }}
-                    >
-                      <Heart size={18} />
-                    </button>
+                  <div className="gig-badge">
+                    <span className="gig-circle gig-circle1"></span>
+                    <span className="gig-circle gig-circle2"></span>
+                    <span className="gig-circle gig-circle3"></span>
+                    <span className="gig-circle gig-circle4"></span>
+                    <span className="gig-circle gig-circle5">
+                      <Star size={18} fill="white" />
+                    </span>
                   </div>
-                </div>
 
-                {/* Gig Info */}
-                <div className="gig-info">
-                  <div className="gig-header">
-                    <h3 className="gig-title">{gig.gigTitle}</h3>
+                  <div className="gig-info">
                     <div className="gig-price">${parseFloat(gig.price || 0).toFixed(2)}</div>
-                  </div>
 
-                  <div className="gig-meta">
                     <div className="gig-rating">
-                      <Star className="star-icon" size={14} />
+                      <Star size={14} fill="currentColor" />
                       <span>{gig.rating ? gig.rating.toFixed(1) : '0.0'}</span>
-                      <span className="reviews-count">({gig.reviews || 0})</span>
+                      <span>({gig.reviews || 0})</span>
                     </div>
-                    
+
+                    <h3 className="gig-title">{gig.gigTitle}</h3>
+
                     <div className="gig-category">
                       {categories.find(c => c.id === gig.categoryId)?.name || 'General'}
                     </div>
-                  </div>
 
-                  <div className="gig-description">
-                    {gig.description && gig.description.length > 100 
-                      ? `${gig.description.substring(0, 100)}...` 
-                      : gig.description || 'No description available'
-                    }
+                    <div className="gig-description">
+                      {gig.description && gig.description.length > 100 
+                        ? `${gig.description.substring(0, 100)}...` 
+                        : gig.description || 'No description available'
+                      }
+                    </div>
                   </div>
 
                   <div className="gig-footer">
                     <div className="seller-info">
-                      <img 
-                        src="/assets/avatar.png" 
-                        alt="Seller" 
-                        className="seller-avatar"
-                      />
-                      <span className="seller-name">
-                        {gig.seller || gig.user?.name || 'Anonymous'}
-                      </span>
+                      <span>{gig.seller || gig.user?.name || 'Anonymous'}</span>
                     </div>
-                    
-                    <div className="gig-date">
-                      {formatDate(gig.created_at)}
+                    <div className="gig-actions">
+                      <button 
+                        className="action-btn"
+                        onClick={(e) => e.stopPropagation()}
+                        title="View Details"
+                      >
+                        📄
+                      </button>
+                      <button 
+                        className="action-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        title="Add to Favorites"
+                      >
+                        <Heart size={16} />
+                      </button>
                     </div>
                   </div>
                 </div>

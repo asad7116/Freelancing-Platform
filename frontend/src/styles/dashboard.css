@@ -2,13 +2,14 @@
 :root {
   --dz-sidebar-w: 220px;
   --dz-topbar-h: 64px;
-  --dz-bg: #f6f4ef;
-  --dz-card-border: #ecebe7;
-  --dz-card-shadow: 0 1px 4px rgba(0, 0, 0, .04);
-  --dz-text-strong: #15241c;
-  --dz-text-muted: #6f7f75;
-  --dz-accent-bg: #0f4a33;
-  --dz-accent-fg: #d8fff0;
+  --dz-bg: #ffffff;
+  --dz-bg-solid: #ffffff;
+  --dz-card-border: rgba(0, 0, 0, 0.1);
+  --dz-card-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  --dz-text-strong: #1a1a1a;
+  --dz-text-muted: #666666;
+  --dz-accent-bg: rgba(0, 168, 107, 0.1);
+  --dz-accent-fg: #00a86b;
   --dz-primary: #00a86b;
   --dz-primary-hover: #007a52;
 }
@@ -27,8 +28,9 @@
 
 /* ===== header band (title + breadcrumb look like screenshot) ===== */
 .dz-headerband {
-  background: #f0ebe1;
-  border-radius: 10px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
   padding: 18px 20px;
   margin-bottom: 16px;
   display: flex;
@@ -46,12 +48,12 @@
 .dz-headerband h1 {
   font-size: 26px;
   font-weight: 800;
-  color: #1b2a22;
+  color: #1a1a1a;
   margin: 0 0 6px 0;
 }
 
 .dz-breadcrumb {
-  color: #7a8b81;
+  color: #666666;
   font-size: 14px;
   margin: 0;
 }
@@ -61,22 +63,22 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--dz-primary);
-  color: #fff;
+  background: #00a86b;
+  color: #ffffff;
   border: none;
   padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .dz-refresh-btn:hover {
-  background: var(--dz-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
+  background: #007a52;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 168, 107, 0.3);
 }
 
 .dz-refresh-btn:active {
@@ -91,67 +93,100 @@
 .dz-loading {
   padding: 3rem 2rem;
   text-align: center;
-  color: var(--dz-text-muted);
+  color: #666666;
   font-size: 16px;
 }
 
 /* ===== Cards ===== */
 .dz-cards {
   display: grid;
-  gap: 16px;
+  gap: 25px;
 }
 
 .dz-cards--top {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
+/* 3D Card Design for Big Cards */
 .dz-card {
-  background: #fff;
-  border: 1px solid var(--dz-card-border);
-  border-radius: 14px;
-  box-shadow: var(--dz-card-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.dz-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  perspective: 1000px;
+  cursor: pointer;
 }
 
 .dz-card--big {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  padding: 16px 18px;
+  height: 140px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%);
+  transition: all 0.5s ease-in-out;
+  transform-style: preserve-3d;
+  box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
+  position: relative;
+  display: block;
+  padding: 0;
+}
+
+.dz-card--big::before {
+  content: '';
+  transform-style: preserve-3d;
+  position: absolute;
+  inset: 8px;
+  border-radius: 25px;
+  border-top-right-radius: 60px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.349) 0%, rgba(255, 255, 255, 0.815) 100%);
+  transform: translate3d(0px, 0px, 25px);
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  transition: all 0.5s ease-in-out;
+}
+
+.dz-card--big:hover {
+  transform: rotate3d(1, 1, 0, 15deg);
+  box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
 }
 
 .dz-card-body {
   display: grid;
   gap: 4px;
+  position: relative;
+  z-index: 10;
+  transform: translate3d(0, 0, 26px);
+  padding: 20px 20px 20px 24px;
 }
 
 .dz-value {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 900;
-  color: var(--dz-text-strong);
+  color: #00894d;
 }
 
 .dz-label {
-  color: var(--dz-text-muted);
-  font-weight: 600;
+  color: rgba(0, 137, 78, 0.8);
+  font-weight: 700;
   font-size: 14px;
 }
 
 .dz-card-icon {
-  width: 44px;
-  height: 44px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
-  background: var(--dz-accent-bg);
-  color: var(--dz-accent-fg);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: rgba(5, 71, 17, 0.3) 0px 5px 15px -3px;
+  color: #00894d;
   flex-shrink: 0;
+  z-index: 10;
+  transform: translate3d(0, 0, 26px);
+  transition: all 0.3s ease-in-out;
+}
+
+.dz-card--big:hover .dz-card-icon {
+  transform: translate3d(0, 0, 40px);
+  box-shadow: rgba(5, 71, 17, 0.4) 0px 8px 20px -3px;
 }
 
 .dz-card-icon svg {
@@ -163,28 +198,63 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+/* 3D Mini Cards */
 .dz-card--mini {
-  padding: 18px;
-  display: grid;
-  gap: 10px;
+  height: 120px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%);
+  transition: all 0.5s ease-in-out;
+  transform-style: preserve-3d;
+  box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
+  position: relative;
+  padding: 0;
+  perspective: 1000px;
+}
+
+.dz-card--mini::before {
+  content: '';
+  transform-style: preserve-3d;
+  position: absolute;
+  inset: 8px;
+  border-radius: 25px;
+  border-top-right-radius: 60px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.349) 0%, rgba(255, 255, 255, 0.815) 100%);
+  transform: translate3d(0px, 0px, 25px);
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  transition: all 0.5s ease-in-out;
+}
+
+.dz-card--mini:hover {
+  transform: rotate3d(1, 1, 0, 15deg);
+  box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
+}
+
+.dz-card--mini > * {
+  position: relative;
+  z-index: 10;
+  transform: translate3d(0, 0, 26px);
 }
 
 .dz-mini-value {
   font-size: 30px;
   font-weight: 900;
-  color: var(--dz-text-strong);
+  color: #00894d;
+  padding: 20px 20px 0 24px;
 }
 
 .dz-mini-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px 20px 24px;
+  gap: 10px;
 }
 
 .dz-mini-label {
-  color: var(--dz-text-muted);
-  font-weight: 600;
-  font-size: 14px;
+  color: rgba(0, 137, 78, 0.8);
+  font-weight: 700;
+  font-size: 13px;
 }
 
 .dz-mini-icon {
@@ -192,10 +262,17 @@
   height: 40px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
-  background: var(--dz-accent-bg);
-  color: var(--dz-accent-fg);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: rgba(5, 71, 17, 0.3) 0px 5px 15px -3px;
+  color: #00894d;
   flex-shrink: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.dz-card--mini:hover .dz-mini-icon {
+  transform: translate3d(0, 0, 15px);
+  box-shadow: rgba(5, 71, 17, 0.4) 0px 8px 20px -3px;
 }
 
 .dz-mini-icon svg {

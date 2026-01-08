@@ -1,0 +1,311 @@
+/* 3D Card Design for Dashboard Cards */
+
+/* Parent wrapper for 3D effect */
+.card-3d-parent {
+  width: 100%;
+  min-height: 280px;
+  perspective: 1000px;
+}
+
+.card-3d {
+  height: 100%;
+  min-height: 280px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%);
+  transition: all 0.5s ease-in-out;
+  transform-style: preserve-3d;
+  box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
+  position: relative;
+}
+
+.card-3d-glass {
+  transform-style: preserve-3d;
+  position: absolute;
+  inset: 8px;
+  border-radius: 25px;
+  border-top-right-radius: 80px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.349) 0%, rgba(255, 255, 255, 0.815) 100%);
+  transform: translate3d(0px, 0px, 25px);
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  transition: all 0.5s ease-in-out;
+}
+
+.card-3d-content {
+  padding: 30px 20px 20px 25px;
+  transform: translate3d(0, 0, 26px);
+  position: relative;
+  z-index: 10;
+}
+
+.card-3d-title {
+  display: block;
+  color: #00894d;
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.card-3d-text {
+  display: block;
+  color: rgba(0, 137, 78, 0.85);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.card-3d-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 15px;
+  font-size: 13px;
+  color: rgba(0, 137, 78, 0.7);
+}
+
+.card-3d-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.card-3d-meta-item svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.card-3d-bottom {
+  padding: 10px 15px;
+  transform-style: preserve-3d;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transform: translate3d(0, 0, 26px);
+}
+
+.card-3d-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
+  transition: all 0.2s ease-in-out;
+}
+
+.card-3d-status.active {
+  color: #00894d;
+}
+
+.card-3d-status.pending {
+  color: #f59e0b;
+}
+
+.card-3d-status.rejected {
+  color: #dc2626;
+}
+
+.card-3d-actions {
+  display: flex;
+  gap: 8px;
+  transform-style: preserve-3d;
+}
+
+.card-3d-action-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  background: rgb(255, 255, 255);
+  border-radius: 50%;
+  border: none;
+  display: grid;
+  place-content: center;
+  box-shadow: rgba(5, 71, 17, 0.3) 0px 5px 10px -3px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-3d-action-btn:first-child {
+  transition: transform 0.2s ease-in-out 0.2s, box-shadow 0.2s ease-in-out 0.2s, background 0.2s;
+}
+
+.card-3d-action-btn:nth-child(2) {
+  transition: transform 0.2s ease-in-out 0.3s, box-shadow 0.2s ease-in-out 0.3s, background 0.2s;
+}
+
+.card-3d-action-btn:nth-child(3) {
+  transition: transform 0.2s ease-in-out 0.4s, box-shadow 0.2s ease-in-out 0.4s, background 0.2s;
+}
+
+.card-3d-action-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #00894d;
+  transition: fill 0.2s;
+}
+
+.card-3d-action-btn:hover {
+  background: #00894d;
+  transform: scale(1.1);
+}
+
+.card-3d-action-btn:hover svg {
+  fill: white;
+}
+
+.card-3d-action-btn:active {
+  background: rgb(255, 234, 0);
+}
+
+.card-3d-action-btn:active svg {
+  fill: black;
+}
+
+.card-3d-badge {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
+
+.card-3d-circle {
+  display: block;
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  top: 0;
+  right: 0;
+  box-shadow: rgba(100, 100, 111, 0.2) -10px 10px 20px 0px;
+  backdrop-filter: blur(5px);
+  background: rgba(0, 249, 203, 0.2);
+  transition: all 0.5s ease-in-out;
+}
+
+.card-3d-circle1 {
+  width: 140px;
+  transform: translate3d(0, 0, 20px);
+  top: 8px;
+  right: 8px;
+}
+
+.card-3d-circle2 {
+  width: 110px;
+  transform: translate3d(0, 0, 40px);
+  top: 10px;
+  right: 10px;
+  backdrop-filter: blur(1px);
+  transition-delay: 0.2s;
+}
+
+.card-3d-circle3 {
+  width: 85px;
+  transform: translate3d(0, 0, 60px);
+  top: 17px;
+  right: 17px;
+  transition-delay: 0.4s;
+}
+
+.card-3d-circle4 {
+  width: 60px;
+  transform: translate3d(0, 0, 80px);
+  top: 23px;
+  right: 23px;
+  transition-delay: 0.6s;
+}
+
+.card-3d-circle5 {
+  width: 40px;
+  transform: translate3d(0, 0, 100px);
+  top: 28px;
+  right: 28px;
+  display: grid;
+  place-content: center;
+  transition-delay: 0.8s;
+}
+
+.card-3d-circle5 svg {
+  width: 18px;
+  fill: white;
+}
+
+/* Hover Effects */
+.card-3d-parent:hover .card-3d {
+  transform: rotate3d(1, 1, 0, 20deg);
+  box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
+}
+
+.card-3d-parent:hover .card-3d-action-btn {
+  transform: translate3d(0, 0, 30px);
+  box-shadow: rgba(5, 71, 17, 0.2) -5px 15px 10px 0px;
+}
+
+.card-3d-parent:hover .card-3d-circle2 {
+  transform: translate3d(0, 0, 60px);
+}
+
+.card-3d-parent:hover .card-3d-circle3 {
+  transform: translate3d(0, 0, 80px);
+}
+
+.card-3d-parent:hover .card-3d-circle4 {
+  transform: translate3d(0, 0, 100px);
+}
+
+.card-3d-parent:hover .card-3d-circle5 {
+  transform: translate3d(0, 0, 120px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-3d-parent {
+    min-height: 250px;
+  }
+  
+  .card-3d {
+    min-height: 250px;
+    border-radius: 20px;
+  }
+  
+  .card-3d-glass {
+    border-radius: 18px;
+    border-top-right-radius: 60px;
+  }
+  
+  .card-3d-content {
+    padding: 25px 15px 15px 20px;
+  }
+  
+  .card-3d-title {
+    font-size: 16px;
+  }
+  
+  .card-3d-text {
+    font-size: 13px;
+  }
+  
+  .card-3d-circle1 {
+    width: 110px;
+  }
+  
+  .card-3d-circle2 {
+    width: 85px;
+  }
+  
+  .card-3d-circle3 {
+    width: 65px;
+  }
+  
+  .card-3d-circle4 {
+    width: 45px;
+  }
+  
+  .card-3d-circle5 {
+    width: 30px;
+  }
+}

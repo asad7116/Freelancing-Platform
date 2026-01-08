@@ -1,6 +1,6 @@
 import React from "react";
+import { FileText, Eye } from "lucide-react";
 import "../styles/my_proposals.css";
-import DashboardSidebar from "./Dashboard_sidebar";
 
 const DUMMY_PROPOSALS = [
   {
@@ -38,58 +38,76 @@ export default function MyProposals() {
           <p className="dz-breadcrumb">Jobs &gt; My Proposals</p>
         </div>
 
-        <section className="mp-table-wrap">
-          <table className="mp-table">
-            <thead>
-              <tr>
-                <th>Client</th>
-                <th>Job</th>
-                <th>Offered Service</th>
-                <th>Proposal Price</th>
-                <th>Revisions</th>
-                <th>Delivery Day</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
+        <section className="proposals-container">
+          {DUMMY_PROPOSALS.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <FileText size={48} />
+              </div>
+              <h3>No proposals yet</h3>
+              <p>Start submitting proposals to jobs that interest you</p>
+            </div>
+          ) : (
+            <div className="proposals-grid">
               {DUMMY_PROPOSALS.map((p) => (
-                <tr key={p.id}>
-                  <td className="mp-client">
-                    <img src={p.client.avatar} alt={p.client.name} />
-                    <span>{p.client.name}</span>
-                  </td>
+                <div key={p.id} className="proposal-card">
+                  <div className="proposal-card-inner">
+                    <div className="proposal-card-glass"></div>
+                    
+                    {/* Badge System */}
+                    <div className="proposal-badge">
+                      <span className="proposal-circle proposal-circle1"></span>
+                      <span className="proposal-circle proposal-circle2"></span>
+                      <span className="proposal-circle proposal-circle3"></span>
+                      <span className="proposal-circle proposal-circle4"></span>
+                      <span className="proposal-circle proposal-circle5">
+                        <FileText size={18} />
+                      </span>
+                    </div>
 
-                  <td>
-                    <button className="mp-link" type="button" title={p.job}>
-                      {p.job}
-                    </button>
-                  </td>
+                    {/* Proposal Info */}
+                    <div className="proposal-info">
+                      <div className="proposal-price">
+                        ${p.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </div>
+                      <h3 className="proposal-job-title">{p.job}</h3>
+                      <p className="proposal-service">{p.service}</p>
+                      
+                      <div className="proposal-meta">
+                        <span className="proposal-meta-item">
+                          {p.revisions} Revisions
+                        </span>
+                        <span className="proposal-meta-item">
+                          {p.deliveryDays} Days
+                        </span>
+                      </div>
 
-                  <td>
-                    <button className="mp-link" type="button" title={p.service}>
-                      {p.service}
-                    </button>
-                  </td>
+                      <div className="proposal-client">
+                        <img 
+                          src={p.client.avatar} 
+                          alt={p.client.name}
+                          className="proposal-client-avatar"
+                        />
+                        <span className="proposal-client-name">{p.client.name}</span>
+                      </div>
+                    </div>
 
-                  <td>${p.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                  <td>{p.revisions}</td>
-                  <td>{p.deliveryDays}</td>
-
-                  <td>
-                    <span className={`mp-status ${p.status.toLowerCase()}`}>
-                      {p.status}
-                    </span>
-                  </td>
-
-                  <td className="mp-action">
-                    <button className="mp-view" title="View">👁</button>
-                  </td>
-                </tr>
+                    {/* Footer */}
+                    <div className="proposal-footer">
+                      <span className={`proposal-status ${p.status.toLowerCase()}`}>
+                        {p.status}
+                      </span>
+                      <div className="proposal-actions">
+                        <button className="action-btn" title="View">
+                          <Eye size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          )}
         </section>
       </main>
     </div>

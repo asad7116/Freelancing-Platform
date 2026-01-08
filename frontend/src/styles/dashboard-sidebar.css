@@ -1,12 +1,12 @@
 /* --- Theme tokens (tweak if needed) --- */
 :root {
-  --wz-green: #22c55e;
-  /* activated green (similar to Workzone) */
-  --wz-green-dark: #0e4f43;
-  --wz-bg: #ffffff;
-  --wz-text: #2b2b2b;
-  --wz-muted: #8b8b8b;
-  --wz-border: #eae7de;
+  --wz-green: #00a86b;
+  /* activated green */
+  --wz-green-dark: #0d1f1a;
+  --wz-bg: linear-gradient(180deg, #0d1f1a 0%, #162b23 100%);
+  --wz-text: rgba(255, 255, 255, 0.9);
+  --wz-muted: rgba(255, 255, 255, 0.5);
+  --wz-border: rgba(255, 255, 255, 0.1);
 }
 
 /* The aside container created in DashboardLayout */
@@ -38,8 +38,8 @@
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: var(--wz-green-dark);
-  color: #fff;
+  background: #00a86b;
+  color: #ffffff;
   display: grid;
   place-items: center;
   font-size: 18px;
@@ -61,7 +61,7 @@
   display: block;
   font-weight: 800;
   font-size: 22px;
-  color: #1f9d55;
+  color: #ffffff;
   /* brand 'Work' green */
   letter-spacing: 0.2px;
 }
@@ -70,7 +70,7 @@
   display: block;
   font-weight: 600;
   font-size: 14px;
-  color: #1f9d55;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Menu */
@@ -87,7 +87,7 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: 10px;
-  color: var(--wz-text);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;
@@ -97,19 +97,19 @@
 .wz-link .wz-ic {
   width: 20px;
   text-align: center;
-  color: var(--wz-muted);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
 }
 
 /* Hover */
 .wz-link:hover {
-  background: #f1efe7;
-  /* light tan hover */
+  background: rgba(255, 255, 255, 0.05);
+  /* light hover */
 }
 
 /* Active state: bright green pill + white text */
 .wz-link.is-active {
-  background: var(--wz-green);
+  background: #00a86b;
   color: #ffffff;
 }
 

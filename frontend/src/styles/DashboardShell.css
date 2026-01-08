@@ -3,13 +3,13 @@
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
-  background: #f6f4ee;
+  background: #ffffff;
   position: relative;
 }
 
 .dash-aside {
-  background: #ffffff;
-  border-right: 1px solid #eae7de;
+  background: linear-gradient(180deg, #0d1f1a 0%, #162b23 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
   align-self: start;
