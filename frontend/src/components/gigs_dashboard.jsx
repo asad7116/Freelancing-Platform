@@ -59,42 +59,55 @@ export default function GigsDashboard() {
                 key={gig.id}
                 onClick={() => handleGigClick(gig.id)}
               >
-                <img
-                  src={`http://localhost:4000/uploads/${gig.thumbnailImage}`}
-                  alt={gig.gigTitle}
-                  className="gd-card-img"
-                />
-                <div className="gd-card-body">
-                  <div className="gd-price">${gig.price.toLocaleString()}</div>
-
-                  <div className="gd-rating">
-                    <Star size={14} fill="currentColor" />
-                    {gig.rating ? gig.rating.toFixed(1) : "0"} ({gig.reviews || 0})
+                <div className="gd-card-inner">
+                  <div className="gd-card-glass"></div>
+                  
+                  <div className="gd-badge">
+                    <span className="gd-circle gd-circle1"></span>
+                    <span className="gd-circle gd-circle2"></span>
+                    <span className="gd-circle gd-circle3"></span>
+                    <span className="gd-circle gd-circle4"></span>
+                    <span className="gd-circle gd-circle5">
+                      <Star size={18} fill="white" />
+                    </span>
                   </div>
 
-                  <h3 className="gd-title">{gig.gigTitle}</h3>
+                  <div className="gd-card-body">
+                    <div className="gd-price">${gig.price.toLocaleString()}</div>
 
-                  <div className="gd-seller">
-                    <img
-                      src="/assets/avatar.png"
-                      alt={gig.seller || "Unknown Seller"}
-                      className="gd-avatar"
-                    />
-                    <span>{gig.seller || "Unknown Seller"}</span>
+                    <div className="gd-rating">
+                      <Star size={14} fill="currentColor" />
+                      {gig.rating ? gig.rating.toFixed(1) : "0"} ({gig.reviews || 0})
+                    </div>
+
+                    <h3 className="gd-title">{gig.gigTitle}</h3>
+
+                    <div className="gd-seller">
+                      <span>{gig.seller || "Unknown Seller"}</span>
+                    </div>
                   </div>
 
-                  <div className="gd-actions">
+                  <div className="gd-footer">
                     <label className="gd-status">
-                      Status:
                       <input type="checkbox" checked={gig.active} readOnly />
+                      {gig.active ? 'Active' : 'Inactive'}
                     </label>
-                    <button
-                      className="gd-edit"
-                      onClick={(e) => handleEditGig(e, gig.id)}
-                    >
-                      <Edit size={16} />
-                      Edit Gig
-                    </button>
+                    <div className="gd-actions">
+                      <button
+                        className="gd-action-btn"
+                        onClick={(e) => handleEditGig(e, gig.id)}
+                        title="Edit Gig"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className="gd-action-btn"
+                        onClick={(e) => e.stopPropagation()}
+                        title="View Details"
+                      >
+                        <Eye size={16} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </article>
