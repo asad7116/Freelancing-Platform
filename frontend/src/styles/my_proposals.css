@@ -1,155 +1,331 @@
-/* My Proposals Dashboard - Matching Dashboard Theme */
+/* My Proposals Dashboard - 3D Card Design */
 :root {
   --mp-primary: #00a86b;
   --mp-primary-hover: #007a52;
 }
 
-/* Layout (aligns with shared DashboardSidebar width = 220px) */
-.mp-wrap {
+/* Proposals Container */
+.proposals-container {
+  padding: 1.5rem 0;
+}
+
+.proposals-grid {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  min-height: 100vh;
-  background: #f6f4ef;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 25px;
+  padding: 1rem 0;
 }
 
-/* Main area */
-.mp-main {
-  padding: 24px 28px;
+/* 3D Proposal Card Wrapper */
+.proposal-card {
+  width: 100%;
+  min-height: 300px;
+  perspective: 1000px;
+  cursor: pointer;
 }
 
-.mp-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+.proposal-card-inner {
+  height: 100%;
+  min-height: 300px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%);
+  transition: all 0.5s ease-in-out;
+  transform-style: preserve-3d;
+  box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
+  position: relative;
 }
 
-.mp-header h1 {
-  font-size: 24px;
-  font-weight: 800;
-  color: #1b2a22;
+.proposal-card-glass {
+  transform-style: preserve-3d;
+  position: absolute;
+  inset: 8px;
+  border-radius: 25px;
+  border-top-right-radius: 80px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.349) 0%, rgba(255, 255, 255, 0.815) 100%);
+  transform: translate3d(0px, 0px, 25px);
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  transition: all 0.5s ease-in-out;
 }
 
-.mp-breadcrumb {
-  margin-top: 4px;
-  color: #7a8b81;
-  font-size: 14px;
+.proposal-info {
+  padding: 30px 20px 80px 25px;
+  transform: translate3d(0, 0, 26px);
+  position: relative;
+  z-index: 10;
 }
 
-.mp-breadcrumb span {
-  margin: 0 6px;
+.proposal-price {
+  color: #00894d;
+  font-weight: 900;
+  font-size: 20px;
+  margin-bottom: 8px;
 }
 
-/* Table */
-.mp-table-wrap {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+.proposal-job-title {
+  font-size: 17px;
+  font-weight: 900;
+  margin: 0 0 12px 0;
+  color: #00894d;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.mp-table {
-  width: 100%;
-  border-collapse: collapse;
+.proposal-service {
+  font-size: 14px;
+  color: rgba(0, 137, 78, 0.75);
+  line-height: 1.4;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.mp-table thead th {
-  background: #dff1d2;
-  color: #2b3a2f;
-  padding: 14px 16px;
+.proposal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.proposal-meta-item {
+  background: rgba(255, 255, 255, 0.9);
+  color: #00894d;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 12px;
   font-weight: 700;
-  text-align: left;
-  border-bottom: 1px solid #dfe7de;
+  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
 }
 
-.mp-table tbody td {
-  padding: 14px 16px;
-  border-bottom: 1px solid #eee;
-  vertical-align: middle;
-  background: #fff;
-}
-
-/* Client cell */
-.mp-client {
+.proposal-client {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
 }
 
-.mp-client img {
-  width: 36px;
-  height: 36px;
+.proposal-client-avatar {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #e7e7e7;
-  background: #fafafa;
 }
 
-/* Link-like buttons for job/service */
-.mp-link {
-  background: transparent;
-  border: none;
-  color: var(--mp-primary);
-  cursor: pointer;
-  padding: 0;
-  font: inherit;
-  text-align: left;
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.mp-link:hover {
-  text-decoration: underline;
-  color: var(--mp-primary-hover);
-}
-
-/* Status chip */
-.mp-status {
-  padding: 6px 12px;
-  border-radius: 20px;
+.proposal-client-name {
   font-size: 13px;
-  font-weight: 700;
+  color: #00894d;
+  font-weight: 600;
 }
 
-.mp-status.paid {
-  background: #dcfce7;
+.proposal-footer {
+  padding: 10px 15px;
+  transform-style: preserve-3d;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transform: translate3d(0, 0, 26px);
+}
+
+.proposal-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
+}
+
+.proposal-status.paid {
   color: #16a34a;
 }
 
-.mp-status.pending {
-  background: #fef3c7;
+.proposal-status.pending {
   color: #d97706;
 }
 
-.mp-status.rejected {
-  background: #fee2e2;
+.proposal-status.rejected {
   color: #dc2626;
 }
 
-/* Actions */
-.mp-action {
+.proposal-actions {
   display: flex;
   gap: 8px;
+  transform-style: preserve-3d;
 }
 
-.mp-view {
-  width: 36px;
-  height: 36px;
-  border-radius: 20px;
+.proposal-actions .action-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  background: rgb(255, 255, 255);
+  border-radius: 50%;
   border: none;
-  background: #f2f2f2;
+  display: grid;
+  place-content: center;
+  box-shadow: rgba(5, 71, 17, 0.3) 0px 5px 10px -3px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
+  transition: all 0.3s ease-in-out;
+}
+
+.proposal-actions .action-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #00894d;
+  color: #00894d;
+  transition: fill 0.2s;
+}
+
+.proposal-actions .action-btn:hover {
+  background: #00894d;
+  transform: scale(1.1);
+}
+
+.proposal-actions .action-btn:hover svg {
+  fill: white;
+  color: white;
+}
+
+.proposal-badge {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
+
+.proposal-circle {
+  display: block;
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  top: 0;
+  right: 0;
+  box-shadow: rgba(100, 100, 111, 0.2) -10px 10px 20px 0px;
+  backdrop-filter: blur(5px);
+  background: rgba(0, 249, 203, 0.2);
+  transition: all 0.5s ease-in-out;
+}
+
+.proposal-circle1 {
+  width: 140px;
+  transform: translate3d(0, 0, 20px);
+  top: 8px;
+  right: 8px;
+}
+
+.proposal-circle2 {
+  width: 110px;
+  transform: translate3d(0, 0, 40px);
+  top: 10px;
+  right: 10px;
+  backdrop-filter: blur(1px);
+  transition-delay: 0.2s;
+}
+
+.proposal-circle3 {
+  width: 85px;
+  transform: translate3d(0, 0, 60px);
+  top: 17px;
+  right: 17px;
+  transition-delay: 0.4s;
+}
+
+.proposal-circle4 {
+  width: 60px;
+  transform: translate3d(0, 0, 80px);
+  top: 23px;
+  right: 23px;
+  transition-delay: 0.6s;
+}
+
+.proposal-circle5 {
+  width: 40px;
+  transform: translate3d(0, 0, 100px);
+  top: 28px;
+  right: 28px;
+  display: grid;
+  place-content: center;
+  transition-delay: 0.8s;
+}
+
+.proposal-circle5 svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+  color: white;
+}
+
+/* Proposal Card Hover Effects */
+.proposal-card:hover .proposal-card-inner {
+  transform: rotate3d(1, 1, 0, 20deg);
+  box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
+}
+
+.proposal-card:hover .action-btn {
+  transform: translate3d(0, 0, 30px);
+  box-shadow: rgba(5, 71, 17, 0.2) -5px 15px 10px 0px;
+}
+
+.proposal-card:hover .proposal-circle2 {
+  transform: translate3d(0, 0, 60px);
+}
+
+.proposal-card:hover .proposal-circle3 {
+  transform: translate3d(0, 0, 80px);
+}
+
+.proposal-card:hover .proposal-circle4 {
+  transform: translate3d(0, 0, 100px);
+}
+
+.proposal-card:hover .proposal-circle5 {
+  transform: translate3d(0, 0, 120px);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: rgba(0, 168, 107, 0.1);
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--mp-primary);
 }
 
-.mp-view:hover {
-  background: #e1e1e1;
-  transform: translateY(-1px);
+.empty-state h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1b2a22;
+  margin-bottom: 0.5rem;
 }
+
+.empty-state p {
+  color: #7a8b81;
+  margin-bottom: 2rem;
+}
+
 
 .mp-view svg {
   flex-shrink: 0;

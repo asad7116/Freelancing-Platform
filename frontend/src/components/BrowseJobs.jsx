@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Filter, Clock, DollarSign, MapPin, Send } from "lucide-react";
+import { Search, Filter, DollarSign, MapPin, Send } from "lucide-react";
 import "../styles/browse.css";
 
 export default function BrowseJobs() {
@@ -150,24 +150,6 @@ export default function BrowseJobs() {
       month: 'short',
       day: 'numeric'
     });
-  };
-
-  const getJobTypeDisplay = (type) => {
-    const types = {
-      'fixed': 'Fixed Price',
-      'hourly': 'Hourly Rate',
-      'milestone': 'Milestone Based'
-    };
-    return types[type] || type;
-  };
-
-  const getExperienceDisplay = (level) => {
-    const levels = {
-      'entry': 'Entry Level',
-      'intermediate': 'Intermediate',
-      'expert': 'Expert'
-    };
-    return levels[level] || level;
   };
 
   if (loading) {
@@ -329,84 +311,80 @@ export default function BrowseJobs() {
           <div className="jobs-grid">
             {filteredJobs.map((job) => (
               <div key={job.id} className="job-card" onClick={() => handleJobClick(job.id)}>
-                {/* Job Header */}
-                <div className="job-header">
+                <div className="job-card-inner">
+                  <div className="job-card-glass"></div>
+                  
+                  <div className="job-badge">
+                    <span className="job-circle job-circle1"></span>
+                    <span className="job-circle job-circle2"></span>
+                    <span className="job-circle job-circle3"></span>
+                    <span className="job-circle job-circle4"></span>
+                    <span className="job-circle job-circle5">
+                      <DollarSign size={18} />
+                    </span>
+                  </div>
+
                   <div className="job-info">
+                    <div className="job-price">
+                      ${parseFloat(job.regular_price || job.fixed_price || 0).toLocaleString()}
+                    </div>
+
                     <h3 className="job-title">{job.title}</h3>
+
                     <div className="job-meta">
-                      <span className="job-type">
-                        {getJobTypeDisplay(job.job_type)}
-                      </span>
                       <span className="job-category">
                         {categories.find(c => c.id === job.categoryId)?.name || 'General'}
                       </span>
+                      {job.city && (
+                        <div className="job-location">
+                          <MapPin size={14} />
+                          <span>{job.city.name}</span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  
-                  <div className="job-price">
-                    <DollarSign size={16} />
-                    <span>${parseFloat(job.regular_price || job.fixed_price || 0).toLocaleString()}</span>
-                  </div>
-                </div>
 
-                {/* Job Description */}
-                <div className="job-description">
-                  {job.description && job.description.length > 150 
-                    ? `${job.description.substring(0, 150)}...` 
-                    : job.description || 'No description available'
-                  }
-                </div>
-
-                {/* Job Details */}
-                <div className="job-details">
-                  <div className="job-detail-item">
-                    <Clock size={14} />
-                    <span>Experience: {getExperienceDisplay(job.experience_level)}</span>
-                  </div>
-                  
-                  {job.city && (
-                    <div className="job-detail-item">
-                      <MapPin size={14} />
-                      <span>{job.city.name}</span>
+                    <div className="job-description">
+                      {job.description && job.description.length > 100 
+                        ? `${job.description.substring(0, 100)}...` 
+                        : job.description || 'No description available'
+                      }
                     </div>
-                  )}
-                  
-                  <div className="job-detail-item">
-                    <span className="applications-count">
-                      {job._count?.applications || 0} applications
-                    </span>
-                  </div>
-                </div>
 
-                {/* Skills */}
-                {job.skills_required && job.skills_required.length > 0 && (
-                  <div className="job-skills">
-                    {job.skills_required.slice(0, 3).map((skill, index) => (
-                      <span key={index} className="skill-tag">
-                        {skill}
-                      </span>
-                    ))}
-                    {job.skills_required.length > 3 && (
-                      <span className="skill-tag more">
-                        +{job.skills_required.length - 3} more
-                      </span>
+                    {job.skills_required && job.skills_required.length > 0 && (
+                      <div className="job-skills">
+                        {job.skills_required.slice(0, 2).map((skill, index) => (
+                          <span key={index} className="skill-tag">
+                            {skill}
+                          </span>
+                        ))}
+                        {job.skills_required.length > 2 && (
+                          <span className="skill-tag">+{job.skills_required.length - 2}</span>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
 
-                {/* Job Footer */}
-                <div className="job-footer">
-                  <div className="job-date">
-                    Posted {formatDate(job.created_at)}
+                  <div className="job-footer">
+                    <div className="job-date">
+                      {formatDate(job.created_at)}
+                    </div>
+                    <div className="job-actions">
+                      <button 
+                        className="action-btn"
+                        onClick={(e) => handleApplyClick(e, job.id)}
+                        title="Apply Now"
+                      >
+                        <Send size={16} />
+                      </button>
+                      <button 
+                        className="action-btn"
+                        onClick={(e) => e.stopPropagation()}
+                        title="Save Job"
+                      >
+                        
+                      </button>
+                    </div>
                   </div>
-                  
-                  <button 
-                    className="apply-btn"
-                    onClick={(e) => handleApplyClick(e, job.id)}
-                  >
-                    <Send size={16} />
-                    Apply Now
-                  </button>
                 </div>
               </div>
             ))}

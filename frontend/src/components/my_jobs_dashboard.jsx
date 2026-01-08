@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Edit, ClipboardList, MapPin } from "lucide-react";
-import DashboardSidebar from "./Dashboard_sidebar";
+import { Plus, Edit, ClipboardList } from "lucide-react";
 import "../styles/my_jobs_dashboard.css";
 import "../styles/job_cards.css";
 
@@ -140,61 +139,53 @@ export default function MyJobs() {
             <div className="jobs-grid">
               {jobPosts.map((job) => (
                 <div key={job.id} className="job-card" onClick={() => handleViewJob(job.id)}>
-                  {/* Thumbnail Section */}
-                  <div className="job-thumbnail">
-                    {job.thumb_image ? (
-                      <img
-                        src={`/uploads/job-thumbnails/${job.thumb_image}`}
-                        alt={job.title}
-                      />
-                    ) : (
-                      <div className="placeholder-thumbnail">
-                        <ClipboardList size={32} />
-                      </div>
-                    )}
-                    <div className="job-actions">
-                      <button
-                        className="action-btn edit-btn"
-                        title="Edit Job"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditJob(job.id);
-                        }}
-                      >
-                        <Edit size={16} />
-                      </button>
+                  <div className="job-card-inner">
+                    <div className="job-card-glass"></div>
+                    
+                    {/* Badge System */}
+                    <div className="job-badge">
+                      <span className="job-circle job-circle1"></span>
+                      <span className="job-circle job-circle2"></span>
+                      <span className="job-circle job-circle3"></span>
+                      <span className="job-circle job-circle4"></span>
+                      <span className="job-circle job-circle5">
+                        <ClipboardList size={18} />
+                      </span>
                     </div>
-                  </div>
 
-                  {/* Job Info Section */}
-                  <div className="job-info">
-                    <div className="job-header">
+                    {/* Job Info Section */}
+                    <div className="job-info">
+                      <div className="job-price">
+                        ${parseFloat(job.regular_price || job.fixed_price || 0).toFixed(2)}
+                      </div>
                       <h3 className="job-title">{job.title}</h3>
                       <div className="job-meta">
                         <span className="job-category">{job.category?.name || 'General'}</span>
-                      </div>
-                    </div>
-
-                    <div className="job-stats">
-                      <div className="stat-item">
-                        <span className="stat-label">Price:</span>
-                        <span className="stat-value price">${parseFloat(job.regular_price || job.fixed_price || 0).toFixed(2)}</span>
-                      </div>
-
-                      <div className="stat-item">
-                        <span className="stat-label">Applications:</span>
-                        <span className="stat-value applications">
-                          {job._count?.applications || 0}
+                        <span className="applications-count">
+                          {job._count?.applications || 0} applications
                         </span>
                       </div>
+                      <div className={`job-status-badge status-${getStatusClass(job.approved_by_admin)}`}>
+                        {getStatusDisplay(job.approved_by_admin)}
+                      </div>
                     </div>
 
+                    {/* Footer */}
                     <div className="job-footer">
                       <div className="job-date">
-                        Posted: {formatDate(job.created_at)}
+                        {formatDate(job.created_at)}
                       </div>
-                      <div className={`job-status status-${getStatusClass(job.approved_by_admin)}`}>
-                        {getStatusDisplay(job.approved_by_admin)}
+                      <div className="job-actions">
+                        <button
+                          className="action-btn"
+                          title="Edit Job"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditJob(job.id);
+                          }}
+                        >
+                          <Edit size={16} />
+                        </button>
                       </div>
                     </div>
                   </div>
