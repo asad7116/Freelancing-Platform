@@ -13,6 +13,7 @@ import {
   Briefcase,
   Award,
   GraduationCap,
+  CreditCard,
   Link as LinkIcon,
   Github,
   Linkedin,
