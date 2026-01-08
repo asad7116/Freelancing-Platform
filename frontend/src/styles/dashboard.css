@@ -2,13 +2,14 @@
 :root {
   --dz-sidebar-w: 220px;
   --dz-topbar-h: 64px;
-  --dz-bg: #f6f4ef;
-  --dz-card-border: #ecebe7;
-  --dz-card-shadow: 0 1px 4px rgba(0, 0, 0, .04);
-  --dz-text-strong: #15241c;
-  --dz-text-muted: #6f7f75;
-  --dz-accent-bg: #0f4a33;
-  --dz-accent-fg: #d8fff0;
+  --dz-bg: #ffffff;
+  --dz-bg-solid: #ffffff;
+  --dz-card-border: rgba(0, 0, 0, 0.1);
+  --dz-card-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  --dz-text-strong: #1a1a1a;
+  --dz-text-muted: #666666;
+  --dz-accent-bg: rgba(0, 168, 107, 0.1);
+  --dz-accent-fg: #00a86b;
   --dz-primary: #00a86b;
   --dz-primary-hover: #007a52;
 }
@@ -27,8 +28,9 @@
 
 /* ===== header band (title + breadcrumb look like screenshot) ===== */
 .dz-headerband {
-  background: #f0ebe1;
-  border-radius: 10px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
   padding: 18px 20px;
   margin-bottom: 16px;
   display: flex;
@@ -46,12 +48,12 @@
 .dz-headerband h1 {
   font-size: 26px;
   font-weight: 800;
-  color: #1b2a22;
+  color: #1a1a1a;
   margin: 0 0 6px 0;
 }
 
 .dz-breadcrumb {
-  color: #7a8b81;
+  color: #666666;
   font-size: 14px;
   margin: 0;
 }
@@ -61,22 +63,22 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--dz-primary);
-  color: #fff;
+  background: #00a86b;
+  color: #ffffff;
   border: none;
   padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .dz-refresh-btn:hover {
-  background: var(--dz-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
+  background: #007a52;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 168, 107, 0.3);
 }
 
 .dz-refresh-btn:active {
@@ -91,7 +93,7 @@
 .dz-loading {
   padding: 3rem 2rem;
   text-align: center;
-  color: var(--dz-text-muted);
+  color: #666666;
   font-size: 16px;
 }
 

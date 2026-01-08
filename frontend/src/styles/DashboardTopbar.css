@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  background: transparent;
+  background: #ffffff;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .mobile-menu-btn {
@@ -26,15 +27,18 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 1px solid #eee7de;
-  background: #fff;
-  color: #2b2b2b;
+  border: 1px solid #e9ecef;
+  background: #f8f9fa;
+  color: #1a1a1a;
   cursor: pointer;
-  transition: filter 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .dash-iconbtn:hover {
-  filter: brightness(0.98);
+  background: #00a86b;
+  border-color: #00a86b;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 168, 107, 0.2);
 }
 
 .dash-iconbtn svg {
@@ -50,14 +54,14 @@
   min-width: 18px;
   height: 18px;
   border-radius: 999px;
-  background: #22c55e;
-  color: #fff;
+  background: #00a86b;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 700;
   display: grid;
   place-items: center;
   padding: 0 5px;
-  border: 2px solid #fff;
+  border: 2px solid #ffffff;
 }
 
 .dash-avatar {
@@ -65,8 +69,8 @@
   height: 38px;
   border-radius: 50%;
   overflow: hidden;
-  border: 1px solid #eee7de;
-  background: #fff;
+  border: 2px solid #00a86b;
+  background: #f8f9fa;
 }
 
 .dash-avatar img {
