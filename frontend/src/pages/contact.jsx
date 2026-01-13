@@ -3,68 +3,108 @@ import "../styles/contact.css";
 import Header from "../components/Header";
 import PageHeader from "../components/PageHeader";
 import Footer from "../components/Footer";
+import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
 export default function Contact() {
   return (
     <>
-    <Header />
+      <Header />
       <PageHeader title="Contact Us" />
-    <div className="contact-page">
-      {/* Banner Section */}
-      <div className="contact-banner">
-        <h1>Contact Us</h1>
-        <p>Home / <span>Contact Us</span></p>
-      </div>
+      <div className="contact-page-new">
+        <div className="container">
+          {/* Contact Info Section */}
+          <div className="contact-info-section">
+            <div className="info-card">
+              <div className="icon-wrapper">
+                <Phone size={24} />
+              </div>
+              <div className="info-content">
+                <h4>Phone</h4>
+                <p>+92 3XX XXX XXX</p>
+                <p>+92 3XX XXXX XXX</p>
+              </div>
+            </div>
 
-      {/* Contact Info Section */}
-      <div className="contact-info">
-        <div className="info-box">
-          <i className="fas fa-phone"></i>
-          <h4>Phone</h4>
-          <p>+92 3XX XXX XXX<br />+92 3XX XXXX XXX</p>
-        </div>
-        <div className="info-box"><i class="fa-slab fa-regular fa-envelope"></i>
-          <h4>Email</h4>
-          <p>asadmeh.9546@gmail.com<br />Tixe@gmail.com</p>
-        </div>
-        <div className="info-box">
-          <i className="fas fa-map-marker-alt"></i>
-          <h4>Location</h4>
-          <p>4517 Washington Ave. 32 King Street.</p>
-        </div>
-        <div className="info-box">
-          <h4>Follow Us:</h4>
-          <div className="social-icons">
-            <i className="fab fa-facebook-f"></i>
-            <i className="fab fa-twitter"></i>
-            <i className="fab fa-linkedin-in"></i>
-            <i className="fab fa-instagram"></i>
-          </div>
-        </div>
-      </div>
+            <div className="info-card">
+              <div className="icon-wrapper">
+                <Mail size={24} />
+              </div>
+              <div className="info-content">
+                <h4>Email</h4>
+                <p>asadmeh.9546@gmail.com</p>
+                <p>Tixe@gmail.com</p>
+              </div>
+            </div>
 
-      {/* Form Section */}
-      <div className="contact-form">
-        <h3>Get in Touch</h3>
-        <p>
-          Award-winning, family owned dealership of new and pre-owned Tixe
-          with several locations across the city.
-        </p>
-        <form>
-          <div className="form-row">
-            <input type="text" placeholder="Name *" required />
-            <input type="text" placeholder="Phone" />
+            <div className="info-card">
+              <div className="icon-wrapper">
+                <MapPin size={24} />
+              </div>
+              <div className="info-content">
+                <h4>Location</h4>
+                <p>4517 Washington Ave. 32 King Street.</p>
+              </div>
+            </div>
+
+            <div className="info-card">
+              <div className="info-content">
+                <h4>Follow Us</h4>
+                <div className="social-links-row">
+                  <a href="#" className="social-link"><Facebook size={20} /></a>
+                  <a href="#" className="social-link"><Twitter size={20} /></a>
+                  <a href="#" className="social-link"><Linkedin size={20} /></a>
+                  <a href="#" className="social-link"><Instagram size={20} /></a>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="form-row">
-            <input type="email" placeholder="Email *" required />
-            <input type="text" placeholder="Subject *" required />
+
+          {/* Form Section */}
+          <div className="contact-form-section">
+            <div className="form-header">
+              <h2>Get in Touch</h2>
+              <p>
+                Have a project in mind or just want to say hello?
+                Feel free to reach out to us. We'd love to hear from you.
+              </p>
+            </div>
+
+            <form className="modern-form">
+              <div className="input-group">
+                <div className="input-field">
+                  <label>Full Name *</label>
+                  <input type="text" placeholder="John Doe" required />
+                </div>
+                <div className="input-field">
+                  <label>Phone Number</label>
+                  <input type="text" placeholder="+92 3XX XXX XXXX" />
+                </div>
+              </div>
+
+              <div className="input-group">
+                <div className="input-field">
+                  <label>Email Address *</label>
+                  <input type="email" placeholder="example@mail.com" required />
+                </div>
+                <div className="input-field">
+                  <label>Subject *</label>
+                  <input type="text" placeholder="How can we help?" required />
+                </div>
+              </div>
+
+              <div className="input-field">
+                <label>Your Message *</label>
+                <textarea placeholder="Write your message here..." required></textarea>
+              </div>
+
+              <button type="submit" className="submit-now-btn">
+                Send Message
+              </button>
+            </form>
           </div>
-          <textarea placeholder="Message *" required></textarea>
-          <button type="submit" className="send-btn">Send Message</button>
-        </form>
+        </div>
       </div>
-    </div>
-    <Footer/>
-  </>
+      <Footer />
+    </>
   );
 }

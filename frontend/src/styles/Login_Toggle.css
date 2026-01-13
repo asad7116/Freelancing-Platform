@@ -10,7 +10,7 @@
   border-radius: 12px;
   border: 2px solid rgba(34, 190, 13, 0.5);
   background: rgba(34, 190, 13, 0.15);
-  color: #000000;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -24,7 +24,7 @@
 
 .toggle-btn.active {
   background: rgba(34, 190, 13, 0.7);
-  color: #000000;
+  color: #ffffff;
   border: 2px solid #22be0d;
   box-shadow: 0 0 0 4px rgba(34, 190, 13, 0.3);
   font-weight: 700;

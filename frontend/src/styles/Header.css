@@ -40,8 +40,15 @@ header {
 }
 
 @keyframes floatHeaderLogo {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .logo .green {
@@ -95,6 +102,11 @@ header {
 }
 
 /* Currency & Language Selectors */
+.selector-container {
+  position: relative;
+  z-index: 101;
+}
+
 .currency-selector,
 .language-selector {
   display: flex;
@@ -103,14 +115,25 @@ header {
   font-size: 0.95rem;
   color: #ffffff;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: all 0.3s ease;
   white-space: nowrap;
   font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
 }
 
 .currency-selector:hover,
-.language-selector:hover {
-  color: #00a86b;
+.language-selector:hover,
+.currency-selector.active,
+.language-selector.active {
+  background: rgba(255, 255, 255, 0.05);
+  color: #22be0d;
+}
+
+.currency-selector.active,
+.language-selector.active {
+  border-color: rgba(34, 190, 13, 0.3);
 }
 
 .currency-selector svg,
@@ -119,22 +142,81 @@ header {
   stroke-width: 2;
 }
 
+.chevron {
+  transition: transform 0.3s ease;
+  opacity: 0.6;
+}
+
+.chevron.rotate {
+  transform: rotate(180deg);
+}
+
+.selector-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #0c1216;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  min-width: 120px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  animation: fadeInDown 0.2s ease-out;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  padding: 10px 14px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.dropdown-item:hover {
+  background: rgba(34, 190, 13, 0.15);
+  color: #22be0d;
+}
+
+.dropdown-item.selected {
+  background: rgba(34, 190, 13, 0.1);
+  color: #22be0d;
+  font-weight: 700;
+}
+
 .signin-btn {
-  background: #00a86b;
+  background: #22be0d;
   color: #fff;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
   white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(34, 190, 13, 0.3);
 }
 
 .signin-btn:hover {
-  background: #007a52;
+  background: #1a9b0a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 190, 13, 0.4);
 }
 
 

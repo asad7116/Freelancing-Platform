@@ -1,5 +1,5 @@
 // src/components/Dashboard_sidebar.jsx
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   Home, List, BriefcaseBusiness, ClipboardList, FileText,
   MessageSquare, Wallet, CreditCard, Images, Star, UserRound, Search
@@ -35,13 +35,13 @@ export default function DashboardSidebar({ role, onLinkClick }) {
 
   return (
     <div className="wz-sidebar">
-      <div className="wz-brand">
+      <Link to="/" className="wz-brand" style={{ textDecoration: 'none' }}>
         <div className="wz-brand-logo"><Home size={18} className="wz-ic" /></div>
         <div className="wz-brand-text">
-          <span className="wz-brand-main">Work</span>
-          <span className="wz-brand-sub">zone</span>
+          <span className="wz-brand-main">Ti</span>
+          <span className="wz-brand-sub">xe</span>
         </div>
-      </div>
+      </Link>
 
       <nav className="wz-menu">
         {items.map(({ to, label, icon: Icon }) => (

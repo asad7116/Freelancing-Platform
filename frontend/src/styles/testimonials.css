@@ -15,14 +15,16 @@
   text-align: center;
   margin-bottom: 40px;
 }
+
 .ts-title {
   font-size: 28px;
   font-weight: 800;
   margin-bottom: 8px;
-  color: #000000;
+  color: #ffffff;
 }
+
 .ts-subtitle {
-  color: #333333;
+  color: #e2e8f0;
   font-size: 15px;
 }
 
@@ -48,7 +50,7 @@
 
 .ts-text {
   font-size: 15px;
-  color: #000000;
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
@@ -75,10 +77,12 @@
 .ts-name {
   font-weight: 700;
   font-size: 14px;
+  color: #ffffff;
 }
+
 .ts-role {
   font-size: 12px;
-  color: #777;
+  color: #cbd5e1;
 }
 
 /* Rating */
@@ -92,6 +96,7 @@
   .ts-title {
     font-size: 24px;
   }
+
   .ts-card {
     padding: 16px;
   }

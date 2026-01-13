@@ -11,7 +11,7 @@
 .cta-container {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
-  color: #000000;
+  color: #ffffff;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -39,12 +39,12 @@
   font-weight: 800;
   line-height: 1.3;
   margin: 0;
-  color: #000000;
+  color: #ffffff;
 }
 
 .cta-subtitle {
   font-size: 15px;
-  color: #333333;
+  color: #e2e8f0;
   margin: 0;
   max-width: 450px;
   line-height: 1.6;
@@ -52,26 +52,28 @@
 
 /* Button */
 .cta-btn {
-  background: #00c853;
+  background: #22be0d;
   color: #fff;
   border: none;
   border-radius: 30px;
-  padding: 12px 28px;
-  font-size: 15px;
-  font-weight: 600;
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: fit-content;
   text-decoration: none;
+  text-align: center;
+  justify-content: center;
 }
 
 .cta-btn:hover {
-  background: #009b40;
-  transform: translateX(3px);
-  box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+  background: #1a9b0a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(34, 190, 13, 0.3);
 }
 
 .cta-btn svg {
@@ -101,7 +103,7 @@
 /* Tablets (900px and below) */
 @media (max-width: 900px) {
   .cta-section {
-      padding: 30px 50px 0px 50px; 
+    padding: 30px 50px 0px 50px;
   }
 
   .cta-container {
@@ -139,7 +141,7 @@
 /* Smaller Tablets (768px and below) */
 @media (max-width: 768px) {
   .cta-section {
-      padding: 30px 50px 0px 50px;
+    padding: 30px 50px 0px 50px;
   }
 
   .cta-container {

@@ -391,11 +391,11 @@
     outline: none;
     transition: var(--chatbot-transition);
     background: var(--chatbot-bg-secondary);
+    color: var(--chatbot-text);
 }
 
 .chatbot-input:focus {
     border-color: var(--chatbot-primary);
-    background: white;
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
@@ -480,10 +480,6 @@
 
     .typing-indicator {
         background: #334155;
-    }
-
-    .chatbot-input {
-        color: var(--chatbot-text);
     }
 }
 

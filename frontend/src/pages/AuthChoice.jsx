@@ -8,15 +8,15 @@ export default function AuthChoice() {
       <div className="auth-choice-container">
         {/* Background Gradient */}
         <div className="gradient-bg"></div>
-        
+
         {/* Content */}
         <div className="auth-choice-content">
           {/* Logo/Brand */}
-          <div className="brand-section">
-            <img src="/assets/logo/logo.png" alt="WorkZone Logo" className="auth-logo" />
-            <h1 className="auth-title">Welcome to WorkZone</h1>
+          <Link to="/" className="brand-section" style={{ textDecoration: 'none' }}>
+            <img src="/assets/logo/logo.png" alt="Tixe Logo" className="auth-logo" />
+            <h1 className="auth-title">Welcome to Tixe</h1>
             <p className="auth-subtitle">Your AI-Powered Freelancing Platform</p>
-          </div>
+          </Link>
 
           {/* Main Message */}
           <div className="auth-message">
