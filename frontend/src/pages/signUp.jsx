@@ -225,7 +225,7 @@ export default function SignUp() {
         <form className="auth-form" onSubmit={handleSubmit}>
           {/* Role Selection - Always visible */}
           <div className="form-group">
-            <ToggleButtons value={role} onChange={setRole} />
+            <ToggleButtons selected={role} onSelect={setRole} />
           </div>
 
           {/* Full signup form (hidden in Google mode) */}

@@ -36,7 +36,9 @@ export default function DashboardSidebar({ role, onLinkClick }) {
   return (
     <div className="wz-sidebar">
       <Link to="/" className="wz-brand" style={{ textDecoration: 'none' }}>
-        <div className="wz-brand-logo"><Home size={18} className="wz-ic" /></div>
+        <div className="wz-brand-logo">
+          <img src="/assets/logo/logo.png" alt="Tixe" className="wz-logo-img" />
+        </div>
         <div className="wz-brand-text">
           <span className="wz-brand-main">Ti</span>
           <span className="wz-brand-sub">xe</span>

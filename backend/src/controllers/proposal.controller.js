@@ -2,9 +2,103 @@ import { getDatabase } from "../db/mongodb.js"
 import { ObjectId } from "mongodb"
 import JobApplicationModel from "../models/JobApplication.js"
 import JobPostModel from "../models/JobPost.js"
-import Stripe from "stripe"
+// import Stripe from "stripe"
+// 
+// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+// ... (rest of the file remains same, commenting specifically the Stripe parts)
+
+// Create Stripe Checkout Session (Client)
+/*
+export const createCheckoutSession = async (req, res) => {
+  try {
+    const clientId = req.user.id
+    const { proposalId } = req.params
+
+    const db = await getDatabase()
+    const proposal = await JobApplicationModel.findById(db, proposalId)
+
+    if (!proposal || proposal.client_id !== clientId) {
+      return res.status(404).json({ success: false, message: "Proposal not found" })
+    }
+
+    if (proposal.status !== "completed") {
+      return res.status(400).json({ success: false, message: "Work must be approved before payment" })
+    }
+
+    const job = await JobPostModel.findById(db, proposal.job_post_id)
+    const frontendUrl = process.env.FRONTEND_ORIGIN || "http://localhost:3000"
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `Payment for ${job?.title || "Project"}`,
+              description: `Freelancer: ${proposal.freelancer_name}`,
+            },
+            unit_amount: Math.round(proposal.proposed_price * 100), // Stripe expects amount in cents
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${frontendUrl}/client/checkout?success=true&proposalId=${proposalId}`,
+      cancel_url: `${frontendUrl}/client/checkout?canceled=true`,
+      metadata: {
+        proposalId: proposalId,
+        clientId: clientId,
+      },
+    })
+
+    res.json({
+      success: true,
+      url: session.url,
+    })
+  } catch (error) {
+    console.error("Create checkout session error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to create checkout session",
+    })
+  }
+}
+*/
+
+// Stripe Webhook Handler
+/*
+export const handleStripeWebhook = async (req, res) => {
+  const sig = req.headers["stripe-signature"]
+  let event
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+  } catch (err) {
+    console.error(`Webhook Error: ${err.message}`)
+    return res.status(400).send(`Webhook Error: ${err.message}`)
+  }
+
+  // Handle the event
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object
+    const proposalId = session.metadata.proposalId
+
+    try {
+      const db = await getDatabase()
+      // Update payment status to 'paid'
+      await JobApplicationModel.updatePaymentStatus(db, proposalId, "paid")
+      console.log(`Payment confirmed for proposal: ${proposalId}`)
+    } catch (dbError) {
+      console.error("Database update error in webhook:", dbError)
+      return res.status(500).json({ message: "Failed to update database" })
+    }
+  }
+
+  res.json({ received: true })
+}
+*/
 
 // Submit a proposal (Freelancer)
 export const submitProposal = async (req, res) => {

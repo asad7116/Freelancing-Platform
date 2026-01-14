@@ -58,6 +58,7 @@ const Checkout = () => {
     };
 
     const handlePay = async (proposalId) => {
+        /*
         try {
             setProcessingId(proposalId);
             setError('');
@@ -81,6 +82,8 @@ const Checkout = () => {
             setError('Payment process failed. Please try again.');
             setProcessingId(null);
         }
+        */
+        alert('Stripe payments are temporarily disabled.');
     };
 
     if (loading) {
@@ -200,7 +203,7 @@ const Checkout = () => {
 
                         <div className="secure-payment-info">
                             <ShieldCheck size={16} />
-                            <span>Secure Payment processed by Stripe/PayPal</span>
+                            <span>Secure Payment processed by PayPal</span>
                         </div>
                     </div>
 

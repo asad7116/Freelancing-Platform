@@ -42,8 +42,8 @@ app.use("/uploads", express.static(path.resolve("./uploads")))
 app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }))
 
 // Stripe webhook must come BEFORE express.json() to get raw body
-import { handleStripeWebhook } from "./controllers/proposal.controller.js"
-app.post("/api/webhook", express.raw({ type: "application/json" }), handleStripeWebhook)
+// import { handleStripeWebhook } from "./controllers/proposal.controller.js"
+// app.post("/api/webhook", express.raw({ type: "application/json" }), handleStripeWebhook)
 
 app.use(express.json())
 app.use(cookieParser())

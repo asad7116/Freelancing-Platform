@@ -9,7 +9,7 @@ export default function ProfileSettings() {
   const [userRole, setUserRole] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
-  
+
   // Personal Information
   const [personalInfo, setPersonalInfo] = useState({
     name: '',
@@ -115,14 +115,14 @@ export default function ProfileSettings() {
       const response = await fetch('http://localhost:4000/api/profile', {
         credentials: 'include' // Use cookies for authentication
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log('Profile data:', data);
-        
+
         // Set user role
         setUserRole(data.user.role);
-        
+
         // Set profile image - prepend backend URL if path exists and is relative
         const imagePath = data.profile?.profile_image || data.user.avatar || '';
         if (imagePath) {
@@ -131,7 +131,7 @@ export default function ProfileSettings() {
         } else {
           setProfileImage('');
         }
-        
+
         // Set personal info from user
         setPersonalInfo({
           name: data.user.name || '',
@@ -226,12 +226,12 @@ export default function ProfileSettings() {
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
+
     // Check if date is not in future and person is at least 13 years old
     if (birthDate > today) return false;
     if (age < 13) return false;
     if (age === 13 && monthDiff < 0) return false;
-    
+
     return true;
   };
 
@@ -239,7 +239,7 @@ export default function ProfileSettings() {
     if (!startDate) return true;
     if (isCurrently) return true; // If currently working/studying, no end date needed
     if (!endDate) return true; // Optional end date
-    
+
     const start = new Date(startDate);
     const end = new Date(endDate);
     return start < end;
@@ -247,40 +247,40 @@ export default function ProfileSettings() {
 
   const validatePaymentAccount = (type, accountNumber) => {
     if (!accountNumber) return false;
-    
-    switch(type) {
+
+    switch (type) {
       case 'jazzcash':
       case 'easypaisa':
         // Pakistani mobile numbers: 11 digits starting with 03
         return /^03\d{9}$/.test(accountNumber.replace(/[\s\-]/g, ''));
-      
+
       case 'paypal':
-      case 'stripe':
+        // case 'stripe':
         // Email format
         return validateEmail(accountNumber);
-      
+
       case 'bank_transfer':
         // Bank account: 10-20 digits
         return /^\d{10,20}$/.test(accountNumber.replace(/[\s\-]/g, ''));
-      
+
       case 'payoneer':
       case 'skrill':
         // Email format
         return validateEmail(accountNumber);
-      
+
       case 'western_union':
       case 'moneygram':
         // MTCN: 10 digits
         return /^\d{10}$/.test(accountNumber.replace(/[\s\-]/g, ''));
-      
+
       case 'cryptocurrency':
         // Basic crypto address validation (alphanumeric, 26-42 chars)
         return /^[a-zA-Z0-9]{26,42}$/.test(accountNumber);
-      
+
       case 'wise':
         // Email or account number
         return validateEmail(accountNumber) || /^\d{8,}$/.test(accountNumber);
-      
+
       default:
         return accountNumber.length >= 5;
     }
@@ -289,10 +289,10 @@ export default function ProfileSettings() {
   const validateBankAccount = (accountNumber, iban) => {
     // Account number should be numeric and 10-20 digits
     const accountValid = /^\d{10,20}$/.test(accountNumber?.replace(/[\s\-]/g, '') || '');
-    
+
     // IBAN validation (if provided): starts with 2 letters, followed by 2 digits, then alphanumeric
     const ibanValid = !iban || /^[A-Z]{2}\d{2}[A-Z0-9]{1,30}$/.test(iban?.replace(/[\s\-]/g, '') || '');
-    
+
     return accountValid && ibanValid;
   };
 
@@ -432,7 +432,7 @@ export default function ProfileSettings() {
   const handleSave = async () => {
     // Validate before saving
     const validationErrors = validateProfile();
-    
+
     if (validationErrors.length > 0) {
       // Show all errors
       const errorMessage = validationErrors.join('\n• ');
@@ -442,7 +442,7 @@ export default function ProfileSettings() {
 
     setSaving(true);
     try {
-      const endpoint = userRole === 'freelancer' 
+      const endpoint = userRole === 'freelancer'
         ? 'http://localhost:4000/api/profile/freelancer'
         : 'http://localhost:4000/api/profile/client';
 
@@ -592,17 +592,17 @@ export default function ProfileSettings() {
       showErrorMessage('Degree and Institution are required fields');
       return;
     }
-    
+
     if (newEducation.start_date && !validateDate(newEducation.start_date)) {
       showErrorMessage('Start date cannot be in the future');
       return;
     }
-    
+
     if (newEducation.start_date && newEducation.end_date && !validateDateRange(newEducation.start_date, newEducation.end_date)) {
       showErrorMessage('Start date must be before end date');
       return;
     }
-    
+
     setEducation([...education, { ...newEducation }]);
     setNewEducation({
       degree: '',
@@ -624,17 +624,17 @@ export default function ProfileSettings() {
       showErrorMessage('Job title and Company are required fields');
       return;
     }
-    
+
     if (newExperience.start_date && !validateDate(newExperience.start_date)) {
       showErrorMessage('Start date cannot be in the future');
       return;
     }
-    
+
     if (!newExperience.currently_working && newExperience.start_date && newExperience.end_date && !validateDateRange(newExperience.start_date, newExperience.end_date)) {
       showErrorMessage('Start date must be before end date');
       return;
     }
-    
+
     setExperience([...experience, { ...newExperience }]);
     setNewExperience({
       title: '',
@@ -657,17 +657,17 @@ export default function ProfileSettings() {
       showErrorMessage('Certification name and Issuing Organization are required fields');
       return;
     }
-    
+
     if (newCertification.credential_url && !validateUrl(newCertification.credential_url)) {
       showErrorMessage('Please enter a valid URL for the credential (must include http:// or https://)');
       return;
     }
-    
+
     if (newCertification.issue_date && newCertification.expiry_date && !validateDateRange(newCertification.issue_date, newCertification.expiry_date)) {
       showErrorMessage('Issue date must be before expiry date');
       return;
     }
-    
+
     setCertifications([...certifications, { ...newCertification }]);
     setNewCertification({
       name: '',
@@ -689,17 +689,17 @@ export default function ProfileSettings() {
       showErrorMessage('Project title is required');
       return;
     }
-    
+
     if (newPortfolio.url && !validateUrl(newPortfolio.url)) {
       showErrorMessage('Please enter a valid project URL (must include http:// or https://)');
       return;
     }
-    
+
     if (newPortfolio.image && !validateUrl(newPortfolio.image)) {
       showErrorMessage('Please enter a valid image URL (must include http:// or https://)');
       return;
     }
-    
+
     setPortfolioItems([...portfolioItems, { ...newPortfolio }]);
     setNewPortfolio({
       title: '',
@@ -720,12 +720,12 @@ export default function ProfileSettings() {
       showErrorMessage('Bank name and Account number are required fields');
       return;
     }
-    
+
     if (!validateBankAccount(newBankAccount.account_number, newBankAccount.iban)) {
       showErrorMessage('Invalid account number (10-20 digits) or IBAN format (e.g., PK36SCBL0000001123456702)');
       return;
     }
-    
+
     setBankAccounts([...bankAccounts, { ...newBankAccount }]);
     setNewBankAccount({
       bank_name: '',
@@ -746,10 +746,10 @@ export default function ProfileSettings() {
       showErrorMessage('Account number/email is required');
       return;
     }
-    
+
     if (!validatePaymentAccount(newPaymentMethod.type, newPaymentMethod.account_number)) {
       let hint = '';
-      switch(newPaymentMethod.type) {
+      switch (newPaymentMethod.type) {
         case 'jazzcash':
         case 'easypaisa':
           hint = 'Enter 11-digit mobile number (e.g., 03001234567)';
@@ -777,7 +777,7 @@ export default function ProfileSettings() {
       showErrorMessage(`Invalid ${newPaymentMethod.type} account format. ${hint}`);
       return;
     }
-    
+
     setPaymentMethods([...paymentMethods, { ...newPaymentMethod }]);
     setNewPaymentMethod({
       type: 'jazzcash',
@@ -799,8 +799,8 @@ export default function ProfileSettings() {
     <div className="profile-settings-container">
       <div className="profile-settings-header">
         <h1>Profile Settings</h1>
-        <button 
-          className="btn-save-profile" 
+        <button
+          className="btn-save-profile"
           onClick={handleSave}
           disabled={saving}
         >
@@ -837,7 +837,7 @@ export default function ProfileSettings() {
       </div>
 
       <div className="profile-tabs">
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'personal' ? 'active' : ''}`}
           onClick={() => setActiveTab('personal')}
         >
@@ -845,25 +845,25 @@ export default function ProfileSettings() {
         </button>
         {userRole === 'freelancer' && (
           <>
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'professional' ? 'active' : ''}`}
               onClick={() => setActiveTab('professional')}
             >
               Professional
             </button>
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'education' ? 'active' : ''}`}
               onClick={() => setActiveTab('education')}
             >
               Education
             </button>
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'experience' ? 'active' : ''}`}
               onClick={() => setActiveTab('experience')}
             >
               Experience
             </button>
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'portfolio' ? 'active' : ''}`}
               onClick={() => setActiveTab('portfolio')}
             >
@@ -873,13 +873,13 @@ export default function ProfileSettings() {
         )}
         {userRole === 'client' && (
           <>
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'company' ? 'active' : ''}`}
               onClick={() => setActiveTab('company')}
             >
               Company Info
             </button>
-            <button 
+            <button
               className={`tab-btn ${activeTab === 'education' ? 'active' : ''}`}
               onClick={() => setActiveTab('education')}
             >
@@ -887,7 +887,7 @@ export default function ProfileSettings() {
             </button>
           </>
         )}
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'payment' ? 'active' : ''}`}
           onClick={() => setActiveTab('payment')}
         >
@@ -906,7 +906,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={personalInfo.name}
-                  onChange={(e) => setPersonalInfo({...personalInfo, name: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, name: e.target.value })}
                   placeholder="Your full name"
                 />
               </div>
@@ -924,7 +924,7 @@ export default function ProfileSettings() {
                 <input
                   type="tel"
                   value={personalInfo.phone}
-                  onChange={(e) => setPersonalInfo({...personalInfo, phone: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
                   placeholder="+1 234 567 8900"
                 />
               </div>
@@ -933,14 +933,14 @@ export default function ProfileSettings() {
                 <input
                   type="date"
                   value={personalInfo.date_of_birth}
-                  onChange={(e) => setPersonalInfo({...personalInfo, date_of_birth: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, date_of_birth: e.target.value })}
                 />
               </div>
               <div className="form-group">
                 <label>Gender</label>
                 <select
                   value={personalInfo.gender}
-                  onChange={(e) => setPersonalInfo({...personalInfo, gender: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, gender: e.target.value })}
                 >
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
@@ -957,7 +957,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={personalInfo.address}
-                  onChange={(e) => setPersonalInfo({...personalInfo, address: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, address: e.target.value })}
                   placeholder="Street address"
                 />
               </div>
@@ -966,7 +966,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={personalInfo.city}
-                  onChange={(e) => setPersonalInfo({...personalInfo, city: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, city: e.target.value })}
                   placeholder="City"
                 />
               </div>
@@ -975,7 +975,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={personalInfo.state}
-                  onChange={(e) => setPersonalInfo({...personalInfo, state: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, state: e.target.value })}
                   placeholder="State"
                 />
               </div>
@@ -984,7 +984,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={personalInfo.country}
-                  onChange={(e) => setPersonalInfo({...personalInfo, country: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, country: e.target.value })}
                   placeholder="Country"
                 />
               </div>
@@ -993,7 +993,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={personalInfo.postal_code}
-                  onChange={(e) => setPersonalInfo({...personalInfo, postal_code: e.target.value})}
+                  onChange={(e) => setPersonalInfo({ ...personalInfo, postal_code: e.target.value })}
                   placeholder="Postal code"
                 />
               </div>
@@ -1011,7 +1011,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={freelancerInfo.title}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, title: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, title: e.target.value })}
                   placeholder="e.g., Full Stack Developer"
                 />
               </div>
@@ -1020,7 +1020,7 @@ export default function ProfileSettings() {
                 <textarea
                   rows="4"
                   value={freelancerInfo.bio}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, bio: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, bio: e.target.value })}
                   placeholder="Tell clients about yourself..."
                 />
               </div>
@@ -1029,7 +1029,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={freelancerInfo.specialization}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, specialization: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, specialization: e.target.value })}
                   placeholder="e.g., Web Development"
                 />
               </div>
@@ -1038,7 +1038,7 @@ export default function ProfileSettings() {
                 <input
                   type="number"
                   value={freelancerInfo.hourly_rate}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, hourly_rate: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, hourly_rate: e.target.value })}
                   placeholder="50"
                 />
               </div>
@@ -1047,7 +1047,7 @@ export default function ProfileSettings() {
                 <input
                   type="number"
                   value={freelancerInfo.years_of_experience}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, years_of_experience: parseInt(e.target.value) || 0})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, years_of_experience: parseInt(e.target.value) || 0 })}
                   placeholder="5"
                 />
               </div>
@@ -1056,7 +1056,7 @@ export default function ProfileSettings() {
                   <input
                     type="checkbox"
                     checked={freelancerInfo.is_available}
-                    onChange={(e) => setFreelancerInfo({...freelancerInfo, is_available: e.target.checked})}
+                    onChange={(e) => setFreelancerInfo({ ...freelancerInfo, is_available: e.target.checked })}
                   />
                   {' '}Available for work
                 </label>
@@ -1099,12 +1099,12 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={newLanguage.language}
-                  onChange={(e) => setNewLanguage({...newLanguage, language: e.target.value})}
+                  onChange={(e) => setNewLanguage({ ...newLanguage, language: e.target.value })}
                   placeholder="Language"
                 />
                 <select
                   value={newLanguage.proficiency}
-                  onChange={(e) => setNewLanguage({...newLanguage, proficiency: e.target.value})}
+                  onChange={(e) => setNewLanguage({ ...newLanguage, proficiency: e.target.value })}
                 >
                   <option value="basic">Basic</option>
                   <option value="intermediate">Intermediate</option>
@@ -1124,7 +1124,7 @@ export default function ProfileSettings() {
                 <input
                   type="url"
                   value={freelancerInfo.linkedin_url}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, linkedin_url: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, linkedin_url: e.target.value })}
                   placeholder="https://linkedin.com/in/..."
                 />
               </div>
@@ -1133,7 +1133,7 @@ export default function ProfileSettings() {
                 <input
                   type="url"
                   value={freelancerInfo.github_url}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, github_url: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, github_url: e.target.value })}
                   placeholder="https://github.com/..."
                 />
               </div>
@@ -1142,7 +1142,7 @@ export default function ProfileSettings() {
                 <input
                   type="url"
                   value={freelancerInfo.website_url}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, website_url: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, website_url: e.target.value })}
                   placeholder="https://yourwebsite.com"
                 />
               </div>
@@ -1151,7 +1151,7 @@ export default function ProfileSettings() {
                 <input
                   type="url"
                   value={freelancerInfo.twitter_url}
-                  onChange={(e) => setFreelancerInfo({...freelancerInfo, twitter_url: e.target.value})}
+                  onChange={(e) => setFreelancerInfo({ ...freelancerInfo, twitter_url: e.target.value })}
                   placeholder="https://twitter.com/..."
                 />
               </div>
@@ -1183,7 +1183,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newEducation.degree}
-                    onChange={(e) => setNewEducation({...newEducation, degree: e.target.value})}
+                    onChange={(e) => setNewEducation({ ...newEducation, degree: e.target.value })}
                     placeholder="Bachelor's, Master's, etc."
                   />
                 </div>
@@ -1192,7 +1192,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newEducation.institution}
-                    onChange={(e) => setNewEducation({...newEducation, institution: e.target.value})}
+                    onChange={(e) => setNewEducation({ ...newEducation, institution: e.target.value })}
                     placeholder="University name"
                   />
                 </div>
@@ -1201,7 +1201,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newEducation.field_of_study}
-                    onChange={(e) => setNewEducation({...newEducation, field_of_study: e.target.value})}
+                    onChange={(e) => setNewEducation({ ...newEducation, field_of_study: e.target.value })}
                     placeholder="Computer Science, etc."
                   />
                 </div>
@@ -1210,7 +1210,7 @@ export default function ProfileSettings() {
                   <input
                     type="date"
                     value={newEducation.start_date}
-                    onChange={(e) => setNewEducation({...newEducation, start_date: e.target.value})}
+                    onChange={(e) => setNewEducation({ ...newEducation, start_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
@@ -1218,7 +1218,7 @@ export default function ProfileSettings() {
                   <input
                     type="date"
                     value={newEducation.end_date}
-                    onChange={(e) => setNewEducation({...newEducation, end_date: e.target.value})}
+                    onChange={(e) => setNewEducation({ ...newEducation, end_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group full-width">
@@ -1226,7 +1226,7 @@ export default function ProfileSettings() {
                   <textarea
                     rows="3"
                     value={newEducation.description}
-                    onChange={(e) => setNewEducation({...newEducation, description: e.target.value})}
+                    onChange={(e) => setNewEducation({ ...newEducation, description: e.target.value })}
                     placeholder="Additional details..."
                   />
                 </div>
@@ -1258,7 +1258,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newCertification.name}
-                    onChange={(e) => setNewCertification({...newCertification, name: e.target.value})}
+                    onChange={(e) => setNewCertification({ ...newCertification, name: e.target.value })}
                     placeholder="AWS Certified, etc."
                   />
                 </div>
@@ -1267,7 +1267,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newCertification.issuing_organization}
-                    onChange={(e) => setNewCertification({...newCertification, issuing_organization: e.target.value})}
+                    onChange={(e) => setNewCertification({ ...newCertification, issuing_organization: e.target.value })}
                     placeholder="Amazon, Microsoft, etc."
                   />
                 </div>
@@ -1276,7 +1276,7 @@ export default function ProfileSettings() {
                   <input
                     type="date"
                     value={newCertification.issue_date}
-                    onChange={(e) => setNewCertification({...newCertification, issue_date: e.target.value})}
+                    onChange={(e) => setNewCertification({ ...newCertification, issue_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
@@ -1284,7 +1284,7 @@ export default function ProfileSettings() {
                   <input
                     type="date"
                     value={newCertification.expiry_date}
-                    onChange={(e) => setNewCertification({...newCertification, expiry_date: e.target.value})}
+                    onChange={(e) => setNewCertification({ ...newCertification, expiry_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
@@ -1292,7 +1292,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newCertification.credential_id}
-                    onChange={(e) => setNewCertification({...newCertification, credential_id: e.target.value})}
+                    onChange={(e) => setNewCertification({ ...newCertification, credential_id: e.target.value })}
                     placeholder="ABC123..."
                   />
                 </div>
@@ -1301,7 +1301,7 @@ export default function ProfileSettings() {
                   <input
                     type="url"
                     value={newCertification.credential_url}
-                    onChange={(e) => setNewCertification({...newCertification, credential_url: e.target.value})}
+                    onChange={(e) => setNewCertification({ ...newCertification, credential_url: e.target.value })}
                     placeholder="https://..."
                   />
                 </div>
@@ -1337,7 +1337,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newExperience.title}
-                    onChange={(e) => setNewExperience({...newExperience, title: e.target.value})}
+                    onChange={(e) => setNewExperience({ ...newExperience, title: e.target.value })}
                     placeholder="Software Engineer, etc."
                   />
                 </div>
@@ -1346,7 +1346,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newExperience.company}
-                    onChange={(e) => setNewExperience({...newExperience, company: e.target.value})}
+                    onChange={(e) => setNewExperience({ ...newExperience, company: e.target.value })}
                     placeholder="Company name"
                   />
                 </div>
@@ -1355,7 +1355,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newExperience.location}
-                    onChange={(e) => setNewExperience({...newExperience, location: e.target.value})}
+                    onChange={(e) => setNewExperience({ ...newExperience, location: e.target.value })}
                     placeholder="City, Country"
                   />
                 </div>
@@ -1364,7 +1364,7 @@ export default function ProfileSettings() {
                   <input
                     type="date"
                     value={newExperience.start_date}
-                    onChange={(e) => setNewExperience({...newExperience, start_date: e.target.value})}
+                    onChange={(e) => setNewExperience({ ...newExperience, start_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
@@ -1372,7 +1372,7 @@ export default function ProfileSettings() {
                   <input
                     type="date"
                     value={newExperience.end_date}
-                    onChange={(e) => setNewExperience({...newExperience, end_date: e.target.value})}
+                    onChange={(e) => setNewExperience({ ...newExperience, end_date: e.target.value })}
                     disabled={newExperience.currently_working}
                   />
                 </div>
@@ -1381,7 +1381,7 @@ export default function ProfileSettings() {
                     <input
                       type="checkbox"
                       checked={newExperience.currently_working}
-                      onChange={(e) => setNewExperience({...newExperience, currently_working: e.target.checked})}
+                      onChange={(e) => setNewExperience({ ...newExperience, currently_working: e.target.checked })}
                     />
                     {' '}Currently working here
                   </label>
@@ -1391,7 +1391,7 @@ export default function ProfileSettings() {
                   <textarea
                     rows="3"
                     value={newExperience.description}
-                    onChange={(e) => setNewExperience({...newExperience, description: e.target.value})}
+                    onChange={(e) => setNewExperience({ ...newExperience, description: e.target.value })}
                     placeholder="Describe your responsibilities..."
                   />
                 </div>
@@ -1429,7 +1429,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newPortfolio.title}
-                    onChange={(e) => setNewPortfolio({...newPortfolio, title: e.target.value})}
+                    onChange={(e) => setNewPortfolio({ ...newPortfolio, title: e.target.value })}
                     placeholder="Project name"
                   />
                 </div>
@@ -1438,7 +1438,7 @@ export default function ProfileSettings() {
                   <textarea
                     rows="3"
                     value={newPortfolio.description}
-                    onChange={(e) => setNewPortfolio({...newPortfolio, description: e.target.value})}
+                    onChange={(e) => setNewPortfolio({ ...newPortfolio, description: e.target.value })}
                     placeholder="Describe the project..."
                   />
                 </div>
@@ -1447,7 +1447,7 @@ export default function ProfileSettings() {
                   <input
                     type="url"
                     value={newPortfolio.url}
-                    onChange={(e) => setNewPortfolio({...newPortfolio, url: e.target.value})}
+                    onChange={(e) => setNewPortfolio({ ...newPortfolio, url: e.target.value })}
                     placeholder="https://..."
                   />
                 </div>
@@ -1456,7 +1456,7 @@ export default function ProfileSettings() {
                   <input
                     type="url"
                     value={newPortfolio.image}
-                    onChange={(e) => setNewPortfolio({...newPortfolio, image: e.target.value})}
+                    onChange={(e) => setNewPortfolio({ ...newPortfolio, image: e.target.value })}
                     placeholder="https://..."
                   />
                 </div>
@@ -1465,7 +1465,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newPortfolio.tags}
-                    onChange={(e) => setNewPortfolio({...newPortfolio, tags: e.target.value})}
+                    onChange={(e) => setNewPortfolio({ ...newPortfolio, tags: e.target.value })}
                     placeholder="React, Node.js, MongoDB"
                   />
                 </div>
@@ -1487,7 +1487,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={clientInfo.company_name}
-                  onChange={(e) => setClientInfo({...clientInfo, company_name: e.target.value})}
+                  onChange={(e) => setClientInfo({ ...clientInfo, company_name: e.target.value })}
                   placeholder="Your company name"
                 />
               </div>
@@ -1495,7 +1495,7 @@ export default function ProfileSettings() {
                 <label>Company Size</label>
                 <select
                   value={clientInfo.company_size}
-                  onChange={(e) => setClientInfo({...clientInfo, company_size: e.target.value})}
+                  onChange={(e) => setClientInfo({ ...clientInfo, company_size: e.target.value })}
                 >
                   <option value="">Select Size</option>
                   <option value="1-10">1-10 employees</option>
@@ -1510,7 +1510,7 @@ export default function ProfileSettings() {
                 <input
                   type="text"
                   value={clientInfo.industry}
-                  onChange={(e) => setClientInfo({...clientInfo, industry: e.target.value})}
+                  onChange={(e) => setClientInfo({ ...clientInfo, industry: e.target.value })}
                   placeholder="Technology, Finance, etc."
                 />
               </div>
@@ -1519,7 +1519,7 @@ export default function ProfileSettings() {
                 <input
                   type="url"
                   value={clientInfo.website_url}
-                  onChange={(e) => setClientInfo({...clientInfo, website_url: e.target.value})}
+                  onChange={(e) => setClientInfo({ ...clientInfo, website_url: e.target.value })}
                   placeholder="https://yourcompany.com"
                 />
               </div>
@@ -1528,7 +1528,7 @@ export default function ProfileSettings() {
                 <input
                   type="url"
                   value={clientInfo.linkedin_url}
-                  onChange={(e) => setClientInfo({...clientInfo, linkedin_url: e.target.value})}
+                  onChange={(e) => setClientInfo({ ...clientInfo, linkedin_url: e.target.value })}
                   placeholder="https://linkedin.com/company/..."
                 />
               </div>
@@ -1561,7 +1561,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newBankAccount.bank_name}
-                    onChange={(e) => setNewBankAccount({...newBankAccount, bank_name: e.target.value})}
+                    onChange={(e) => setNewBankAccount({ ...newBankAccount, bank_name: e.target.value })}
                     placeholder="Bank name"
                   />
                 </div>
@@ -1570,7 +1570,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newBankAccount.account_title}
-                    onChange={(e) => setNewBankAccount({...newBankAccount, account_title: e.target.value})}
+                    onChange={(e) => setNewBankAccount({ ...newBankAccount, account_title: e.target.value })}
                     placeholder="Account holder name"
                   />
                 </div>
@@ -1579,7 +1579,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newBankAccount.account_number}
-                    onChange={(e) => setNewBankAccount({...newBankAccount, account_number: e.target.value})}
+                    onChange={(e) => setNewBankAccount({ ...newBankAccount, account_number: e.target.value })}
                     placeholder="1234567890"
                   />
                 </div>
@@ -1588,7 +1588,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newBankAccount.iban}
-                    onChange={(e) => setNewBankAccount({...newBankAccount, iban: e.target.value})}
+                    onChange={(e) => setNewBankAccount({ ...newBankAccount, iban: e.target.value })}
                     placeholder="PK..."
                   />
                 </div>
@@ -1597,7 +1597,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newBankAccount.branch_code}
-                    onChange={(e) => setNewBankAccount({...newBankAccount, branch_code: e.target.value})}
+                    onChange={(e) => setNewBankAccount({ ...newBankAccount, branch_code: e.target.value })}
                     placeholder="0123"
                   />
                 </div>
@@ -1626,7 +1626,7 @@ export default function ProfileSettings() {
                   <label>Payment Type *</label>
                   <select
                     value={newPaymentMethod.type}
-                    onChange={(e) => setNewPaymentMethod({...newPaymentMethod, type: e.target.value})}
+                    onChange={(e) => setNewPaymentMethod({ ...newPaymentMethod, type: e.target.value })}
                   >
                     <option value="jazzcash">JazzCash</option>
                     <option value="easypaisa">Easypaisa</option>
@@ -1646,7 +1646,7 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newPaymentMethod.account_name}
-                    onChange={(e) => setNewPaymentMethod({...newPaymentMethod, account_name: e.target.value})}
+                    onChange={(e) => setNewPaymentMethod({ ...newPaymentMethod, account_name: e.target.value })}
                     placeholder="Account holder name"
                   />
                 </div>
@@ -1655,24 +1655,24 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     value={newPaymentMethod.account_number}
-                    onChange={(e) => setNewPaymentMethod({...newPaymentMethod, account_number: e.target.value})}
+                    onChange={(e) => setNewPaymentMethod({ ...newPaymentMethod, account_number: e.target.value })}
                     placeholder={
                       newPaymentMethod.type === 'jazzcash' || newPaymentMethod.type === 'easypaisa' ? '03001234567' :
-                      newPaymentMethod.type === 'paypal' || newPaymentMethod.type === 'stripe' || newPaymentMethod.type === 'payoneer' || newPaymentMethod.type === 'skrill' || newPaymentMethod.type === 'wise' ? 'email@example.com' :
-                      newPaymentMethod.type === 'bank_transfer' ? '1234567890123456' :
-                      newPaymentMethod.type === 'western_union' || newPaymentMethod.type === 'moneygram' ? '1234567890' :
-                      newPaymentMethod.type === 'cryptocurrency' ? 'Wallet address' :
-                      'Account number or email'
+                        newPaymentMethod.type === 'paypal' || newPaymentMethod.type === 'stripe' || newPaymentMethod.type === 'payoneer' || newPaymentMethod.type === 'skrill' || newPaymentMethod.type === 'wise' ? 'email@example.com' :
+                          newPaymentMethod.type === 'bank_transfer' ? '1234567890123456' :
+                            newPaymentMethod.type === 'western_union' || newPaymentMethod.type === 'moneygram' ? '1234567890' :
+                              newPaymentMethod.type === 'cryptocurrency' ? 'Wallet address' :
+                                'Account number or email'
                     }
                   />
                   <small style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.25rem', display: 'block' }}>
                     {newPaymentMethod.type === 'jazzcash' || newPaymentMethod.type === 'easypaisa' ? '11-digit mobile number starting with 03' :
-                     newPaymentMethod.type === 'paypal' || newPaymentMethod.type === 'stripe' || newPaymentMethod.type === 'payoneer' || newPaymentMethod.type === 'skrill' ? 'Valid email address' :
-                     newPaymentMethod.type === 'bank_transfer' ? '10-20 digit account number' :
-                     newPaymentMethod.type === 'western_union' || newPaymentMethod.type === 'moneygram' ? '10-digit MTCN number' :
-                     newPaymentMethod.type === 'cryptocurrency' ? '26-42 character wallet address' :
-                     newPaymentMethod.type === 'wise' ? 'Email or account number (8+ digits)' :
-                     'Enter account details'}
+                      newPaymentMethod.type === 'paypal' || newPaymentMethod.type === 'stripe' || newPaymentMethod.type === 'payoneer' || newPaymentMethod.type === 'skrill' ? 'Valid email address' :
+                        newPaymentMethod.type === 'bank_transfer' ? '10-20 digit account number' :
+                          newPaymentMethod.type === 'western_union' || newPaymentMethod.type === 'moneygram' ? '10-digit MTCN number' :
+                            newPaymentMethod.type === 'cryptocurrency' ? '26-42 character wallet address' :
+                              newPaymentMethod.type === 'wise' ? 'Email or account number (8+ digits)' :
+                                'Enter account details'}
                   </small>
                 </div>
               </div>
