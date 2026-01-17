@@ -4,7 +4,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background: #f8fafc;
+  background: transparent;
   min-height: 100vh;
 }
 
@@ -51,19 +51,21 @@
 
 /* Header Section */
 .job-detail-header {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .back-button {
-  background: #f3f4f6;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  color: #374151;
+  color: #ffffff;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -71,7 +73,7 @@
 }
 
 .back-button:hover {
-  background: #e5e7eb;
+  background: rgba(0, 168, 107, 0.3);
 }
 
 .job-header-content {
@@ -113,7 +115,7 @@
 .job-title-large {
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 1rem 0;
   line-height: 1.2;
 }
@@ -172,12 +174,12 @@
 .job-stats-header .stat strong {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 .job-stats-header .stat span {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .edit-job-btn {
@@ -200,30 +202,32 @@
 }
 
 .content-section {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .content-section h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 1rem 0;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .content-section h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.9);
   margin: 1.5rem 0 0.75rem 0;
 }
 
 .content-text {
-  color: #4b5563;
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.7;
 }
 
@@ -258,15 +262,15 @@
 }
 
 .skill-tag.mandatory {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+  background: rgba(220, 38, 38, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
 .skill-tag.optional {
-  background: #f0f9ff;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
+  background: rgba(0, 168, 107, 0.2);
+  color: #00e68a;
+  border: 1px solid rgba(0, 168, 107, 0.3);
 }
 
 /* Project Details */
@@ -285,14 +289,14 @@
 .detail-item label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
 
 .detail-value {
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 /* Sidebar */
@@ -303,19 +307,21 @@
 }
 
 .sidebar-card {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-card h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 1rem 0;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .job-meta-list {
@@ -332,26 +338,26 @@
 
 .meta-label {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
 }
 
 .meta-value {
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
   text-align: right;
 }
 
 .meta-value.status-pending {
-  color: #d97706;
+  color: #fbbf24;
 }
 
 .meta-value.status-approved {
-  color: #059669;
+  color: #00e68a;
 }
 
 .meta-value.status-rejected {
-  color: #dc2626;
+  color: #ff6b6b;
 }
 
 /* Applications Summary */

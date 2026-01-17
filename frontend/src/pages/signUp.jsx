@@ -10,6 +10,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isGoogleMode, setIsGoogleMode] = useState(false);
@@ -257,7 +258,7 @@ export default function SignUp() {
 
               <div className="form-group">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -269,7 +270,7 @@ export default function SignUp() {
 
               <div className="form-group">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -277,6 +278,17 @@ export default function SignUp() {
                   disabled={loading}
                   className="form-input"
                 />
+              </div>
+
+              <div className="form-group show-password-group">
+                <label className="show-password-label">
+                  <input
+                    type="checkbox"
+                    checked={showPassword}
+                    onChange={(e) => setShowPassword(e.target.checked)}
+                  />
+                  <span>Show Password</span>
+                </label>
               </div>
             </>
           )}

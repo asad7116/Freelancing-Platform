@@ -6,54 +6,54 @@
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 14px;
 }
-.mod-header h1{ font-size: 22px; font-weight: 800; color: #1b2a22; }
+.mod-header h1{ font-size: 22px; font-weight: 800; color: #ffffff; }
 .mod-user-icons{ display: flex; align-items: center; gap: 12px; }
 .mod-round{
   width: 36px; height: 36px; border-radius: 50%;
-  background: #fff; border: 1px solid #e5e7eb; cursor: pointer;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); cursor: pointer;
 }
 .mod-badge::after{
   content: "8"; position: relative; left: -10px; top: -10px;
-  background: #1ec47d; color: #0b2517; font-size: 10px; font-weight: 800;
+  background: #00e68a; color: #0b2517; font-size: 10px; font-weight: 800;
   border-radius: 999px; padding: 2px 6px;
 }
 .mod-avatar{
   width: 40px; height: 40px; border-radius: 50%;
-  object-fit: cover; border: 2px solid #e5e7eb; background: #fff;
+  object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3);
 }
 
 /* Table */
 .mod-container{
-  background: #fff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,.2);
   overflow: hidden;
 }
 .mod-table{ width: 100%; border-collapse: collapse; }
 .mod-table thead th{
-  background: #e2f3cf; color: #2b3a2f; padding: 14px 16px;
-  font-weight: 700; text-align: left; border-bottom: 1px solid #dfe7de;
+  background: rgba(0, 168, 107, 0.2); color: #ffffff; padding: 14px 16px;
+  font-weight: 700; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .mod-table tbody td{
-  padding: 14px 16px; border-bottom: 1px solid #eee; vertical-align: middle;
+  padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; color: #ffffff;
 }
 .mod-product-cell{ display: flex; align-items: center; gap: 10px; }
 .mod-product-cell img{
   width: 42px; height: 42px; border-radius: 8px; object-fit: cover;
-  border: 1px solid #e7e7e7; background: #fafafa;
+  border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.3);
 }
-.mod-product-name{ color: #2370d7; cursor: pointer; }
+.mod-product-name{ color: #00e68a; cursor: pointer; }
 
 /* Status pills */
 .status{ padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-.status.pending{ background: #e9f9ee; color: #19a165; }
-.status.completed{ background: #e9f9ee; color: #19a165; }
+.status.pending{ background: rgba(0, 230, 138, 0.2); color: #00e68a; border: 1px solid rgba(0, 230, 138, 0.3); }
+.status.completed{ background: rgba(0, 230, 138, 0.2); color: #00e68a; border: 1px solid rgba(0, 230, 138, 0.3); }
 
 /* Actions */
 .mod-action-cell{ display: flex; gap: 10px; }
 .view-btn{
-  background: #f2f2f2; border: none; border-radius: 20px; width: 36px; height: 36px;
-  cursor: pointer; transition: background .2s;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; width: 36px; height: 36px;
+  cursor: pointer; transition: background .2s; color: #ffffff;
 }
-.view-btn:hover{ background: #e1e1e1; }
+.view-btn:hover{ background: rgba(255, 255, 255, 0.2); }
 
 /* Responsive */
 @media (max-width: 560px){

@@ -2,7 +2,7 @@
   padding: 40px 20px;
   max-width: 1200px;
   margin: 0 auto;
-  color: #1a1a1a;
+  color: #ffffff;
 }
 
 .checkout-header {
@@ -12,12 +12,12 @@
 .checkout-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2b3674;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
 .checkout-header p {
-  color: #a3aed0;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1.1rem;
 }
 
@@ -30,7 +30,7 @@
 .checkout-list-section h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  color: #2b3674;
+  color: #ffffff;
 }
 
 .payments-grid {
@@ -40,10 +40,12 @@
 }
 
 .payment-card {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -62,7 +64,7 @@
 
 .project-details h3 {
   font-size: 1.25rem;
-  color: #2b3674;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
@@ -70,7 +72,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #707eae;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.95rem;
 }
 
@@ -81,7 +83,7 @@
 .payment-amount .label {
   display: block;
   font-size: 0.85rem;
-  color: #a3aed0;
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
@@ -96,13 +98,13 @@
 .payment-actions {
   display: flex;
   gap: 12px;
-  border-top: 1px solid #f4f7fe;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 20px;
 }
 
 .btn-pay-now {
   flex: 1;
-  background: #4318ff;
+  background: linear-gradient(135deg, #00a86b 0%, #00c77a 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -117,8 +119,8 @@
 }
 
 .btn-pay-now:hover:not(:disabled) {
-  background: #3311db;
-  box-shadow: 0 10px 20px rgba(67, 24, 255, 0.2);
+  background: linear-gradient(135deg, #00c77a 0%, #00e68a 100%);
+  box-shadow: 0 10px 20px rgba(0, 168, 107, 0.3);
 }
 
 .btn-pay-now.processing {
@@ -127,9 +129,9 @@
 }
 
 .btn-view-details {
-  background: #f4f7fe;
-  color: #2b3674;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: 12px 20px;
   font-weight: 600;
@@ -141,7 +143,7 @@
 }
 
 .btn-view-details:hover {
-  background: #e9edfe;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .checkout-sidebar {
@@ -151,23 +153,25 @@
 }
 
 .payment-summary-card {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .payment-summary-card h3 {
   font-size: 1.25rem;
   margin-bottom: 20px;
-  color: #2b3674;
+  color: #ffffff;
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
-  color: #707eae;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .summary-total {
@@ -175,10 +179,10 @@
   justify-content: space-between;
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 2px dashed #f4f7fe;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
   font-size: 1.25rem;
   font-weight: 700;
-  color: #2b3674;
+  color: #ffffff;
 }
 
 .secure-payment-info {
@@ -195,8 +199,8 @@
 
 .btn-back-dashboard {
   background: transparent;
-  color: #707eae;
-  border: 1px solid #e0e5f2;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: 12px;
   font-weight: 600;
@@ -209,31 +213,33 @@
 }
 
 .btn-back-dashboard:hover {
-  background: #f4f7fe;
-  color: #2b3674;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .empty-payments {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 60px 40px;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .empty-payments h3 {
   font-size: 1.5rem;
-  color: #2b3674;
+  color: #ffffff;
   margin: 20px 0 10px;
 }
 
 .empty-payments p {
-  color: #a3aed0;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 30px;
 }
 
 .btn-primary {
-  background: #4318ff;
+  background: linear-gradient(135deg, #00a86b 0%, #00c77a 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -243,25 +249,27 @@
 }
 
 .checkout-error {
-  background: #fff5f5;
-  color: #e31a1a;
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 .checkout-success {
-  background: #f0fff4;
-  color: #05cd99;
+  background: rgba(0, 230, 138, 0.15);
+  color: #00e68a;
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 
 .mini-spinner {

@@ -33,9 +33,11 @@
 
 /* Card container */
 .mj-card {
-  background: #fff;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -46,19 +48,20 @@
 }
 
 .mj-table thead th {
-  background: #dff1d2;
-  color: #2a3a2f;
+  background: rgba(0, 168, 107, 0.2);
+  color: #ffffff;
   font-weight: 800;
   padding: 14px 16px;
   text-align: left;
-  border-bottom: 1px solid #d6e6cb;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mj-table tbody td {
-  background: #fff;
+  background: transparent;
   padding: 14px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   vertical-align: middle;
+  color: #ffffff;
 }
 
 /* Columns */
@@ -90,12 +93,12 @@
 }
 
 .td-amount {
-  color: #374151;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .td-category {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
 }
 
@@ -119,8 +122,8 @@
   height: 44px;
   border-radius: 10px;
   object-fit: cover;
-  border: 1px solid #e7e7e7;
-  background: #fafafa;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .mj-logo-placeholder {
@@ -130,14 +133,14 @@
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  border: 1px solid #e7e7e7;
-  background: #f9fafb;
-  color: #6b7280;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 20px;
 }
 
 .mj-title {
-  color: #2563eb;
+  color: #00e68a;
   text-decoration: none;
   font-weight: 600;
   line-height: 1.3;
@@ -158,21 +161,21 @@
 }
 
 .mj-status.pending {
-  background: #fef3c7;
-  color: #d97706;
-  border: 1px solid #f59e0b;
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 .mj-status.approved {
-  background: #dcfce7;
-  color: #16a34a;
-  border: 1px solid #22c55e;
+  background: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 
 .mj-status.rejected {
-  background: #fee2e2;
-  color: #dc2626;
-  border: 1px solid #ef4444;
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 /* Proposals pill */
@@ -182,10 +185,10 @@
   width: 34px;
   height: 34px;
   border-radius: 999px;
-  background: #ecfdf5;
-  color: #10b981;
+  background: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
   font-weight: 800;
-  border: 1px solid #c7f1e4;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 
 /* Action buttons */
@@ -199,18 +202,19 @@
   width: 36px;
   height: 36px;
   border-radius: 20px;
-  border: 0;
-  background: #f3f4f6;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
   font-size: 16px;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
 }
 
 .mj-icon-btn:hover {
-  background: #e6e7eb;
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
 

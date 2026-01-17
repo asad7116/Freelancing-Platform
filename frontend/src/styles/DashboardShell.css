@@ -3,12 +3,20 @@
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
-  background: #ffffff;
+  background: linear-gradient(135deg, #0a3d2e 0%, #0f4a33 25%, #1a5c42 50%, #0b5345 75%, #0d3d2a 100%);
+  background-size: 400% 400%;
+  animation: gradientShiftShell 15s ease infinite;
   position: relative;
 }
 
+@keyframes gradientShiftShell {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .dash-aside {
-  background: linear-gradient(180deg, #0d1f1a 0%, #162b23 100%);
+  background: linear-gradient(180deg, #062119 0%, #0a3d2e 50%, #0f4a33 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;

@@ -2,22 +2,30 @@
 :root {
   --dz-sidebar-w: 220px;
   --dz-topbar-h: 64px;
-  --dz-bg: #ffffff;
-  --dz-bg-solid: #ffffff;
-  --dz-card-border: rgba(0, 0, 0, 0.1);
-  --dz-card-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-  --dz-text-strong: #1a1a1a;
-  --dz-text-muted: #666666;
-  --dz-accent-bg: rgba(0, 168, 107, 0.1);
-  --dz-accent-fg: #00a86b;
+  --dz-bg: linear-gradient(135deg, #0a3d2e 0%, #0f4a33 25%, #1a5c42 50%, #0b5345 75%, #0d3d2a 100%);
+  --dz-bg-solid: #0a3d2e;
+  --dz-card-border: rgba(255, 255, 255, 0.1);
+  --dz-card-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+  --dz-text-strong: #ffffff;
+  --dz-text-muted: rgba(255, 255, 255, 0.7);
+  --dz-accent-bg: rgba(0, 168, 107, 0.2);
+  --dz-accent-fg: #00e68a;
   --dz-primary: #00a86b;
-  --dz-primary-hover: #007a52;
+  --dz-primary-hover: #00c77a;
 }
 
 .dz-with-shell {
   min-height: 100vh;
   background: var(--dz-bg);
+  background-size: 400% 400%;
+  animation: gradientShiftDashboard 15s ease infinite;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@keyframes gradientShiftDashboard {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* utility for any element (e.g., Footer) that should align with main area */
@@ -28,8 +36,9 @@
 
 /* ===== header band (title + breadcrumb look like screenshot) ===== */
 .dz-headerband {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 18px 20px;
   margin-bottom: 16px;
@@ -48,12 +57,12 @@
 .dz-headerband h1 {
   font-size: 26px;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #ffffff;
   margin: 0 0 6px 0;
 }
 
 .dz-breadcrumb {
-  color: #666666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   margin: 0;
 }
@@ -93,7 +102,7 @@
 .dz-loading {
   padding: 3rem 2rem;
   text-align: center;
-  color: #666666;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 16px;
 }
 
@@ -117,13 +126,14 @@
 .dz-card--big {
   height: 140px;
   border-radius: 30px;
-  background: linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%);
+  background: linear-gradient(135deg, #0a5a32 0%, #0d7a42 50%, #0a5a32 100%);
   transition: all 0.5s ease-in-out;
   transform-style: preserve-3d;
-  box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 40px 50px 25px -40px, rgba(0, 0, 0, 0.4) 0px 25px 25px -5px;
   position: relative;
   display: block;
   padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .dz-card--big::before {
@@ -133,16 +143,16 @@
   inset: 8px;
   border-radius: 25px;
   border-top-right-radius: 60px;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.349) 0%, rgba(255, 255, 255, 0.815) 100%);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.25) 100%);
   transform: translate3d(0px, 0px, 25px);
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.5s ease-in-out;
 }
 
 .dz-card--big:hover {
   transform: rotate3d(1, 1, 0, 15deg);
-  box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
+  box-shadow: rgba(0, 0, 0, 0.4) 30px 50px 25px -40px, rgba(0, 0, 0, 0.3) 0px 25px 30px 0px;
 }
 
 .dz-card-body {
@@ -157,11 +167,11 @@
 .dz-value {
   font-size: 32px;
   font-weight: 900;
-  color: #00894d;
+  color: #ffffff;
 }
 
 .dz-label {
-  color: rgba(0, 137, 78, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 700;
   font-size: 14px;
 }
@@ -175,9 +185,10 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: rgba(5, 71, 17, 0.3) 0px 5px 15px -3px;
-  color: #00894d;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 15px -3px;
+  color: #ffffff;
   flex-shrink: 0;
   z-index: 10;
   transform: translate3d(0, 0, 26px);
@@ -186,7 +197,7 @@
 
 .dz-card--big:hover .dz-card-icon {
   transform: translate3d(0, 0, 40px);
-  box-shadow: rgba(5, 71, 17, 0.4) 0px 8px 20px -3px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 8px 20px -3px;
 }
 
 .dz-card-icon svg {
@@ -202,13 +213,14 @@
 .dz-card--mini {
   height: 120px;
   border-radius: 30px;
-  background: linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%);
+  background: linear-gradient(135deg, #0a5a32 0%, #0d7a42 50%, #0a5a32 100%);
   transition: all 0.5s ease-in-out;
   transform-style: preserve-3d;
-  box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 40px 50px 25px -40px, rgba(0, 0, 0, 0.4) 0px 25px 25px -5px;
   position: relative;
   padding: 0;
   perspective: 1000px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .dz-card--mini::before {
@@ -218,16 +230,16 @@
   inset: 8px;
   border-radius: 25px;
   border-top-right-radius: 60px;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.349) 0%, rgba(255, 255, 255, 0.815) 100%);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.25) 100%);
   transform: translate3d(0px, 0px, 25px);
-  border-left: 1px solid white;
-  border-bottom: 1px solid white;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.5s ease-in-out;
 }
 
 .dz-card--mini:hover {
   transform: rotate3d(1, 1, 0, 15deg);
-  box-shadow: rgba(5, 71, 17, 0.3) 30px 50px 25px -40px, rgba(5, 71, 17, 0.1) 0px 25px 30px 0px;
+  box-shadow: rgba(0, 0, 0, 0.4) 30px 50px 25px -40px, rgba(0, 0, 0, 0.3) 0px 25px 30px 0px;
 }
 
 .dz-card--mini > * {
@@ -239,7 +251,7 @@
 .dz-mini-value {
   font-size: 30px;
   font-weight: 900;
-  color: #00894d;
+  color: #ffffff;
   padding: 20px 20px 0 24px;
 }
 
@@ -252,7 +264,7 @@
 }
 
 .dz-mini-label {
-  color: rgba(0, 137, 78, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 700;
   font-size: 13px;
 }
@@ -263,16 +275,17 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: rgba(5, 71, 17, 0.3) 0px 5px 15px -3px;
-  color: #00894d;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 15px -3px;
+  color: #ffffff;
   flex-shrink: 0;
   transition: all 0.3s ease-in-out;
 }
 
 .dz-card--mini:hover .dz-mini-icon {
   transform: translate3d(0, 0, 15px);
-  box-shadow: rgba(5, 71, 17, 0.4) 0px 8px 20px -3px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 8px 20px -3px;
 }
 
 .dz-mini-icon svg {

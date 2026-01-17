@@ -1,19 +1,19 @@
 /* Browse Components Styles - Matching Dashboard Theme */
 :root {
-  --browse-primary: #00a86b;
-  --browse-primary-hover: #007a52;
-  --browse-bg: #f6f4ef;
-  --browse-card-border: #ecebe7;
-  --browse-text-strong: #15241c;
-  --browse-text-muted: #6f7f75;
-  --browse-accent-bg: #0f4a33;
+  --browse-primary: #00e68a;
+  --browse-primary-hover: #00c77a;
+  --browse-bg: transparent;
+  --browse-card-border: rgba(255, 255, 255, 0.15);
+  --browse-text-strong: #ffffff;
+  --browse-text-muted: rgba(255, 255, 255, 0.7);
+  --browse-accent-bg: rgba(0, 0, 0, 0.2);
 }
 
 .browse-container {
   padding: 20px;
   max-width: 1400px;
   margin: 0 auto;
-  background: var(--browse-bg);
+  background: transparent;
   min-height: 100vh;
 }
 
@@ -24,7 +24,9 @@
   align-items: flex-end;
   margin-bottom: 30px;
   padding: 18px 20px;
-  background: #f0ebe1;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 
@@ -32,17 +34,17 @@
   margin: 0 0 8px 0;
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--browse-text-strong);
+  color: #ffffff;
 }
 
 .browse-title p {
   margin: 0;
-  color: var(--browse-text-muted);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1.1rem;
 }
 
 .browse-stats {
-  color: var(--browse-text-muted);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -76,17 +78,22 @@
 .search-input {
   width: 100%;
   padding: 12px 15px 12px 45px;
-  border: 2px solid var(--browse-card-border);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .search-input:focus {
   outline: none;
   border-color: var(--browse-primary);
-  box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
 }
 
 .filter-toggle {
@@ -94,17 +101,17 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background-color: white;
-  border: 2px solid var(--browse-card-border);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--browse-text-strong);
+  color: #ffffff;
 }
 
 .filter-toggle:hover {
-  background-color: #f0ebe1;
+  background: rgba(0, 168, 107, 0.3);
   border-color: var(--browse-primary);
   transform: translateY(-1px);
 }
@@ -115,11 +122,12 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px;
-  background-color: white;
-  border: 1px solid var(--browse-card-border);
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   margin-bottom: 20px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .filter-group {
@@ -130,24 +138,29 @@
 
 .filter-group label {
   font-weight: 600;
-  color: var(--browse-text-strong);
+  color: #ffffff;
   font-size: 0.9rem;
 }
 
 .filter-group select {
   padding: 10px 12px;
-  border: 1px solid var(--browse-card-border);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
-  background-color: white;
+  background: rgba(0, 0, 0, 0.3);
   font-size: 0.9rem;
   cursor: pointer;
-  color: var(--browse-text-strong);
+  color: #ffffff;
+}
+
+.filter-group select option {
+  background: #0a3d2e;
+  color: #ffffff;
 }
 
 .filter-group select:focus {
   outline: none;
   border-color: var(--browse-primary);
-  box-shadow: 0 0 0 2px rgba(0, 168, 107, 0.1);
+  box-shadow: 0 0 0 2px rgba(0, 230, 138, 0.2);
 }
 
 /* Loading and Error States */
@@ -159,12 +172,13 @@
   justify-content: center;
   padding: 60px 20px;
   text-align: center;
+  color: #ffffff;
 }
 
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--browse-card-border);
+  border: 4px solid rgba(255, 255, 255, 0.2);
   border-top: 4px solid var(--browse-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -198,7 +212,8 @@
 .no-results {
   text-align: center;
   padding: 60px 20px;
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
   border-radius: 12px;
   border: 1px solid var(--browse-card-border);
 }

@@ -180,7 +180,8 @@
   outline: none;
   border-color: #22be0d;
   box-shadow: 0 0 0 4px rgba(34, 190, 13, 0.2);
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .form-input::placeholder {

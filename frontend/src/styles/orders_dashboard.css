@@ -38,10 +38,12 @@
 
 /* Card container for the table */
 .orders-container {
-  background: #fff;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .06);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -52,19 +54,20 @@
 }
 
 .orders-table thead th {
-  background: #dff1d2;
-  color: #2b3a2f;
+  background: rgba(0, 168, 107, 0.2);
+  color: #ffffff;
   padding: 14px 16px;
   font-weight: 700;
   text-align: left;
-  border-bottom: 1px solid #dfe7de;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .orders-table tbody td {
   padding: 14px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   vertical-align: middle;
-  background: #fff;
+  background: transparent;
+  color: #ffffff;
 }
 
 /* Product cell */
@@ -79,8 +82,8 @@
   height: 52px;
   border-radius: 10px;
   object-fit: cover;
-  border: 1px solid #e7e7e7;
-  background: #fafafa;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .product-name {
@@ -102,18 +105,21 @@
 }
 
 .status.pending {
-  background: #fef3c7;
-  color: #d97706;
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 .status.completed {
-  background: #dcfce7;
-  color: #16a34a;
+  background: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 
 .status.revision {
-  background: #fff3e2;
-  color: #cc8a00;
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 /* Applications count */
@@ -135,8 +141,8 @@
 .view-btn,
 .check-btn,
 .edit-btn {
-  background: #f2f2f2;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   width: 36px;
   height: 36px;
@@ -145,12 +151,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
 }
 
 .view-btn:hover,
 .check-btn:hover,
 .edit-btn:hover {
-  background: #e1e1e1;
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
 

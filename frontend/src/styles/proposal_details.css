@@ -9,9 +9,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: none;
-  border: none;
-  color: #6366f1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   font-size: 14px;
   cursor: pointer;
   padding: 8px 12px;
@@ -21,7 +21,7 @@
 }
 
 .btn-back-inline:hover {
-  background-color: #f3f4f6;
+  background: rgba(0, 168, 107, 0.3);
 }
 
 /* Banners */
@@ -30,12 +30,13 @@
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  background-color: #d1fae5;
-  color: #059669;
+  background: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
   border-radius: 8px;
   margin-bottom: 20px;
   font-size: 15px;
   font-weight: 500;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 
 .error-banner {
@@ -43,11 +44,12 @@
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  background-color: #fee2e2;
-  color: #dc2626;
+  background: rgba(220, 38, 38, 0.2);
+  color: #ff6b6b;
   border-radius: 8px;
   margin-bottom: 20px;
   font-size: 15px;
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
 /* Layout */
@@ -92,10 +94,12 @@
 }
 
 .proposal-content-card {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card-section {
@@ -108,7 +112,7 @@
 
 .card-section h3 {
   font-size: 18px;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 15px 0;
   font-weight: 600;
 }
@@ -121,7 +125,7 @@
 
 .stat-box {
   padding: 16px;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   text-align: center;
 }
@@ -129,7 +133,7 @@
 .stat-label {
   display: block;
   font-size: 12px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 6px;
 }
 
@@ -137,7 +141,7 @@
   display: block;
   font-size: 28px;
   font-weight: 700;
-  color: #6366f1;
+  color: #00e68a;
   line-height: 1;
 }
 
@@ -145,18 +149,18 @@
   display: block;
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 .cover-letter-full {
   font-size: 15px;
   line-height: 1.8;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.9);
   white-space: pre-wrap;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.05);
   padding: 20px;
   border-radius: 8px;
-  border-left: 4px solid #6366f1;
+  border-left: 4px solid #00e68a;
 }
 
 /* Milestones */
@@ -170,9 +174,9 @@
   display: flex;
   gap: 15px;
   padding: 16px;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  border-left: 3px solid #6366f1;
+  border-left: 3px solid #00e68a;
 }
 
 .milestone-number {

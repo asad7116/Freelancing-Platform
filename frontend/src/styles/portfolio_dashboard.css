@@ -8,9 +8,11 @@
 
 /* Portfolio Card */
 .pf-card {
-  background: #fff;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -39,11 +41,11 @@
 .pf-title {
   font-size: 16px;
   font-weight: 700;
-  color: #1b2a22;
+  color: #ffffff;
 }
 .pf-category {
   font-size: 13px;
-  color: #555;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Status */
@@ -57,12 +59,14 @@
   align-self: flex-start;
 }
 .pf-status.published {
-  background: #e9f9ee;
-  color: #19a165;
+  background: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 .pf-status.draft {
-  background: #fff3e2;
-  color: #cc8a00;
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 /* Actions */
@@ -80,8 +84,8 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.pf-btn.view { background: #f2f2f2; }
-.pf-btn.edit { background: #e2f3cf; }
-.pf-btn.delete { background: #ffe0e0; }
+.pf-btn.view { background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); }
+.pf-btn.edit { background: rgba(0, 230, 138, 0.2); color: #00e68a; border: 1px solid rgba(0, 230, 138, 0.3); }
+.pf-btn.delete { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.3); }
 
 .pf-btn:hover { opacity: 0.85; }

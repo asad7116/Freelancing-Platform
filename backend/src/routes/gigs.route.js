@@ -97,6 +97,29 @@ router.get("/", async (req, res) => {
   }
 })
 
+// Route for fetching current user's gigs only
+router.get("/my-gigs", authMiddleware, async (req, res) => {
+  try {
+    const db = await getDatabase()
+    const gigs = db.collection("gigs")
+    const userId = req.user.id
+
+    const userGigs = await gigs.find({ createdBy: userId }).sort({ created_at: -1 }).toArray()
+
+    res.status(200).json({
+      success: true,
+      gigs: userGigs.map((g) => ({ ...g, id: g._id.toString() })),
+    })
+  } catch (error) {
+    console.error("Error fetching user gigs:", error)
+    res.status(500).json({
+      success: false,
+      message: "Error fetching your gigs",
+      error: error.message,
+    })
+  }
+})
+
 // Get single gig by ID
 router.get("/:id", async (req, res) => {
   try {

@@ -11,7 +11,9 @@ export default function GigsDashboard() {
   useEffect(() => {
     const fetchGigs = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/gigs');
+        const response = await axios.get('http://localhost:4000/api/gigs/my-gigs', {
+          withCredentials: true
+        });
         setGigs(response.data.gigs);
       } catch (error) {
         console.error("Error fetching gigs:", error);

@@ -4,7 +4,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background: #fff;
+  background: transparent;
+  color: #ffffff;
 }
 
 /* Notifications */
@@ -65,7 +66,9 @@
   align-items: center;
   gap: 2rem;
   padding: 2rem;
-  background: #f9fafb;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   margin-bottom: 2rem;
 }
@@ -135,7 +138,7 @@
 
 .image-hint {
   font-size: 0.85rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
 
@@ -143,7 +146,7 @@
   text-align: center;
   padding: 4rem;
   font-size: 1.2rem;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .profile-settings-header {
@@ -152,12 +155,12 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .profile-settings-header h1 {
   font-size: 2rem;
-  color: #1a1a1a;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -192,7 +195,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   overflow-x: auto;
 }
 
@@ -203,19 +206,19 @@
   border-bottom: 3px solid transparent;
   font-size: 1rem;
   font-weight: 500;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
 .tab-btn:hover {
-  color: #00a86b;
+  color: #00e68a;
 }
 
 .tab-btn.active {
-  color: #00a86b;
-  border-bottom-color: #00a86b;
+  color: #00e68a;
+  border-bottom-color: #00e68a;
 }
 
 /* Tab Content */
@@ -237,16 +240,16 @@
 
 .tab-content h2 {
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: #ffffff;
   margin-bottom: 1.5rem;
 }
 
 .tab-content h3 {
   font-size: 1.25rem;
-  color: #333;
+  color: rgba(255, 255, 255, 0.9);
   margin: 2rem 0 1rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Form Grid */
@@ -269,7 +272,7 @@
 .form-group label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 0.5rem;
 }
 
@@ -277,23 +280,25 @@
 .form-group select,
 .form-group textarea {
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-size: 1rem;
   transition: all 0.3s ease;
   font-family: inherit;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #00a86b;
-  box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.1);
+  border-color: #00e68a;
+  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
 }
 
 .form-group input:disabled {
-  background-color: #f5f5f5;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: not-allowed;
 }
 
@@ -344,9 +349,11 @@
 .add-skill-form input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-size: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
 }
 
 .add-skill-form button {
@@ -377,9 +384,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f9fafb;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   margin-bottom: 0.5rem;
+  color: #ffffff;
 }
 
 .language-item svg {
@@ -402,9 +411,11 @@
 .add-language-form select {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-size: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
 }
 
 .add-language-form button {
@@ -427,8 +438,10 @@
 .certification-item,
 .bank-item,
 .payment-item {
-  background: #f9fafb;
-  border-left: 4px solid #00a86b;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #00e68a;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -443,7 +456,7 @@
 
 .item-header h4 {
   margin: 0;
-  color: #1a1a1a;
+  color: #ffffff;
   font-size: 1.1rem;
 }
 
@@ -459,13 +472,13 @@
 }
 
 .date-range {
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.9rem;
   margin: 0.5rem 0;
 }
 
 .description {
-  color: #555;
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   margin-top: 0.75rem;
 }
@@ -490,7 +503,9 @@
 
 /* Add Section */
 .add-section {
-  background: #f9fafb;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border-radius: 8px;
   margin-top: 2rem;
@@ -501,7 +516,7 @@
   padding: 0;
   border: none;
   font-size: 1.1rem;
-  color: #333;
+  color: #ffffff;
 }
 
 .btn-add {
@@ -535,24 +550,25 @@
 }
 
 .portfolio-item {
-  background: #f9fafb;
-  border: 2px solid #e5e7eb;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 .portfolio-item h4 {
   margin: 0 0 0.75rem 0;
-  color: #1a1a1a;
+  color: #ffffff;
 }
 
 .portfolio-item p {
   margin: 0.5rem 0;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .portfolio-item a {
-  color: #00a86b;
+  color: #00e68a;
   text-decoration: none;
   font-weight: 500;
   display: inline-block;
@@ -565,7 +581,7 @@
 
 .portfolio-item .tags {
   font-size: 0.85rem;
-  color: #888;
+  color: rgba(255, 255, 255, 0.5);
   margin-top: 0.75rem;
 }
 

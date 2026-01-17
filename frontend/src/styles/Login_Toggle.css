@@ -18,14 +18,15 @@
 }
 
 .toggle-btn:hover {
-  background: rgba(34, 190, 13, 0.25);
+  background: rgba(34, 190, 13, 0.35);
   border-color: rgba(34, 190, 13, 0.7);
 }
 
 .toggle-btn.active {
-  background: rgba(34, 190, 13, 0.7);
+  background: linear-gradient(135deg, #0a5a32 0%, #0d7a42 100%);
   color: #ffffff;
   border: 2px solid #22be0d;
-  box-shadow: 0 0 0 4px rgba(34, 190, 13, 0.3);
+  box-shadow: 0 0 0 4px rgba(34, 190, 13, 0.4), 0 8px 20px rgba(10, 90, 50, 0.5);
   font-weight: 700;
+  transform: scale(1.02);
 }

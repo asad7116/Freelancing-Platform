@@ -32,12 +32,12 @@
 
 .proposal-header h1 {
   font-size: 32px;
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
 .proposal-header .subtitle {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
 }
 
@@ -79,10 +79,12 @@
 
 /* Proposal Form */
 .proposal-form {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .form-section {
@@ -94,32 +96,34 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 8px;
   font-size: 15px;
 }
 
 .form-description {
   font-size: 14px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 15px;
 }
 
 .form-textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
   resize: vertical;
   transition: border-color 0.2s;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
 }
 
 .form-textarea:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #00e68a;
+  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
 }
 
 .char-count {
@@ -144,21 +148,23 @@
 .form-input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.2s;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #00e68a;
+  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
 }
 
 .form-hint {
   font-size: 12px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   margin-top: 4px;
 }
 
@@ -172,7 +178,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 15px;
-  background-color: #f9fafb;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   margin-bottom: 8px;
 }
@@ -185,12 +192,12 @@
 
 .milestone-content strong {
   font-size: 14px;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 .milestone-content span {
   font-size: 13px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .btn-remove {
@@ -247,7 +254,7 @@
   justify-content: flex-end;
   margin-top: 30px;
   padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-cancel {

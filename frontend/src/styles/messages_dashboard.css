@@ -1,7 +1,7 @@
 /* Messages Dashboard - Matching Dashboard Theme */
 :root {
-  --msg-primary: #00a86b;
-  --msg-primary-hover: #007a52;
+  --msg-primary: #00e68a;
+  --msg-primary-hover: #00c77a;
   --msg-accent-bg: #0f4a33;
 }
 
@@ -14,31 +14,38 @@
 
 /* LEFT – list panel */
 .mg-list {
-  background: #fff;
-  border: 1px solid #ecebe7;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
 .mg-search {
   padding: 14px;
-  border-bottom: 1px solid #f0f0ec;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mg-search input {
   width: 100%;
   height: 40px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   padding: 0 12px;
   outline: none;
   transition: border-color 0.2s ease;
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.mg-search input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .mg-search input:focus {
   border-color: var(--msg-primary);
-  box-shadow: 0 0 0 3px rgba(0, 168, 107, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
 }
 
 .mg-items {
@@ -53,17 +60,17 @@
   align-items: center;
   padding: 12px 14px;
   cursor: pointer;
-  border-bottom: 1px solid #f2f2ef;
-  background: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: transparent;
   transition: background 0.15s ease;
 }
 
 .mg-item:hover {
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .mg-item--active {
-  background: rgba(0, 168, 107, 0.1);
+  background: rgba(0, 230, 138, 0.15);
   border-left: 3px solid var(--msg-primary);
 }
 
@@ -72,6 +79,7 @@
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .mg-item-body {
@@ -87,16 +95,16 @@
 
 .mg-name {
   font-weight: 700;
-  color: #25312a;
+  color: #ffffff;
 }
 
 .mg-when {
-  color: #9aa6a0;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 12px;
 }
 
 .mg-last {
-  color: #6f7f75;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
   margin-top: 2px;
   white-space: nowrap;
@@ -108,10 +116,11 @@
 .mg-chat {
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border: 1px solid #ecebe7;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -121,8 +130,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 18px;
-  border-bottom: 1px solid #f0f0ec;
-  background: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .mg-chat-user {
@@ -136,6 +145,7 @@
   height: 56px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .mg-chat-name {
