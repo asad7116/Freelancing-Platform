@@ -30,12 +30,12 @@
 
 .page-header h1 {
   font-size: 32px;
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
 .subtitle {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 15px;
 }
 
@@ -48,38 +48,40 @@
 }
 
 .quick-stat {
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 10px;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #00a86b;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-left: 4px solid #00e68a;
 }
 
 .quick-stat.pending {
-  border-left-color: #f59e0b;
+  border-left-color: #fbbf24;
 }
 
 .quick-stat.approved {
-  border-left-color: #10b981;
+  border-left-color: #00e68a;
 }
 
 .quick-stat.rejected {
-  border-left-color: #ef4444;
+  border-left-color: #ff6b6b;
 }
 
 .stat-value {
   display: block;
   font-size: 32px;
   font-weight: 700;
-  color: #1f2937;
+  color: #ffffff;
   line-height: 1;
   margin-bottom: 6px;
 }
 
 .stat-label {
   font-size: 13px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Proposals List */
@@ -90,11 +92,12 @@
 }
 
 .proposal-card-detailed {
-  background: white;
+  background: linear-gradient(135deg, rgba(10, 61, 46, 0.6) 0%, rgba(15, 74, 51, 0.6) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 230, 138, 0.2);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid #f3f4f6;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -111,7 +114,7 @@
   align-items: flex-start;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .freelancer-info {
@@ -141,13 +144,13 @@
 
 .freelancer-details h3 {
   font-size: 18px;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 4px 0;
 }
 
 .freelancer-title {
   font-size: 14px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   margin: 0 0 8px 0;
 }
 
@@ -162,7 +165,7 @@
   align-items: center;
   gap: 4px;
   font-size: 13px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .proposal-status-section {
@@ -184,18 +187,21 @@
 }
 
 .badge-pending {
-  background-color: #fef3c7;
-  color: #d97706;
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 .badge-approved {
-  background-color: #d1fae5;
-  color: #059669;
+  background-color: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
+  border: 1px solid rgba(0, 230, 138, 0.3);
 }
 
 .badge-rejected {
-  background-color: #fee2e2;
-  color: #dc2626;
+  background-color: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 .submission-badge {
@@ -233,7 +239,8 @@
   gap: 15px;
   margin-bottom: 20px;
   padding: 16px;
-  background: #f9fafb;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
 }
 
@@ -245,13 +252,13 @@
 
 .bid-label {
   font-size: 12px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
 }
 
 .bid-value {
   font-size: 18px;
-  color: #1f2937;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -262,14 +269,14 @@
 
 .proposal-cover-section h4 {
   font-size: 14px;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 10px 0;
   font-weight: 600;
 }
 
 .cover-letter-preview {
   font-size: 14px;
-  color: #4b5563;
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.7;
   margin: 0;
 }
@@ -281,7 +288,7 @@
 
 .skills-section h4 {
   font-size: 14px;
-  color: #1f2937;
+  color: #ffffff;
   margin: 0 0 10px 0;
   font-weight: 600;
 }
@@ -294,16 +301,18 @@
 
 .skill-tag {
   padding: 6px 12px;
-  background-color: #eef2ff;
-  color: #6366f1;
+  background-color: rgba(0, 230, 138, 0.2);
+  color: #00e68a;
+  border: 1px solid rgba(0, 230, 138, 0.3);
   border-radius: 16px;
   font-size: 12px;
   font-weight: 500;
 }
 
 .skill-tag.more {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Proposal Actions */
@@ -336,23 +345,25 @@
 .empty-state {
   text-align: center;
   padding: 100px 20px;
-  background: white;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
 }
 
 .empty-icon {
-  color: #d1d5db;
+  color: rgba(255, 255, 255, 0.3);
   margin-bottom: 24px;
 }
 
 .empty-state h3 {
   font-size: 24px;
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: 12px;
 }
 
 .empty-state p {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
   max-width: 500px;
   margin-left: auto;
@@ -383,7 +394,7 @@
 }
 
 .loading-state p {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
 }
 
@@ -393,8 +404,9 @@
   align-items: center;
   gap: 10px;
   padding: 14px 18px;
-  background-color: #fee2e2;
-  color: #dc2626;
+  background-color: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
   border-radius: 8px;
   margin-bottom: 24px;
   font-size: 14px;

@@ -1,9 +1,9 @@
 /* --- Theme tokens (tweak if needed) --- */
 :root {
-  --wz-green: #00a86b;
+  --wz-green: #00e68a;
   /* activated green */
-  --wz-green-dark: #0d1f1a;
-  --wz-bg: linear-gradient(180deg, #0d1f1a 0%, #162b23 100%);
+  --wz-green-dark: #0a3d2e;
+  --wz-bg: linear-gradient(180deg, #062119 0%, #0a3d2e 50%, #0f4a33 100%);
   --wz-text: #ffffff;
   --wz-muted: rgba(255, 255, 255, 0.7);
   --wz-border: rgba(255, 255, 255, 0.1);
@@ -24,6 +24,7 @@
   height: 100vh;
   padding: 16px;
   gap: 16px;
+  color: #ffffff;
 }
 
 /* Brand */
@@ -35,15 +36,17 @@
 }
 
 .wz-brand-logo {
-  width: 44px;
+  width: 60px;
   height: 44px;
   border-radius: 10px;
-  background: #00a86b;
-  color: #ffffff;
+  background: linear-gradient(135deg, #00e68a 0%, #00a86b 100%);
+  color: #0a3d2e;
   display: grid;
   place-items: center;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 900;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 230, 138, 0.3);
 }
 
 .wz-logo-img {
@@ -61,16 +64,16 @@
   display: block;
   font-weight: 800;
   font-size: 22px;
-  color: #ffffff;
-  /* brand 'Work' green */
-  letter-spacing: 0.2px;
+  color: #00e68a !important;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .wz-brand-sub {
   display: block;
   font-weight: 600;
   font-size: 14px;
-  color: #ffffff;
+  color: #ffffff !important;
   opacity: 0.8;
 }
 
@@ -88,40 +91,50 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: 10px;
-  color: #ffffff;
+  color: #ffffff !important;
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;
   transition: background-color .15s ease, color .15s ease;
 }
 
+.wz-link span {
+  color: #ffffff !important;
+}
+
 .wz-link .wz-ic {
   width: 20px;
   text-align: center;
-  color: #ffffff;
+  color: #ffffff !important;
   opacity: 0.8;
   font-size: 16px;
 }
 
 /* Hover */
 .wz-link:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   /* light hover */
 }
 
 /* Active state: bright green pill + white text */
 .wz-link.is-active {
-  background: #00a86b;
-  color: #ffffff;
+  background: linear-gradient(135deg, #00a86b 0%, #00c77a 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(0, 168, 107, 0.4);
+}
+
+.wz-link.is-active span {
+  color: #ffffff !important;
 }
 
 .wz-link.is-active .wz-ic {
-  color: #ffffff;
+  color: #ffffff !important;
+  opacity: 1;
 }
 
 /* Make anchor defaults neutral in the sidebar */
 .wz-sidebar a {
-  color: inherit;
+  color: #ffffff !important;
   text-decoration: none;
 }
 
@@ -129,13 +142,13 @@
 .wz-link .wz-ic {
   width: 18px;
   height: 18px;
-  color: var(--wz-muted);
+  color: rgba(255, 255, 255, 0.8);
   flex-shrink: 0;
 }
 
 /* active link already flips color via .is-active on parent */
 .wz-link.is-active .wz-ic {
-  color: #fff;
+  color: #fff !important;
 }
 
 /* ========== RESPONSIVE DESIGN ========== */

@@ -172,8 +172,8 @@
   border-radius: 12px;
   font-size: 15px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.25);
-  color: #000000;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
 }
 
 .form-input:focus {
@@ -184,12 +184,37 @@
 }
 
 .form-input::placeholder {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .form-input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.show-password-group {
+  margin-bottom: 16px;
+}
+
+.show-password-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #000000;
+  cursor: pointer;
+  user-select: none;
+}
+
+.show-password-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #22be0d;
+}
+
+.show-password-label span {
+  color: #000000;
 }
 
 .form-options {
