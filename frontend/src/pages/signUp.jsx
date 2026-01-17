@@ -62,6 +62,7 @@ export default function SignUp() {
           window.google.accounts.id.initialize({
             client_id: clientId,
             callback: handleGoogleResponse,
+            use_fedcm_for_prompt: false,
           });
           const btn = document.getElementById('google-button-signup');
           if (btn) {

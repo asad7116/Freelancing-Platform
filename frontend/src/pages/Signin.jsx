@@ -47,6 +47,7 @@ export default function SignIn() {
           window.google.accounts.id.initialize({
             client_id: clientId,
             callback: handleGoogleResponse,
+            use_fedcm_for_prompt: false,
           });
           const btn = document.getElementById('google-button-signin');
           if (btn) {
