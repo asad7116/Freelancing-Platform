@@ -6,6 +6,7 @@ import { api } from "../lib/api";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -106,7 +107,13 @@ export default function SignIn() {
     setLoading(true);
 
     try {
-      const { user } = await api.post("/api/auth/signin", { email, password });
+      const response = await api.post("/api/auth/signin", { email, password });
+      
+      if (!response || !response.user) {
+        throw new Error("Invalid response from server");
+      }
+      
+      const { user } = response;
       localStorage.setItem("role", user.role);
 
       const backTo =
@@ -115,9 +122,8 @@ export default function SignIn() {
 
       navigate(backTo, { replace: true });
     } catch (err) {
-      const msg = err.response?.data?.error || err.message || "Sign-in failed. Try again.";
+      const msg = err.message || "Sign-in failed. Try again.";
       setError(msg);
-    } finally {
       setLoading(false);
     }
   };
@@ -181,7 +187,7 @@ export default function SignIn() {
 
           <div className="form-group">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               placeholder="Password"
               value={password}
@@ -190,6 +196,17 @@ export default function SignIn() {
               disabled={loading}
               className="form-input"
             />
+          </div>
+
+          <div className="form-group show-password-group">
+            <label className="show-password-label">
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              <span>Show Password</span>
+            </label>
           </div>
 
           <div className="form-options">

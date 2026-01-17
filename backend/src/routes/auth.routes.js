@@ -77,7 +77,7 @@ router.post("/signin", async (req, res) => {
     return res.json({ user: publicUser })
   } catch (err) {
     if (err?.issues) return res.status(400).json({ message: "Invalid input", issues: err.issues })
-    console.error(err)
+    console.error("❌ Signin error:", err)
     return res.status(500).json({ message: "Internal error" })
   }
 })
