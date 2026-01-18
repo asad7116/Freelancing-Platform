@@ -155,8 +155,8 @@ export default function BrowseJobs() {
   if (loading) {
     return (
       <div className="browse-container">
-        <div className="browse-loading">
-          <div className="loading-spinner"></div>
+        <div className="loading-state">
+          <div className="spinner"></div>
           <p>Loading jobs...</p>
         </div>
       </div>
@@ -320,28 +320,20 @@ export default function BrowseJobs() {
                     <span className="job-circle job-circle3"></span>
                     <span className="job-circle job-circle4"></span>
                     <span className="job-circle job-circle5">
-                      <DollarSign size={18} />
+                      <DollarSign size={18} fill="white" />
                     </span>
                   </div>
 
-                  <div className="job-info">
+                  <div className="job-card-body">
                     <div className="job-price">
                       ${parseFloat(job.regular_price || job.fixed_price || 0).toLocaleString()}
                     </div>
 
-                    <h3 className="job-title">{job.title}</h3>
-
-                    <div className="job-meta">
-                      <span className="job-category">
-                        {categories.find(c => c.id === job.categoryId)?.name || 'General'}
-                      </span>
-                      {job.city && (
-                        <div className="job-location">
-                          <MapPin size={14} />
-                          <span>{job.city.name}</span>
-                        </div>
-                      )}
+                    <div className="job-category-tag">
+                      {categories.find(c => c.id === job.categoryId)?.name || 'General'}
                     </div>
+
+                    <h3 className="job-title">{job.title}</h3>
 
                     <div className="job-description">
                       {job.description && job.description.length > 100 
@@ -349,19 +341,6 @@ export default function BrowseJobs() {
                         : job.description || 'No description available'
                       }
                     </div>
-
-                    {job.skills_required && job.skills_required.length > 0 && (
-                      <div className="job-skills">
-                        {job.skills_required.slice(0, 2).map((skill, index) => (
-                          <span key={index} className="skill-tag">
-                            {skill}
-                          </span>
-                        ))}
-                        {job.skills_required.length > 2 && (
-                          <span className="skill-tag">+{job.skills_required.length - 2}</span>
-                        )}
-                      </div>
-                    )}
                   </div>
 
                   <div className="job-footer">
@@ -375,13 +354,6 @@ export default function BrowseJobs() {
                         title="Apply Now"
                       >
                         <Send size={16} />
-                      </button>
-                      <button 
-                        className="action-btn"
-                        onClick={(e) => e.stopPropagation()}
-                        title="Save Job"
-                      >
-                        
                       </button>
                     </div>
                   </div>

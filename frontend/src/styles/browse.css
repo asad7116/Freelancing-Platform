@@ -175,7 +175,13 @@
   color: #ffffff;
 }
 
-.loading-spinner {
+/* Loading State - Match Proposals/Gigs Style */
+.loading-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.spinner {
   width: 50px;
   height: 50px;
   border: 4px solid rgba(255, 255, 255, 0.3);
@@ -191,7 +197,7 @@
   }
 }
 
-.browse-loading p {
+.loading-state p {
   color: rgba(255, 255, 255, 0.8);
   font-size: 15px;
 }
@@ -557,31 +563,25 @@
   color: var(--browse-text-muted);
 }
 
-/* ===== JOBS GRID - 3D CARDS ===== */
+/* ===== JOBS GRID - Match Gigs Dashboard Cards ===== */
 .jobs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 25px;
   margin-top: 20px;
 }
 
-/* 3D Job Card Wrapper */
+/* 3D Job Card Wrapper - Match Gigs */
 .job-card {
   width: 100%;
-  max-width: 100%;
-  min-height: 300px;
+  min-height: 280px;
   perspective: 1000px;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
 }
 
 .job-card-inner {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 300px;
-  width: 100%;
+  height: 100%;
+  min-height: 280px;
   border-radius: 30px;
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   transition: all 0.5s ease-in-out;
@@ -603,7 +603,7 @@
   transition: all 0.5s ease-in-out;
 }
 
-.job-info {
+.job-card-body {
   padding: 30px 20px 70px 25px;
   transform: translate3d(0, 0, 26px);
   position: relative;
@@ -615,6 +615,18 @@
   font-weight: 900;
   font-size: 20px;
   margin-bottom: 8px;
+}
+
+.job-category-tag {
+  background: rgba(255, 255, 255, 0.9);
+  color: #00894d;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
+  display: inline-block;
+  margin-bottom: 12px;
 }
 
 .job-title {
@@ -630,65 +642,11 @@
   text-overflow: ellipsis;
 }
 
-.job-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.job-category {
-  background: rgba(255, 255, 255, 0.9);
-  color: #00894d;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
-}
-
-.job-location {
-  color: rgba(0, 137, 78, 0.7);
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.job-location svg {
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-}
-
 .job-description {
   font-size: 13px;
   color: rgba(0, 137, 78, 0.75);
   line-height: 1.5;
   margin-bottom: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.job-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.skill-tag {
-  background: rgba(255, 255, 255, 0.8);
-  color: #00894d;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  box-shadow: rgba(5, 71, 17, 0.15) 0px 2px 6px 0px;
 }
 
 .job-footer {
@@ -735,10 +693,6 @@
 
 .job-actions .action-btn:first-child {
   transition: transform 0.2s ease-in-out 0.2s, box-shadow 0.2s ease-in-out 0.2s, background 0.2s;
-}
-
-.job-actions .action-btn:nth-child(2) {
-  transition: transform 0.2s ease-in-out 0.3s, box-shadow 0.2s ease-in-out 0.3s, background 0.2s;
 }
 
 .job-actions .action-btn svg {

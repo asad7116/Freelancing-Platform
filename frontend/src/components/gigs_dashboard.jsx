@@ -6,17 +6,21 @@ import "../styles/gigs_dashboard.css";
 
 export default function GigsDashboard() {
   const [gigs, setGigs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGigs = async () => {
       try {
+        setLoading(true);
         const response = await axios.get('http://localhost:4000/api/gigs/my-gigs', {
           withCredentials: true
         });
         setGigs(response.data.gigs);
       } catch (error) {
         console.error("Error fetching gigs:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -51,11 +55,17 @@ export default function GigsDashboard() {
           </button>
         </div>
 
-        <section className="gd-cards">
-          {gigs.length === 0 ? (
-            <p className="gd-empty">No gigs found.</p>
-          ) : (
-            gigs.map((gig) => (
+        {loading ? (
+          <div className="loading-state">
+            <div className="spinner"></div>
+            <p>Loading your gigs...</p>
+          </div>
+        ) : (
+          <section className="gd-cards">
+            {gigs.length === 0 ? (
+              <p className="gd-empty">No gigs found.</p>
+            ) : (
+              gigs.map((gig) => (
               <article
                 className="gd-card"
                 key={gig.id}
@@ -116,6 +126,7 @@ export default function GigsDashboard() {
             ))
           )}
         </section>
+        )}
       </main>
     </div>
   );
