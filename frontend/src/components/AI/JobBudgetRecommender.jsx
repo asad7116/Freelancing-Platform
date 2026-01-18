@@ -35,13 +35,18 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/recommend-job-budget', {
+      const response = await fetch('http://localhost:4000/api/ai/recommend-price', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ title, description, category, complexity, duration })
+        body: JSON.stringify({ 
+          gigTitle: title, 
+          shortDescription: description, 
+          category, 
+          deliveryTime: duration 
+        })
       });
 
       const data = await response.json();

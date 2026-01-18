@@ -18,13 +18,13 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/estimate-project-timeline', {
+      const response = await fetch('http://localhost:4000/api/ai/analyze-bid', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ title, description, category, budget })
+        body: JSON.stringify({ jobDescription: description || title, jobBudget: budget })
       });
 
       const data = await response.json();

@@ -207,8 +207,8 @@ const PostJobFormEnhanced = () => {
     const newErrors = {};
 
     if (step === 1) {
-      if (!formData.title.trim()) newErrors.title = 'Job title is required';
-      if (!formData.description.trim()) newErrors.description = 'Job description is required';
+      if (!formData.title || !formData.title.trim()) newErrors.title = 'Job title is required';
+      if (!formData.description || !formData.description.trim()) newErrors.description = 'Job description is required';
       if (!formData.category_id) newErrors.category_id = 'Category is required';
     }
 
@@ -364,7 +364,7 @@ const PostJobFormEnhanced = () => {
             <div className="form-group">
               <label>Title *</label>
               <JobTitleGenerator
-                description={formData.description || formData.summary}
+                currentTitle={formData.title}
                 category={categories.find(c => c.id === formData.category_id)?.name}
                 onApply={(title) => handleInputChange('title', title)}
               />

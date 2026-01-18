@@ -18,13 +18,13 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/suggest-required-skills', {
+      const response = await fetch('http://localhost:4000/api/ai/smart-suggestions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ title, description, category })
+        body: JSON.stringify({ category: category || 'General', keywords: `${title} ${description}` })
       });
 
       const data = await response.json();

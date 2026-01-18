@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Sparkles, RefreshCw, Check, X } from 'lucide-react';
 import './JobTitleGenerator.css';
 
-const JobTitleGenerator = ({ description, category, onApply }) => {
+const JobTitleGenerator = ({ currentTitle, category, onApply }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleGenerate = async () => {
-    if (!description) {
-      setError('Please enter a description first');
+  const handleImprove = async () => {
+    if (!currentTitle || currentTitle.trim().length < 5) {
+      setError('Please enter a title with at least 5 characters first');
       return;
     }
 
@@ -18,26 +18,26 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/generate-job-title', {
+      const response = await fetch('http://localhost:4000/api/ai/improve-title', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ description, category })
+        body: JSON.stringify({ title: currentTitle, category })
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate title');
+        throw new Error(data.error || 'Failed to improve title');
       }
 
       setResult(data.data);
       setIsOpen(true);
     } catch (err) {
       setError(err.message);
-      console.error('Error generating title:', err);
+      console.error('Error improving title:', err);
     } finally {
       setLoading(false);
     }
@@ -58,13 +58,13 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
     <div className="job-title-generator">
       <button
         type="button"
-        onClick={handleGenerate}
-        disabled={loading || !description}
+        onClick={handleImprove}
+        disabled={loading || !currentTitle || currentTitle.trim().length < 5}
         className="generate-title-btn"
-        title="Generate AI title"
+        title="Improve title with AI"
       >
         <Sparkles size={18} />
-        {loading ? 'Generating...' : 'Generate Title with AI'}
+        {loading ? 'Improving...' : 'Improve Title with AI'}
       </button>
 
       {error && (
@@ -79,7 +79,7 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
             <div className="title-generator-header">
               <h3>
                 <Sparkles size={20} />
-                AI-Generated Job Titles
+                AI-Improved Job Titles
               </h3>
               <button onClick={handleClose} className="close-btn">
                 <X size={20} />
@@ -131,9 +131,9 @@ const JobTitleGenerator = ({ description, category, onApply }) => {
             </div>
 
             <div className="title-generator-footer">
-              <button onClick={handleGenerate} className="regenerate-btn">
+              <button onClick={handleImprove} className="regenerate-btn">
                 <RefreshCw size={16} />
-                Regenerate
+                Re-improve
               </button>
               <button onClick={handleClose} className="cancel-btn">
                 Cancel

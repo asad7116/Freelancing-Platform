@@ -18,7 +18,7 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/enhance-job-description', {
+      const response = await fetch('http://localhost:4000/api/ai/enhance-description', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
