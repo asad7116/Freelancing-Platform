@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
-import { Sparkles, RefreshCw, Check, X } from 'lucide-react';
-import './JobTitleGenerator.css';
+import './AIAssistant.css';
 
+/**
+ * JobTitleGenerator Component
+ * Provides AI-powered title improvements for job posts
+ * Uses the same backend endpoint and styling as gig AIAssistant
+ * 
+ * @param {Object} props
+ * @param {string} props.currentTitle - Current job title
+ * @param {string} props.category - Job category for context
+ * @param {Function} props.onApply - Callback when user applies AI suggestion
+ */
 const JobTitleGenerator = ({ currentTitle, category, onApply }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState(null);
   const [error, setError] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const handleImprove = async () => {
-    if (!currentTitle || currentTitle.trim().length < 5) {
-      setError('Please enter a title with at least 5 characters first');
+    if (!currentTitle || currentTitle.trim().length < 3) {
+      setError('Please enter a title with at least 3 characters first');
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
+    setSuggestions(null);
 
     try {
       const response = await fetch('http://localhost:4000/api/ai/improve-title', {
@@ -24,7 +34,7 @@ const JobTitleGenerator = ({ currentTitle, category, onApply }) => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ title: currentTitle, category })
+        body: JSON.stringify({ title: currentTitle, category: category || '' })
       });
 
       const data = await response.json();
@@ -33,109 +43,116 @@ const JobTitleGenerator = ({ currentTitle, category, onApply }) => {
         throw new Error(data.error || 'Failed to improve title');
       }
 
-      setResult(data.data);
-      setIsOpen(true);
+      // Backend returns: { improved: string, suggestions: string[] }
+      setSuggestions(data.data);
+      setShowSuggestions(true);
     } catch (err) {
-      setError(err.message);
-      console.error('Error improving title:', err);
+      console.error('Job Title Generator Error:', err);
+      setError(err.message || 'Failed to connect to AI service');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleApply = (title) => {
-    onApply(title);
-    setIsOpen(false);
-    setResult(null);
+  const handleApplySuggestion = (suggestion) => {
+    onApply(suggestion);
+    setShowSuggestions(false);
+    setSuggestions(null);
+  };
+
+  const handleRegenerate = () => {
+    handleImprove();
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    setShowSuggestions(false);
     setError(null);
   };
 
   return (
-    <div className="job-title-generator">
+    <div className="ai-assistant">
       <button
         type="button"
+        className="ai-improve-btn"
         onClick={handleImprove}
-        disabled={loading || !currentTitle || currentTitle.trim().length < 5}
-        className="generate-title-btn"
+        disabled={isLoading || !currentTitle || currentTitle.trim().length < 3}
         title="Improve title with AI"
       >
-        <Sparkles size={18} />
-        {loading ? 'Improving...' : 'Improve Title with AI'}
+        {isLoading ? (
+          <>
+            <span className="spinner"></span> Improving...
+          </>
+        ) : (
+          <>
+            ✨ Improve Title with AI
+          </>
+        )}
       </button>
 
       {error && (
-        <div className="title-error-message">
-          {error}
+        <div className="ai-error">
+          <span className="error-icon">⚠️</span>
+          <span>{error}</span>
+          <button className="close-btn" onClick={() => setError(null)}>×</button>
         </div>
       )}
 
-      {isOpen && result && (
-        <div className="title-generator-modal">
-          <div className="title-generator-content">
-            <div className="title-generator-header">
-              <h3>
-                <Sparkles size={20} />
-                AI-Improved Job Titles
-              </h3>
-              <button onClick={handleClose} className="close-btn">
-                <X size={20} />
-              </button>
+      {showSuggestions && suggestions && (
+        <div className="ai-suggestions-modal">
+          <div className="ai-suggestions-overlay" onClick={handleClose}></div>
+          <div className="ai-suggestions-content">
+            <div className="ai-suggestions-header">
+              <h3>✨ AI-Improved Job Titles</h3>
+              <button className="close-btn" onClick={handleClose}>×</button>
             </div>
 
-            <div className="title-generator-body">
-              <div className="recommended-title">
-                <label>Recommended Title</label>
-                <div className="title-option main-title">
-                  <p>{result.title}</p>
+            <div className="ai-suggestions-body">
+              <div className="suggestion-section">
+                <h4>Recommended Title:</h4>
+                <div className="suggestion-card primary">
+                  <p>{suggestions.improved}</p>
                   <button 
-                    onClick={() => handleApply(result.title)}
                     className="apply-btn"
+                    onClick={() => handleApplySuggestion(suggestions.improved)}
                   >
-                    <Check size={16} />
-                    Apply
+                    Apply This
                   </button>
                 </div>
               </div>
 
-              {result.alternatives && result.alternatives.length > 0 && (
-                <div className="alternative-titles">
-                  <label>Alternative Options</label>
-                  {result.alternatives.map((alt, index) => (
-                    <div key={index} className="title-option">
-                      <p>{alt}</p>
+              {suggestions.suggestions && suggestions.suggestions.length > 0 && (
+                <div className="suggestion-section">
+                  <h4>Alternative Options:</h4>
+                  {suggestions.suggestions.map((suggestion, index) => (
+                    <div key={index} className="suggestion-card">
+                      <p>{suggestion}</p>
                       <button 
-                        onClick={() => handleApply(alt)}
                         className="apply-btn secondary"
+                        onClick={() => handleApplySuggestion(suggestion)}
                       >
-                        <Check size={16} />
-                        Apply
+                        Use This
                       </button>
                     </div>
                   ))}
                 </div>
               )}
 
-              <div className="title-tips">
-                <h4>💡 Title Tips</h4>
-                <ul>
+              <div className="suggestion-section tips">
+                <h4>💡 Title Tips:</h4>
+                <ul className="tips-list">
                   <li>Keep it clear and specific</li>
                   <li>Include key skills or role type</li>
-                  <li>Avoid vague terms</li>
+                  <li>Avoid vague or generic terms</li>
                   <li>Make it professional and searchable</li>
                 </ul>
               </div>
             </div>
 
-            <div className="title-generator-footer">
-              <button onClick={handleImprove} className="regenerate-btn">
-                <RefreshCw size={16} />
-                Re-improve
+            <div className="ai-suggestions-footer">
+              <button className="regenerate-btn" onClick={handleRegenerate}>
+                🔄 Regenerate
               </button>
-              <button onClick={handleClose} className="cancel-btn">
+              <button className="cancel-btn" onClick={handleClose}>
                 Cancel
               </button>
             </div>

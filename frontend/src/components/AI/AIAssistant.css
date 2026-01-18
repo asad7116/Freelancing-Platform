@@ -299,6 +299,68 @@
   color: #374151;
 }
 
+/* Skills Grid for JobSkillsSuggester */
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.skill-chip:hover {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.skill-chip.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: white;
+}
+
+.skill-chip .skill-check {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.helper-text {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.suggestion-section.tips {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ai-suggestions-footer .apply-btn.primary {
+  padding: 12px 24px;
+  font-size: 15px;
+}
+
+.ai-suggestions-footer .apply-btn.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .ai-suggestions-content {
@@ -311,5 +373,14 @@
 
   .ai-suggestions-footer {
     flex-direction: column;
+  }
+
+  .skills-grid {
+    gap: 8px;
+  }
+
+  .skill-chip {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }

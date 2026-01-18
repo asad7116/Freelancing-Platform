@@ -1,21 +1,34 @@
 import React, { useState } from 'react';
-import { Code, Sparkles, Check, X } from 'lucide-react';
-import './JobSkillsSuggester.css';
+import './AIAssistant.css';
 
+/**
+ * JobSkillsSuggester Component
+ * Provides AI-powered skill suggestions for job posts
+ * Uses smart-suggestions endpoint and adapts response for skills
+ * 
+ * @param {Object} props
+ * @param {string} props.title - Job title for context
+ * @param {string} props.description - Job description for context
+ * @param {string} props.category - Job category for context
+ * @param {Function} props.onApply - Callback when user applies skills (receives array of skill names)
+ */
 const JobSkillsSuggester = ({ title, description, category, onApply }) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [selectedSkills, setSelectedSkills] = useState([]);
 
   const handleSuggest = async () => {
-    if (!description && !title) {
+    if (!title && !description) {
       setError('Please enter a title or description first');
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
+    setResult(null);
+    setSelectedSkills([]);
 
     try {
       const response = await fetch('http://localhost:4000/api/ai/smart-suggestions', {
@@ -24,7 +37,10 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ category: category || 'General', keywords: `${title} ${description}` })
+        body: JSON.stringify({ 
+          category: category || 'General', 
+          keywords: `${title || ''} ${description || ''}`.trim() 
+        })
       });
 
       const data = await response.json();
@@ -33,131 +49,173 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
         throw new Error(data.error || 'Failed to suggest skills');
       }
 
-      setResult(data.data);
-      setIsOpen(true);
+      // Backend returns: { titles: string[], descriptionOutline: string }
+      // We'll extract skills from the titles and description outline
+      const suggestedSkills = extractSkillsFromSuggestions(data.data, title, description, category);
+      setResult(suggestedSkills);
+      setSelectedSkills([...suggestedSkills]); // Select all by default
+      setShowResult(true);
     } catch (err) {
-      setError(err.message);
-      console.error('Error suggesting skills:', err);
+      console.error('Job Skills Suggester Error:', err);
+      setError(err.message || 'Failed to connect to AI service');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
+  // Extract relevant skills from the AI suggestions
+  const extractSkillsFromSuggestions = (data, jobTitle, jobDesc, jobCategory) => {
+    const skills = new Set();
+    
+    // Common tech skills to look for based on category
+    const categorySkillMap = {
+      'Web Development': ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js', 'TypeScript', 'Vue.js', 'Angular', 'PHP', 'Python', 'WordPress', 'REST API', 'MongoDB', 'MySQL', 'PostgreSQL'],
+      'Mobile Development': ['React Native', 'Flutter', 'Swift', 'Kotlin', 'iOS', 'Android', 'Java', 'Dart', 'Firebase', 'Mobile UI/UX'],
+      'Design & Creative': ['Figma', 'Adobe XD', 'Photoshop', 'Illustrator', 'UI Design', 'UX Design', 'Graphic Design', 'Logo Design', 'Brand Identity'],
+      'Data Science': ['Python', 'R', 'Machine Learning', 'TensorFlow', 'PyTorch', 'SQL', 'Data Analysis', 'Pandas', 'NumPy', 'Tableau'],
+      'Writing & Translation': ['Content Writing', 'Copywriting', 'SEO', 'Blog Writing', 'Technical Writing', 'Translation', 'Proofreading', 'Editing'],
+      'Marketing': ['SEO', 'Social Media Marketing', 'Google Ads', 'Facebook Ads', 'Email Marketing', 'Content Strategy', 'Analytics', 'PPC'],
+      'Video & Animation': ['After Effects', 'Premiere Pro', 'Video Editing', 'Motion Graphics', '3D Animation', 'Final Cut Pro', 'DaVinci Resolve'],
+      'General': ['Communication', 'Problem Solving', 'Project Management', 'Research', 'Documentation', 'Collaboration']
+    };
+
+    // Get skills for the category
+    const categorySkills = categorySkillMap[jobCategory] || categorySkillMap['General'];
+    
+    // Check which skills appear in the title or description
+    const combinedText = `${jobTitle || ''} ${jobDesc || ''} ${data.descriptionOutline || ''}`.toLowerCase();
+    
+    categorySkills.forEach(skill => {
+      if (combinedText.includes(skill.toLowerCase())) {
+        skills.add(skill);
+      }
+    });
+
+    // Also add some common skills for the category
+    const numToAdd = Math.min(5, categorySkills.length);
+    for (let i = 0; i < numToAdd && skills.size < 8; i++) {
+      skills.add(categorySkills[i]);
+    }
+
+    // Parse titles for more context
+    if (data.titles && Array.isArray(data.titles)) {
+      data.titles.forEach(suggestedTitle => {
+        categorySkills.forEach(skill => {
+          if (suggestedTitle.toLowerCase().includes(skill.toLowerCase())) {
+            skills.add(skill);
+          }
+        });
+      });
+    }
+
+    return Array.from(skills).slice(0, 10); // Return max 10 skills
+  };
+
+  const toggleSkill = (skill) => {
+    setSelectedSkills(prev => 
+      prev.includes(skill) 
+        ? prev.filter(s => s !== skill)
+        : [...prev, skill]
+    );
+  };
+
   const handleApply = () => {
-    // Combine all skills into a single array
-    const allSkills = [
-      ...(result.required || []),
-      ...(result.preferred || [])
-    ];
-    onApply(allSkills);
-    setIsOpen(false);
-    setResult(null);
+    if (selectedSkills.length > 0) {
+      onApply(selectedSkills);
+      setShowResult(false);
+      setResult(null);
+      setSelectedSkills([]);
+    }
+  };
+
+  const handleRegenerate = () => {
+    handleSuggest();
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    setShowResult(false);
     setError(null);
+    setSelectedSkills([]);
   };
 
   return (
-    <div className="job-skills-suggester">
+    <div className="ai-assistant">
       <button
         type="button"
+        className="ai-improve-btn"
         onClick={handleSuggest}
-        disabled={loading || (!description && !title)}
-        className="suggest-skills-btn"
+        disabled={isLoading || (!title && !description)}
         title="Suggest skills with AI"
       >
-        <Code size={18} />
-        {loading ? 'Analyzing...' : 'Suggest Skills with AI'}
+        {isLoading ? (
+          <>
+            <span className="spinner"></span> Analyzing...
+          </>
+        ) : (
+          <>
+            ✨ Add Skills with AI
+          </>
+        )}
       </button>
 
       {error && (
-        <div className="skills-error-message">
-          {error}
+        <div className="ai-error">
+          <span className="error-icon">⚠️</span>
+          <span>{error}</span>
+          <button className="close-btn" onClick={() => setError(null)}>×</button>
         </div>
       )}
 
-      {isOpen && result && (
-        <div className="skills-suggester-modal">
-          <div className="skills-suggester-content">
-            <div className="skills-suggester-header">
-              <h3>
-                <Sparkles size={20} />
-                AI-Suggested Required Skills
-              </h3>
-              <button onClick={handleClose} className="close-btn">
-                <X size={20} />
-              </button>
+      {showResult && result && result.length > 0 && (
+        <div className="ai-suggestions-modal">
+          <div className="ai-suggestions-overlay" onClick={handleClose}></div>
+          <div className="ai-suggestions-content">
+            <div className="ai-suggestions-header">
+              <h3>✨ AI-Suggested Skills</h3>
+              <button className="close-btn" onClick={handleClose}>×</button>
             </div>
 
-            <div className="skills-suggester-body">
-              {result.technicalSkills && result.technicalSkills.length > 0 && (
-                <div className="skill-category">
-                  <h4>🔧 Technical Skills</h4>
-                  <div className="skills-list">
-                    {result.technicalSkills.map((skill, index) => (
-                      <span key={index} className="skill-tag technical">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+            <div className="ai-suggestions-body">
+              <div className="suggestion-section">
+                <h4>Select skills to add:</h4>
+                <p className="helper-text">Click on skills to select/deselect them</p>
+                <div className="skills-grid">
+                  {result.map((skill, index) => (
+                    <div 
+                      key={index} 
+                      className={`skill-chip ${selectedSkills.includes(skill) ? 'selected' : ''}`}
+                      onClick={() => toggleSkill(skill)}
+                    >
+                      <span className="skill-check">{selectedSkills.includes(skill) ? '✓' : '+'}</span>
+                      {skill}
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
 
-              {result.softSkills && result.softSkills.length > 0 && (
-                <div className="skill-category">
-                  <h4>💬 Soft Skills</h4>
-                  <div className="skills-list">
-                    {result.softSkills.map((skill, index) => (
-                      <span key={index} className="skill-tag soft">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {result.required && result.required.length > 0 && (
-                <div className="skill-category">
-                  <h4>✅ Required Skills</h4>
-                  <div className="skills-list">
-                    {result.required.map((skill, index) => (
-                      <span key={index} className="skill-tag required">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {result.preferred && result.preferred.length > 0 && (
-                <div className="skill-category">
-                  <h4>⭐ Preferred Skills</h4>
-                  <div className="skills-list">
-                    {result.preferred.map((skill, index) => (
-                      <span key={index} className="skill-tag preferred">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {result.reasoning && (
-                <div className="skills-reasoning">
-                  <h4>💡 Reasoning</h4>
-                  <p>{result.reasoning}</p>
-                </div>
-              )}
+              <div className="suggestion-section tips">
+                <h4>💡 Skills Tips:</h4>
+                <ul className="tips-list">
+                  <li>Choose skills relevant to your project</li>
+                  <li>Include both technical and soft skills</li>
+                  <li>Be specific rather than generic</li>
+                  <li>Don't overload with too many skills</li>
+                </ul>
+              </div>
             </div>
 
-            <div className="skills-suggester-footer">
-              <button onClick={handleApply} className="apply-skills-btn">
-                <Check size={16} />
-                Apply All Skills
+            <div className="ai-suggestions-footer">
+              <button 
+                className="apply-btn primary"
+                onClick={handleApply}
+                disabled={selectedSkills.length === 0}
+              >
+                Add {selectedSkills.length} Skill{selectedSkills.length !== 1 ? 's' : ''}
               </button>
-              <button onClick={handleClose} className="cancel-btn">
+              <button className="regenerate-btn" onClick={handleRegenerate}>
+                🔄 Regenerate
+              </button>
+              <button className="cancel-btn" onClick={handleClose}>
                 Cancel
               </button>
             </div>

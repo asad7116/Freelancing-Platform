@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
-import { Wand2, Check, X, AlertCircle } from 'lucide-react';
-import './JobDescriptionEnhancer.css';
+import './AIAssistant.css';
 
+/**
+ * JobDescriptionEnhancer Component
+ * Provides AI-powered description enhancement for job posts
+ * Uses the same backend endpoint and styling as gig AIAssistant
+ * 
+ * @param {Object} props
+ * @param {string} props.description - Current job description
+ * @param {string} props.title - Job title for context
+ * @param {string} props.category - Job category for context
+ * @param {Function} props.onApply - Callback when user applies AI suggestion
+ */
 const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [showResult, setShowResult] = useState(false);
 
   const handleEnhance = async () => {
-    if (!description && !title) {
-      setError('Please enter a title or description first');
+    if (!description || description.trim().length < 10) {
+      setError('Please enter a description with at least 10 characters first');
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
+    setResult(null);
 
     try {
       const response = await fetch('http://localhost:4000/api/ai/enhance-description', {
@@ -24,7 +35,11 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ description, title, category })
+        body: JSON.stringify({ 
+          description, 
+          title: title || '', 
+          category: category || '' 
+        })
       });
 
       const data = await response.json();
@@ -33,96 +48,104 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
         throw new Error(data.error || 'Failed to enhance description');
       }
 
+      // Backend returns: { enhanced: string, tips: string[] }
       setResult(data.data);
-      setIsOpen(true);
+      setShowResult(true);
     } catch (err) {
-      setError(err.message);
-      console.error('Error enhancing description:', err);
+      console.error('Job Description Enhancer Error:', err);
+      setError(err.message || 'Failed to connect to AI service');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleApply = () => {
-    onApply(result.enhanced);
-    setIsOpen(false);
-    setResult(null);
+    if (result && result.enhanced) {
+      onApply(result.enhanced);
+      setShowResult(false);
+      setResult(null);
+    }
+  };
+
+  const handleRegenerate = () => {
+    handleEnhance();
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    setShowResult(false);
     setError(null);
   };
 
   return (
-    <div className="job-description-enhancer">
+    <div className="ai-assistant">
       <button
         type="button"
+        className="ai-improve-btn"
         onClick={handleEnhance}
-        disabled={loading || (!description && !title)}
-        className="enhance-description-btn"
-        title="Enhance with AI"
+        disabled={isLoading || !description || description.trim().length < 10}
+        title="Enhance description with AI"
       >
-        <Wand2 size={18} />
-        {loading ? 'Enhancing...' : 'Enhance with AI'}
+        {isLoading ? (
+          <>
+            <span className="spinner"></span> Enhancing...
+          </>
+        ) : (
+          <>
+            ✨ Enhance with AI
+          </>
+        )}
       </button>
 
       {error && (
-        <div className="enhance-error-message">
-          <AlertCircle size={16} />
-          {error}
+        <div className="ai-error">
+          <span className="error-icon">⚠️</span>
+          <span>{error}</span>
+          <button className="close-btn" onClick={() => setError(null)}>×</button>
         </div>
       )}
 
-      {isOpen && result && (
-        <div className="description-enhancer-modal">
-          <div className="description-enhancer-content">
-            <div className="description-enhancer-header">
-              <h3>
-                <Wand2 size={20} />
-                AI-Enhanced Job Description
-              </h3>
-              <button onClick={handleClose} className="close-btn">
-                <X size={20} />
-              </button>
+      {showResult && result && (
+        <div className="ai-suggestions-modal">
+          <div className="ai-suggestions-overlay" onClick={handleClose}></div>
+          <div className="ai-suggestions-content">
+            <div className="ai-suggestions-header">
+              <h3>✨ AI-Enhanced Description</h3>
+              <button className="close-btn" onClick={handleClose}>×</button>
             </div>
 
-            <div className="description-enhancer-body">
-              <div className="enhanced-description">
-                <label>Enhanced Description</label>
-                <div className="description-preview">
-                  <p style={{ whiteSpace: 'pre-wrap' }}>{result.enhanced}</p>
+            <div className="ai-suggestions-body">
+              <div className="suggestion-section">
+                <h4>Enhanced Description:</h4>
+                <div className="suggestion-card primary">
+                  <p className="description-preview" style={{ whiteSpace: 'pre-wrap' }}>
+                    {result.enhanced}
+                  </p>
+                  <button 
+                    className="apply-btn"
+                    onClick={handleApply}
+                  >
+                    Apply This
+                  </button>
                 </div>
               </div>
 
-              {result.improvements && result.improvements.length > 0 && (
-                <div className="improvements-made">
-                  <h4>✨ Improvements Made</h4>
-                  <ul>
-                    {result.improvements.map((improvement, index) => (
-                      <li key={index}>{improvement}</li>
+              {result.tips && result.tips.length > 0 && (
+                <div className="suggestion-section">
+                  <h4>💡 Tips for Improvement:</h4>
+                  <ul className="tips-list">
+                    {result.tips.map((tip, index) => (
+                      <li key={index}>{tip}</li>
                     ))}
                   </ul>
                 </div>
               )}
-
-              <div className="enhancement-tips">
-                <h4>💡 Description Tips</h4>
-                <ul>
-                  <li>Clear project overview and goals</li>
-                  <li>Specific requirements and deliverables</li>
-                  <li>Structured and easy to read</li>
-                  <li>Professional tone</li>
-                </ul>
-              </div>
             </div>
 
-            <div className="description-enhancer-footer">
-              <button onClick={handleApply} className="apply-enhanced-btn">
-                <Check size={16} />
-                Apply Enhanced Description
+            <div className="ai-suggestions-footer">
+              <button className="regenerate-btn" onClick={handleRegenerate}>
+                🔄 Regenerate
               </button>
-              <button onClick={handleClose} className="cancel-btn">
+              <button className="cancel-btn" onClick={handleClose}>
                 Cancel
               </button>
             </div>
