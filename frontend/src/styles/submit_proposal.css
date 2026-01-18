@@ -117,7 +117,7 @@
   resize: vertical;
   transition: border-color 0.2s;
   background: rgba(0, 0, 0, 0.3);
-  color: #ffffff;
+  color: #000000;
 }
 
 .form-textarea:focus {

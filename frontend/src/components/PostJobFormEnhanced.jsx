@@ -332,17 +332,25 @@ const PostJobFormEnhanced = () => {
       <div className="job-form-header">
         <h1>{isEditMode ? 'Edit Job' : 'Post a Job'}</h1>
         <div className="step-indicator">
-          <div className={`step ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
-            <span className="step-number">1</span>
-            <span className="step-label">About the job</span>
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+            />
           </div>
-          <div className={`step ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
-            <span className="step-number">2</span>
-            <span className="step-label">Freelancer requirements</span>
-          </div>
-          <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
-            <span className="step-number">3</span>
-            <span className="step-label">Budget</span>
+          <div className="progress-steps">
+            <div className={`step ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
+              <span className="step-number">1</span>
+              <p className="step-label">About the job</p>
+            </div>
+            <div className={`step ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
+              <span className="step-number">2</span>
+              <p className="step-label">Freelancer requirements</p>
+            </div>
+            <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
+              <span className="step-number">3</span>
+              <p className="step-label">Budget</p>
+            </div>
           </div>
         </div>
       </div>
