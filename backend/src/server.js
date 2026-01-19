@@ -22,7 +22,10 @@ import chatbotRoutes from "./routes/chatbot.routes.js"
 
 const app = express()
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000"
-
+const allowedOrigins = [
+  FRONTEND_ORIGIN,
+  "http://localhost:3000"
+]
 // Initialize MongoDB before starting server
 async function initializeApp() {
   try {
@@ -39,8 +42,22 @@ initializeApp()
 
 app.use("/uploads", express.static(path.resolve("./uploads")))
 
-app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }))
+//app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }))
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow tools without origin (e.g. Postman)
+      if (!origin) return callback(null, true)
 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      }
+
+      return callback(new Error("Not allowed by CORS"))
+    },
+    credentials: true
+  })
+)
 // Stripe webhook must come BEFORE express.json() to get raw body
 // import { handleStripeWebhook } from "./controllers/proposal.controller.js"
 // app.post("/api/webhook", express.raw({ type: "application/json" }), handleStripeWebhook)
