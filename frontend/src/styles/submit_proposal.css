@@ -116,7 +116,7 @@
   font-family: inherit;
   resize: vertical;
   transition: border-color 0.2s;
-  background: rgba(0, 0, 0, 0.3);
+  background: #ecf3f5;
   color: #000000;
 }
 
