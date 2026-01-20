@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "client_profiles" ADD COLUMN     "date_of_birth" TIMESTAMP(3),
-ADD COLUMN     "gender" TEXT;
