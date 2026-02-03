@@ -49,14 +49,9 @@ app.use(express.json())
 app.use(cookieParser())
 
 // Health check (must be before auth-protected routes)
-app.get("/api/health", async (_req, res) => {
-  try {
-    const db = await getDatabase()
-    await db.command({ ping: 1 })
-    res.json({ ok: true, database: "connected" })
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message })
-  }
+// Simple health check for ALB - no DB or external service checks
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ status: "ok" })
 })
 
 // Routes

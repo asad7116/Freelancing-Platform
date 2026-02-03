@@ -7,17 +7,29 @@
 import "dotenv/config";
 import OpenAI from "openai";
 
-// Initialize OpenAI client
-// Using the specified baseURL. Note: SDK appends /embeddings to baseURL/embeddings call, 
-// so we use the base v1 path.
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
+// Lazy-initialized OpenAI client
+let openaiClient = null;
+
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY environment variable is missing or empty");
+  }
+
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey,
+      baseURL: "https://openrouter.ai/api/v1",
+      defaultHeaders: {
         "HTTP-Referer": "http://localhost:3000",
         "X-Title": "Freelancing Platform",
-    }
-});
+      }
+    });
+  }
+
+  return openaiClient;
+}
 
 // Model configuration
 const EMBEDDING_MODEL = "openai/text-embedding-ada-002";
@@ -64,6 +76,7 @@ export async function generateEmbedding(text) {
     }
 
     try {
+        const openai = getOpenAIClient();
         const response = await openai.embeddings.create({
             model: EMBEDDING_MODEL,
             input: trimmedText,
@@ -97,6 +110,7 @@ export async function generateBatchEmbeddings(texts) {
 
     try {
         // OpenAI supports batching directly
+        const openai = getOpenAIClient();
         const response = await openai.embeddings.create({
             model: EMBEDDING_MODEL,
             input: texts.map(t => t.trim().replace(/\n/g, " ")),

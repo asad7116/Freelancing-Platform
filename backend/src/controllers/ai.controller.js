@@ -1,6 +1,27 @@
 import * as aiService from "../services/ai.service.js";
 
 /**
+ * Helper function to handle AI service errors consistently
+ */
+const handleAIError = (error, res, defaultMessage) => {
+  console.error("AI Controller Error:", error.message);
+  
+  // Return 503 if Groq API key is missing
+  if (error.message?.includes("GROQ_API_KEY")) {
+    return res.status(503).json({ 
+      ok: false,
+      message: "AI service not configured",
+      error: "GROQ_API_KEY is missing"
+    });
+  }
+  
+  // Generic error
+  res.status(500).json({ 
+    error: defaultMessage || "AI service encountered an error. Please try again." 
+  });
+};
+
+/**
  * POST /api/ai/improve-title
  * Improve a gig title using AI
  */
@@ -22,6 +43,16 @@ export const improveTitleController = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in improveTitleController:", error.message);
+    
+    // Return 503 if Groq API key is missing
+    if (error.message?.includes("GROQ_API_KEY")) {
+      return res.status(503).json({ 
+        ok: false,
+        message: "AI service not configured",
+        error: error.message
+      });
+    }
+    
     res.status(500).json({ 
       error: "Failed to improve title. Please try again." 
     });
@@ -49,10 +80,7 @@ export const enhanceDescriptionController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in enhanceDescriptionController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to enhance description. Please try again." 
-    });
+    handleAIError(error, res, "Failed to enhance description. Please try again.");
   }
 };
 
@@ -77,10 +105,7 @@ export const analyzeGigController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in analyzeGigController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to analyze gig. Please try again." 
-    });
+    handleAIError(error, res, "Failed to analyze gig. Please try again.");
   }
 };
 
@@ -105,10 +130,7 @@ export const smartSuggestionsController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in smartSuggestionsController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to generate suggestions. Please try again." 
-    });
+    handleAIError(error, res, "Failed to generate suggestions. Please try again.");
   }
 };
 
@@ -133,10 +155,7 @@ export const recommendPriceController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in recommendPriceController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to recommend price. Please try again." 
-    });
+    handleAIError(error, res, "Failed to recommend price. Please try again.");
   }
 };
 
@@ -168,10 +187,7 @@ export const generateCoverLetterController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in generateCoverLetterController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to generate cover letter. Please try again." 
-    });
+    handleAIError(error, res, "Failed to generate cover letter. Please try again.");
   }
 };
 
@@ -206,10 +222,7 @@ export const improveCoverLetterController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in improveCoverLetterController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to improve cover letter. Please try again." 
-    });
+    handleAIError(error, res, "Failed to improve cover letter. Please try again.");
   }
 };
 
@@ -246,10 +259,7 @@ export const analyzeProposalController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in analyzeProposalController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to analyze proposal. Please try again." 
-    });
+    handleAIError(error, res, "Failed to analyze proposal. Please try again.");
   }
 };
 
@@ -280,10 +290,7 @@ export const analyzeBidController = async (req, res) => {
       data: result
     });
   } catch (error) {
-    console.error("Error in analyzeBidController:", error.message);
-    res.status(500).json({ 
-      error: "Failed to analyze bid. Please try again." 
-    });
+    handleAIError(error, res, "Failed to suggest bid range. Please try again.");
   }
 };
 

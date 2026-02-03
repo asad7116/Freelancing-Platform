@@ -12,14 +12,29 @@ import {
     cosineSimilarity
 } from "./embedding.service.js";
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
+// Lazy-initialized OpenAI client
+let openaiClient = null;
+
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY environment variable is missing or empty");
+  }
+
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey,
+      baseURL: "https://openrouter.ai/api/v1",
+      defaultHeaders: {
         "HTTP-Referer": "http://localhost:3000",
         "X-Title": "Freelancing Platform Chatbot",
-    }
-});
+      }
+    });
+  }
+
+  return openaiClient;
+}
 
 const MODEL = "meta-llama/llama-3.1-8b-instruct";
 
@@ -228,8 +243,7 @@ ${context}`;
     // Add current question
     messages.push({ role: "user", content: question });
 
-    try {
-        const completion = await openai.chat.completions.create({
+    try {        const openai = getOpenAIClient();        const completion = await openai.chat.completions.create({
             messages,
             model: MODEL,
             temperature: 0.7,
