@@ -20,8 +20,8 @@ const AIAssistant = ({ type, value, onApply, category = '', title = '' }) => {
 
   const getEndpoint = () => {
     return type === 'title' 
-      ? 'http://localhost:4000/api/ai/improve-title'
-      : 'http://localhost:4000/api/ai/enhance-description';
+      ? '/api/ai/improve-title'
+      : '/api/ai/enhance-description';
   };
 
   const getRequestBody = () => {

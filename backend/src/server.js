@@ -48,6 +48,17 @@ app.use(cors({ origin: FRONTEND_ORIGIN, credentials: true }))
 app.use(express.json())
 app.use(cookieParser())
 
+// Health check (must be before auth-protected routes)
+app.get("/api/health", async (_req, res) => {
+  try {
+    const db = await getDatabase()
+    await db.command({ ping: 1 })
+    res.json({ ok: true, database: "connected" })
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message })
+  }
+})
+
 // Routes
 app.get("/", (req, res) => res.send("API running"))
 app.use("/api/auth", authRoutes)
@@ -63,17 +74,6 @@ app.use("/api/profile", profileRoutes)
 app.use("/api/proposals", proposalRoutes)
 app.use("/api", clientDashboardRoutes)
 app.use("/api", freelancerDashboardRoutes)
-
-// Health check
-app.get("/api/health", async (_req, res) => {
-  try {
-    const db = await getDatabase()
-    await db.admin().ping()
-    res.json({ ok: true, database: "connected" })
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message })
-  }
-})
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => console.log(`API listening on http://localhost:${PORT}`))

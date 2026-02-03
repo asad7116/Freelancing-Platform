@@ -28,7 +28,7 @@ const JobTitleGenerator = ({ currentTitle, category, onApply }) => {
     setSuggestions(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/improve-title', {
+      const response = await fetch('/api/ai/improve-title', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

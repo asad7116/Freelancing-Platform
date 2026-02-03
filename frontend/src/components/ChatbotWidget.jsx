@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Minimize2, Maximize2, Trash2, Bot } from 'lucide-react';
 import '../styles/ChatbotWidget.css';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+// Use empty string for relative URLs (works with React proxy in dev)
+const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const ChatbotWidget = () => {
     const [isOpen, setIsOpen] = useState(false);

@@ -18,7 +18,7 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/analyze-bid', {
+      const response = await fetch('/api/ai/analyze-bid', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

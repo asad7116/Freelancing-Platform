@@ -30,8 +30,8 @@ const ProposalAIAssistant = ({
 
   const getEndpoint = () => {
     return mode === 'generate'
-      ? 'http://localhost:4000/api/ai/generate-cover-letter'
-      : 'http://localhost:4000/api/ai/improve-cover-letter';
+      ? '/api/ai/generate-cover-letter'
+      : '/api/ai/improve-cover-letter';
   };
 
   const getRequestBody = () => {

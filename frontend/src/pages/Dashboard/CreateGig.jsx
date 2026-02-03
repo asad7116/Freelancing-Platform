@@ -102,7 +102,7 @@ export default function CreateGig() {
     });
 
     try {
-      const res = await fetch("http://localhost:4000/api/gigs", {
+      const res = await fetch("/api/gigs", {
         method: "POST",
         body: formDataToSend,
         credentials: 'include', // ✅ Include cookies for authentication

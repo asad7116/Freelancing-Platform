@@ -30,7 +30,7 @@ const GigAnalyzer = ({ gigData }) => {
     setAnalysis(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/analyze-gig', {
+      const response = await fetch('/api/ai/analyze-gig', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getImageUrl } from '../lib/api';
 import { 
   ArrowLeft,
   User,
@@ -28,7 +29,7 @@ const JobProposals = () => {
   const fetchProposals = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/api/proposals/job/${jobId}`, {
+      const response = await fetch(`/api/proposals/job/${jobId}`, {
         credentials: 'include'
       });
 
@@ -145,7 +146,7 @@ const JobProposals = () => {
                   <div className="freelancer-avatar">
                     {proposal.freelancer?.profile?.profile_image ? (
                       <img 
-                        src={`http://localhost:4000${proposal.freelancer.profile.profile_image}`} 
+                        src={getImageUrl(proposal.freelancer.profile.profile_image)} 
                         alt={proposal.freelancer.name}
                       />
                     ) : (

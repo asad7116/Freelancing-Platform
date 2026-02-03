@@ -25,7 +25,7 @@ const SubmitWork = () => {
   const fetchProposal = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}`, {
+      const response = await fetch(`/api/proposals/${proposalId}`, {
         credentials: 'include'
       });
 
@@ -67,7 +67,7 @@ const SubmitWork = () => {
       setSubmitting(true);
       setError('');
 
-      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}/submit-work`, {
+      const response = await fetch(`/api/proposals/${proposalId}/submit-work`, {
         method: 'PUT',
         credentials: 'include',
         headers: {

@@ -5,7 +5,7 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY 
 });
 
-const MODEL = "llama-3.1-8b-instant"; // Fast and efficient model
+const MODEL = "llama-3.3-70b-versatile"; // Updated to Llama 3.3 model
 
 /**
  * Improve a gig title using AI

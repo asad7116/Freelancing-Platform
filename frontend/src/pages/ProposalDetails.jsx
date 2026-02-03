@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getImageUrl } from '../lib/api';
 import {
   ArrowLeft,
   User,
@@ -37,7 +38,7 @@ const ProposalDetails = () => {
   const fetchProposalDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}`, {
+      const response = await fetch(`/api/proposals/${proposalId}`, {
         credentials: 'include'
       });
 
@@ -68,7 +69,7 @@ const ProposalDetails = () => {
       setActionLoading(true);
       setError('');
 
-      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}/status`, {
+      const response = await fetch(`/api/proposals/${proposalId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +111,7 @@ const ProposalDetails = () => {
       setActionLoading(true);
       setError('');
 
-      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}/review-submission`, {
+      const response = await fetch(`/api/proposals/${proposalId}/review-submission`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -148,7 +149,7 @@ const ProposalDetails = () => {
       setActionLoading(true);
       setError('');
 
-      const response = await fetch(`http://localhost:4000/api/proposals/${proposalId}/confirm-receipt`, {
+      const response = await fetch(`/api/proposals/${proposalId}/confirm-receipt`, {
         method: 'PUT',
         credentials: 'include'
       });
@@ -439,7 +440,7 @@ const ProposalDetails = () => {
             <div className="freelancer-avatar-large">
               {profile?.profile_image ? (
                 <img
-                  src={`http://localhost:4000${profile.profile_image}`}
+                  src={getImageUrl(profile.profile_image)}
                   alt={freelancer.name}
                 />
               ) : (
