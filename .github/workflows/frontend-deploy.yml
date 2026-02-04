@@ -1,0 +1,63 @@
+name: Deploy Frontend to S3 + CloudFront (tixe)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "client/**"
+      - ".github/workflows/frontend-deploy.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd client
+          npm ci
+
+      - name: Build
+        env:
+          # Vite example:
+          VITE_API_BASE_URL: https://api.tixe.dev
+          # CRA example (keep both, harmless):
+          REACT_APP_API_BASE_URL: https://api.tixe.dev
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Upload build to S3
+        run: |
+          # If Vite output is dist/ and CRA is build/, one of these will exist
+          if [ -d "client/dist" ]; then
+            aws s3 sync client/dist s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
+          else
+            aws s3 sync client/build s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
+          fi
+
+      - name: CloudFront Invalidation
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
