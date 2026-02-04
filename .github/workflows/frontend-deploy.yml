@@ -51,10 +51,10 @@ jobs:
       - name: Upload build to S3
         run: |
           # If Vite output is dist/ and CRA is build/, one of these will exist
-          if [ -d "client/dist" ]; then
-            aws s3 sync client/dist s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
+          if [ -d "frontend/dist" ]; then
+            aws s3 sync frontend/dist s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
           else
-            aws s3 sync client/build s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
+            aws s3 sync frontend/build s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
           fi
 
       - name: CloudFront Invalidation
