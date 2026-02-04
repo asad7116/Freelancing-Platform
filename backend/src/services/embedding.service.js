@@ -22,7 +22,7 @@ function getOpenAIClient() {
       apiKey,
       baseURL: "https://openrouter.ai/api/v1",
       defaultHeaders: {
-        "HTTP-Referer": "http://localhost:3000",
+        "HTTP-Referer": process.env.FRONTEND_ORIGIN || "https://www.tixe.dev",
         "X-Title": "Freelancing Platform",
       }
     });
