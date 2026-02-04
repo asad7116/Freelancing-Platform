@@ -13,7 +13,7 @@ export default function GigsDashboard() {
     const fetchGigs = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:4000/api/gigs/my-gigs', {
+        const response = await axios.get('/api/gigs/my-gigs', {
           withCredentials: true
         });
         setGigs(response.data.gigs);

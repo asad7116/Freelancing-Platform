@@ -1,5 +1,23 @@
 // frontend/src/lib/api.js
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:4000";
+// In development, the proxy in package.json handles routing to http://localhost:4000
+// In production, REACT_APP_API_URL should be set to the actual API domain
+const API_BASE = process.env.REACT_APP_API_URL || "";
+
+// Export the base URL for components that need to construct image URLs
+export const getApiBaseUrl = () => {
+  // For local development, return empty string (relative URLs will use proxy)
+  // For production or when explicitly set, return the full URL
+  return process.env.REACT_APP_API_URL || "";
+};
+
+// For image URLs, we need the full URL in development
+export const getImageUrl = (path) => {
+  if (!path) return null;
+  if (path.startsWith('http')) return path;
+  // In development, use localhost:4000 for static files (images)
+  const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  return `${baseUrl}${path}`;
+};
 
 async function request(path, { method = "GET", body } = {}) {
   const res = await fetch(`${API_BASE}${path}`, {

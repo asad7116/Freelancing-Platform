@@ -29,7 +29,7 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
     setResult(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/enhance-description', {
+      const response = await fetch('/api/ai/enhance-description', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

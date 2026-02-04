@@ -41,7 +41,7 @@ const SubmitProposal = () => {
 
   const fetchJobDetails = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/job-posts/${jobId}`, {
+      const response = await fetch(`/api/job-posts/${jobId}`, {
         credentials: 'include'
       });
 
@@ -114,7 +114,7 @@ const SubmitProposal = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/proposals', {
+      const response = await fetch('/api/proposals', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

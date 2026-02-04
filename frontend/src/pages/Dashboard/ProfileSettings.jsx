@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Plus, Trash2, Save } from 'lucide-react';
+import { getImageUrl } from '../../lib/api';
 import '../../styles/profile_settings.css';
 
 export default function ProfileSettings() {
@@ -112,7 +113,7 @@ export default function ProfileSettings() {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:4000/api/profile', {
+      const response = await fetch('/api/profile', {
         credentials: 'include' // Use cookies for authentication
       });
 
@@ -127,7 +128,7 @@ export default function ProfileSettings() {
         const imagePath = data.profile?.profile_image || data.user.avatar || '';
         if (imagePath) {
           // If path already has http, use it as is, otherwise prepend backend URL
-          setProfileImage(imagePath.startsWith('http') ? imagePath : `http://localhost:4000${imagePath}`);
+          setProfileImage(getImageUrl(imagePath));
         } else {
           setProfileImage('');
         }
@@ -443,8 +444,8 @@ export default function ProfileSettings() {
     setSaving(true);
     try {
       const endpoint = userRole === 'freelancer'
-        ? 'http://localhost:4000/api/profile/freelancer'
-        : 'http://localhost:4000/api/profile/client';
+        ? '/api/profile/freelancer'
+        : '/api/profile/client';
 
       const profileData = userRole === 'freelancer' ? {
         ...personalInfo,
@@ -542,7 +543,7 @@ export default function ProfileSettings() {
       const formData = new FormData();
       formData.append('profileImage', file);
 
-      const response = await fetch('http://localhost:4000/api/profile/upload-image', {
+      const response = await fetch('/api/profile/upload-image', {
         method: 'POST',
         credentials: 'include',
         body: formData
@@ -550,7 +551,7 @@ export default function ProfileSettings() {
 
       if (response.ok) {
         const data = await response.json();
-        setProfileImage(`http://localhost:4000${data.imagePath}`);
+        setProfileImage(getImageUrl(data.imagePath));
         showSuccessMessage('Profile picture updated successfully!');
       } else {
         const error = await response.json();

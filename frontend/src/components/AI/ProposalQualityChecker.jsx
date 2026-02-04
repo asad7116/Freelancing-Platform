@@ -31,7 +31,7 @@ const ProposalQualityChecker = ({ proposalData }) => {
     setAnalysis(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/analyze-proposal', {
+      const response = await fetch('/api/ai/analyze-proposal', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

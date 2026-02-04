@@ -26,7 +26,7 @@ const MyProposalsFreelancer = () => {
   const fetchProposals = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/proposals/freelancer', {
+      const response = await fetch('/api/proposals/freelancer', {
         credentials: 'include'
       });
 

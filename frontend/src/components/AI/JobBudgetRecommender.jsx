@@ -44,7 +44,7 @@ const JobBudgetRecommender = ({ title, description, category, complexity, durati
         '': 30
       };
 
-      const response = await fetch('http://localhost:4000/api/ai/recommend-price', {
+      const response = await fetch('/api/ai/recommend-price', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

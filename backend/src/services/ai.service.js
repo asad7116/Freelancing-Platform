@@ -1,11 +1,23 @@
 import Groq from "groq-sdk";
 
-// Initialize Groq client
-const groq = new Groq({ 
-  apiKey: process.env.GROQ_API_KEY 
-});
+// Lazy-initialized Groq client
+let groqClient = null;
 
-const MODEL = "llama-3.1-8b-instant"; // Fast and efficient model
+function getGroqClient() {
+  const apiKey = process.env.GROQ_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY environment variable is missing or empty");
+  }
+
+  if (!groqClient) {
+    groqClient = new Groq({ apiKey });
+  }
+
+  return groqClient;
+}
+
+const MODEL = "llama-3.3-70b-versatile"; // Updated to Llama 3.3 model
 
 /**
  * Improve a gig title using AI

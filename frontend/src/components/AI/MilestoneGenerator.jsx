@@ -39,7 +39,7 @@ const MilestoneGenerator = ({
     setResult(null);
 
     try {
-      const response = await fetch('http://localhost:4000/api/ai/generate-milestones', {
+      const response = await fetch('/api/ai/generate-milestones', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

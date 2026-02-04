@@ -25,7 +25,7 @@ const ClientProposalsList = () => {
   const fetchJobsWithProposals = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/proposals/client', {
+      const response = await fetch('/api/proposals/client', {
         credentials: 'include'
       });
 
