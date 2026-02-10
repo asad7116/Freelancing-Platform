@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import '../../styles/FreelancerProfile.css';
 
 const FreelancerProfileSetup = () => {
@@ -111,7 +112,7 @@ const FreelancerProfileSetup = () => {
         submitData.append('profileImage', formData.profileImage);
       }
 
-      const response = await fetch('/api/freelancer/profile', {
+      const response = await fetch(`${API_BASE_URL}/api/freelancer/profile`, {
         method: 'POST',
         body: submitData,
       });

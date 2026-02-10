@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from "../lib/api";
 import { 
   Send, 
   DollarSign, 
@@ -41,7 +42,7 @@ const SubmitProposal = () => {
 
   const fetchJobDetails = useCallback(async () => {
     try {
-      const response = await fetch(`/api/job-posts/${jobId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/job-posts/${jobId}`, {
         credentials: 'include'
       });
 
@@ -114,7 +115,7 @@ const SubmitProposal = () => {
     }
 
     try {
-      const response = await fetch('/api/proposals', {
+      const response = await fetch(`${API_BASE_URL}/api/proposals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -17,6 +17,13 @@ function getGroqClient() {
   return groqClient;
 }
 
+// Create a proxy so `groq.chat.completions.create(...)` works lazily
+const groq = new Proxy({}, {
+  get(_, prop) {
+    return getGroqClient()[prop];
+  }
+});
+
 const MODEL = "llama-3.3-70b-versatile"; // Updated to Llama 3.3 model
 
 /**

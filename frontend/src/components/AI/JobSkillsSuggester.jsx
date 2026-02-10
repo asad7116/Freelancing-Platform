@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './AIAssistant.css';
 
 /**
@@ -31,7 +32,7 @@ const JobSkillsSuggester = ({ title, description, category, onApply }) => {
     setSelectedSkills([]);
 
     try {
-      const response = await fetch('/api/ai/smart-suggestions', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/smart-suggestions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

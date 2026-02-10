@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './ProposalQualityChecker.css';
 
 /**
@@ -31,7 +32,7 @@ const ProposalQualityChecker = ({ proposalData }) => {
     setAnalysis(null);
 
     try {
-      const response = await fetch('/api/ai/analyze-proposal', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/analyze-proposal`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

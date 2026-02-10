@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Filter, DollarSign, MapPin, Send } from "lucide-react";
+import { API_BASE_URL } from "../lib/api";
 import "../styles/browse.css";
 
 export default function BrowseJobs() {
@@ -26,7 +27,7 @@ export default function BrowseJobs() {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/job-posts/browse', {
+      const response = await fetch(`${API_BASE_URL}/api/job-posts/browse`, {
         credentials: 'include'
       });
       
@@ -49,7 +50,7 @@ export default function BrowseJobs() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories', {
+      const response = await fetch(`${API_BASE_URL}/api/categories`, {
         credentials: 'include'
       });
       const data = await response.json();

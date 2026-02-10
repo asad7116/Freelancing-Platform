@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_BASE_URL } from "../../lib/api";
 import "../../styles/CreateGig.css";
 import AIAssistant from "../../components/AI/AIAssistant";
 import GigAnalyzer from "../../components/AI/GigAnalyzer";
@@ -102,7 +103,7 @@ export default function CreateGig() {
     });
 
     try {
-      const res = await fetch("/api/gigs", {
+      const res = await fetch(`${API_BASE_URL}/api/gigs`, {
         method: "POST",
         body: formDataToSend,
         credentials: 'include', // ✅ Include cookies for authentication

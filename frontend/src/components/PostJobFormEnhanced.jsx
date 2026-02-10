@@ -8,6 +8,7 @@ import JobDescriptionEnhancer from './AI/JobDescriptionEnhancer';
 import JobBudgetRecommender from './AI/JobBudgetRecommender';
 import JobSkillsSuggester from './AI/JobSkillsSuggester';
 import JobTimelineEstimator from './AI/JobTimelineEstimator';
+import { API_BASE_URL } from "../lib/api";
 
 const PostJobFormEnhanced = () => {
   const { jobId } = useParams();
@@ -100,7 +101,7 @@ const PostJobFormEnhanced = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       const data = await response.json();
       if (data.success) setCategories(data.data);
     } catch (error) {
@@ -110,7 +111,7 @@ const PostJobFormEnhanced = () => {
 
   const fetchSkills = async () => {
     try {
-      const response = await fetch('/api/skills');
+      const response = await fetch(`${API_BASE_URL}/api/skills`);
       const data = await response.json();
       if (data.success) setSkills(data.data);
     } catch (error) {
@@ -120,7 +121,7 @@ const PostJobFormEnhanced = () => {
 
   const fetchSpecialties = async (categoryId) => {
     try {
-      const response = await fetch(`/api/specialties?category_id=${categoryId}`);
+      const response = await fetch(`${API_BASE_URL}/api/specialties?category_id=${categoryId}`);
       const data = await response.json();
       if (data.success) setSpecialties(data.data);
       else setSpecialties([]);
@@ -133,7 +134,7 @@ const PostJobFormEnhanced = () => {
   const fetchJobData = async (jid) => {
     try {
       setFetchingData(true);
-      const response = await fetch(`/api/job-posts/${jid}`, {
+      const response = await fetch(`${API_BASE_URL}/api/job-posts/${jid}`, {
         credentials: 'include',
         headers: { 'Cache-Control': 'no-store' }, // avoid stale edit data
       });

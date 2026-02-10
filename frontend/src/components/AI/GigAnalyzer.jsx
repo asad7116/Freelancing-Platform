@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './GigAnalyzer.css';
 
 /**
@@ -30,7 +31,7 @@ const GigAnalyzer = ({ gigData }) => {
     setAnalysis(null);
 
     try {
-      const response = await fetch('/api/ai/analyze-gig', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/analyze-gig`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

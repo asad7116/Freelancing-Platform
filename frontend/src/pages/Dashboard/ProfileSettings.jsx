@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Plus, Trash2, Save } from 'lucide-react';
-import { getImageUrl } from '../../lib/api';
+import { getImageUrl, API_BASE_URL } from '../../lib/api';
 import '../../styles/profile_settings.css';
 
 export default function ProfileSettings() {
@@ -113,7 +113,7 @@ export default function ProfileSettings() {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/profile', {
+      const response = await fetch(`${API_BASE_URL}/api/profile`, {
         credentials: 'include' // Use cookies for authentication
       });
 
@@ -444,8 +444,8 @@ export default function ProfileSettings() {
     setSaving(true);
     try {
       const endpoint = userRole === 'freelancer'
-        ? '/api/profile/freelancer'
-        : '/api/profile/client';
+        ? `${API_BASE_URL}/api/profile/freelancer`
+        : `${API_BASE_URL}/api/profile/client`;
 
       const profileData = userRole === 'freelancer' ? {
         ...personalInfo,
@@ -543,7 +543,7 @@ export default function ProfileSettings() {
       const formData = new FormData();
       formData.append('profileImage', file);
 
-      const response = await fetch('/api/profile/upload-image', {
+      const response = await fetch(`${API_BASE_URL}/api/profile/upload-image`, {
         method: 'POST',
         credentials: 'include',
         body: formData

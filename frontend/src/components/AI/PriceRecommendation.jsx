@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './PriceRecommendation.css';
 
 /**
@@ -32,7 +33,7 @@ const PriceRecommendation = ({ gigData, onApplyPrice }) => {
     setRecommendation(null);
 
     try {
-      const response = await fetch('/api/ai/recommend-price', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/recommend-price`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

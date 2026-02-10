@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getImageUrl } from '../lib/api';
+import { API_BASE_URL } from "../lib/api";
 import { 
   ArrowLeft,
   User,
@@ -29,7 +30,7 @@ const JobProposals = () => {
   const fetchProposals = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/proposals/job/${jobId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/proposals/job/${jobId}`, {
         credentials: 'include'
       });
 

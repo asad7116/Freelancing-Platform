@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './MilestoneGenerator.css';
 
 /**
@@ -39,7 +40,7 @@ const MilestoneGenerator = ({
     setResult(null);
 
     try {
-      const response = await fetch('/api/ai/generate-milestones', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/generate-milestones`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

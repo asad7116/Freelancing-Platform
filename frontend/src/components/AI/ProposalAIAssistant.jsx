@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './ProposalAIAssistant.css';
 
 /**
@@ -30,8 +31,8 @@ const ProposalAIAssistant = ({
 
   const getEndpoint = () => {
     return mode === 'generate'
-      ? '/api/ai/generate-cover-letter'
-      : '/api/ai/improve-cover-letter';
+      ? `${API_BASE_URL}/api/ai/generate-cover-letter`
+      : `${API_BASE_URL}/api/ai/improve-cover-letter`;
   };
 
   const getRequestBody = () => {

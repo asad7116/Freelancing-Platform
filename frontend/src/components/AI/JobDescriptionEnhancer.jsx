@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './AIAssistant.css';
 
 /**
@@ -29,7 +30,7 @@ const JobDescriptionEnhancer = ({ description, title, category, onApply }) => {
     setResult(null);
 
     try {
-      const response = await fetch('/api/ai/enhance-description', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/enhance-description`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

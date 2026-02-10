@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../lib/api';
 import { 
   Briefcase, 
   Users, 
@@ -25,7 +26,7 @@ const ClientProposalsList = () => {
   const fetchJobsWithProposals = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/proposals/client', {
+      const response = await fetch(`${API_BASE_URL}/api/proposals/client`, {
         credentials: 'include'
       });
 

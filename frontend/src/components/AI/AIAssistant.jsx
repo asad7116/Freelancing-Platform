@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './AIAssistant.css';
 
 /**
@@ -20,8 +21,8 @@ const AIAssistant = ({ type, value, onApply, category = '', title = '' }) => {
 
   const getEndpoint = () => {
     return type === 'title' 
-      ? '/api/ai/improve-title'
-      : '/api/ai/enhance-description';
+      ? `${API_BASE_URL}/api/ai/improve-title`
+      : `${API_BASE_URL}/api/ai/enhance-description`;
   };
 
   const getRequestBody = () => {

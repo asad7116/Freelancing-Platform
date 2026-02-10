@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, Calendar, Check, X } from 'lucide-react';
+import { API_BASE_URL } from '../../lib/api';
 import './JobTimelineEstimator.css';
 
 const JobTimelineEstimator = ({ title, description, category, budget, onApply }) => {
@@ -18,7 +19,7 @@ const JobTimelineEstimator = ({ title, description, category, budget, onApply })
     setError(null);
 
     try {
-      const response = await fetch('/api/ai/analyze-bid', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/analyze-bid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

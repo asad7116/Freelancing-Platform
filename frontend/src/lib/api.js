@@ -3,6 +3,16 @@
 // In production, REACT_APP_API_URL should be set to the actual API domain
 const API_BASE = process.env.REACT_APP_API_URL || "";
 
+// Export the base URL constant for use in fetch calls
+export const API_BASE_URL = API_BASE;
+
+// Helper function to build API URL
+export const buildApiUrl = (path) => {
+  // Ensure path starts with /
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE}${normalizedPath}`;
+};
+
 // Export the base URL for components that need to construct image URLs
 export const getApiBaseUrl = () => {
   // For local development, return empty string (relative URLs will use proxy)

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Clock, RefreshCw, DollarSign, Calendar, Edit } from 'lucide-react';
 import '../styles/gig_detail.css';
+import { API_BASE_URL } from "../lib/api";
 
 const GigDetail = () => {
   const { gigId } = useParams();
@@ -23,7 +24,7 @@ const GigDetail = () => {
   const fetchGigDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/gigs/${gigId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/gigs/${gigId}`, {
         credentials: 'include'
       });
       

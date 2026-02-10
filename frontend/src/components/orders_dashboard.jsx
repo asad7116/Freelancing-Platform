@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Edit, ClipboardList, MapPin } from "lucide-react";
+import { API_BASE_URL } from "../lib/api";
 import DashboardSidebar from "../components/Dashboard_sidebar";
 import "../styles/orders_dashboard.css";
 import "../styles/job_cards.css";
@@ -18,7 +19,7 @@ export default function Orders() {
   const fetchJobPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/job-posts/my-jobs', {
+      const response = await fetch(`${API_BASE_URL}/api/job-posts/my-jobs`, {
         credentials: 'include' // Include cookies for authentication
       });
 

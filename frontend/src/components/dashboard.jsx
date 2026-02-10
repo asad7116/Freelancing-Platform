@@ -13,6 +13,7 @@ import {
   Clock,
   RefreshCw
 } from "lucide-react";
+import { API_BASE_URL } from "../lib/api";
 import "../styles/dashboard.css";
 
 // Live, DB-driven dashboard (client)
@@ -30,7 +31,7 @@ export default function Dashboard({ role = "client" }) {
       setLoading(true);
       try {
         const endpoint = role === "freelancer" ? "/api/freelancer/dashboard" : "/api/client/dashboard";
-        const url = `${endpoint}?t=${Date.now()}`;
+        const url = `${API_BASE_URL}${endpoint}?t=${Date.now()}`;
         const res = await fetch(url, {
           method: "GET",
           credentials: "include",

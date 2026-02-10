@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/post_job.css';
 import { emit } from '../lib/eventBus'; // NEW
+import { API_BASE_URL } from "../lib/api";
 
 const PostJobForm = () => {
   const { jobId } = useParams();
@@ -43,7 +44,7 @@ const PostJobForm = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       const data = await response.json();
       if (data.success) setCategories(data.data);
     } catch (error) { console.error('Error fetching categories:', error); }
@@ -51,7 +52,7 @@ const PostJobForm = () => {
 
   const fetchCities = async () => {
     try {
-      const response = await fetch('/api/cities');
+      const response = await fetch(`${API_BASE_URL}/api/cities`);
       const data = await response.json();
       if (data.success) setCities(data.data);
     } catch (error) { console.error('Error fetching cities:', error); }
@@ -60,7 +61,7 @@ const PostJobForm = () => {
   const fetchJobData = async (jobId) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/job-posts/${jobId}`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/api/job-posts/${jobId}`, { credentials: 'include' });
       const data = await response.json();
       if (data.success) {
         const job = data.data;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './AIAssistant.css';
 
 /**
@@ -28,7 +29,7 @@ const JobTitleGenerator = ({ currentTitle, category, onApply }) => {
     setSuggestions(null);
 
     try {
-      const response = await fetch('/api/ai/improve-title', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/improve-title`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

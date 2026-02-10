@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import "../../styles/CreateGig.css"; // Use the same CSS as CreateGig
+import { API_BASE_URL } from "../../lib/api";
 
 export default function EditGig() {
   const { gigId } = useParams();
@@ -42,7 +43,7 @@ export default function EditGig() {
   const fetchGigData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/gigs/${gigId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/gigs/${gigId}`, {
         credentials: 'include'
       });
       
@@ -151,7 +152,7 @@ export default function EditGig() {
         });
       }
 
-      const response = await fetch(`/api/gigs/${gigId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/gigs/${gigId}`, {
         method: "PUT",
         body: submitData,
         credentials: 'include'

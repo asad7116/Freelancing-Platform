@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from "../lib/api";
 import {
     CreditCard,
     CheckCircle,
@@ -40,7 +41,7 @@ const Checkout = () => {
     const fetchPendingPayments = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/proposals/client/pending-payments', {
+            const response = await fetch(`${API_BASE_URL}/api/proposals/client/pending-payments`, {
                 credentials: 'include'
             });
             const data = await response.json();
@@ -63,7 +64,7 @@ const Checkout = () => {
             setProcessingId(proposalId);
             setError('');
 
-            const response = await fetch(`/api/proposals/${proposalId}/create-checkout-session`, {
+            const response = await fetch(`${API_BASE_URL}/api/proposals/${proposalId}/create-checkout-session`, {
                 method: 'POST',
                 credentials: 'include'
             });

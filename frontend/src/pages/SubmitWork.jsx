@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Send, FileText, Link as LinkIcon, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
 import '../styles/submit_work.css';
+import { API_BASE_URL } from "../lib/api";
 
 const SubmitWork = () => {
   const { proposalId } = useParams();
@@ -25,7 +26,7 @@ const SubmitWork = () => {
   const fetchProposal = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/proposals/${proposalId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/proposals/${proposalId}`, {
         credentials: 'include'
       });
 
@@ -67,7 +68,7 @@ const SubmitWork = () => {
       setSubmitting(true);
       setError('');
 
-      const response = await fetch(`/api/proposals/${proposalId}/submit-work`, {
+      const response = await fetch(`${API_BASE_URL}/api/proposals/${proposalId}/submit-work`, {
         method: 'PUT',
         credentials: 'include',
         headers: {

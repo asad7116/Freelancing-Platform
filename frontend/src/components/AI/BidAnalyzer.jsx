@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../lib/api';
 import './BidAnalyzer.css';
 
 /**
@@ -48,7 +49,7 @@ const BidAnalyzer = ({
     setError(null);
 
     try {
-      const response = await fetch('/api/ai/analyze-bid', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/analyze-bid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

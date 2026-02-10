@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/job_detail.css';
+import { API_BASE_URL } from "../lib/api";
 
 const JobDetail = () => {
   const { jobId } = useParams();
@@ -21,7 +22,7 @@ const JobDetail = () => {
   const fetchJobDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/job-posts/${jobId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/job-posts/${jobId}`, {
         credentials: 'include'
       });
       

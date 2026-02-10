@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Star, Eye } from "lucide-react";
+import { API_BASE_URL } from "../lib/api";
 import "../styles/gigs_dashboard.css";
 
 export default function GigsDashboard() {
@@ -13,10 +14,10 @@ export default function GigsDashboard() {
     const fetchGigs = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/gigs/my-gigs', {
+        const response = await axios.get(`${API_BASE_URL}/api/gigs/my-gigs`, {
           withCredentials: true
         });
-        setGigs(response.data.gigs);
+        setGigs(response.data.gigs || []);
       } catch (error) {
         console.error("Error fetching gigs:", error);
       } finally {
