@@ -40,6 +40,9 @@ jobs:
       with:
         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
         aws-region: us-east-1
+    - name: Debug Variable Visibility
+      run: |
+        echo "My Variable is: ${{ vars.FRONTEND_S3_BUCKET }}"
 
     - name: Debug vars (safe)
       run: |
