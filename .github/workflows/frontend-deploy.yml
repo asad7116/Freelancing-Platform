@@ -40,22 +40,10 @@ jobs:
       with:
         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
         aws-region: us-east-1
-    - name: Debug Variable Visibility
-      run: |
-        echo "My Variable is: ${{ vars.FRONTEND_S3_BUCKET }}"
-
-    - name: Debug vars (safe)
-      run: |
-        echo "FRONTEND_S3_BUCKET length: ${#FRONTEND_S3_BUCKET}"
-      env:
-        FRONTEND_S3_BUCKET: ${{ vars.FRONTEND_S3_BUCKET }}
-
-    - name: Validate vars are present
-      run: |
-        test -n "${{ vars.FRONTEND_S3_BUCKET }}" || (echo "Missing vars.FRONTEND_S3_BUCKET" && exit 1)
+   
 
     - name: Deploy to S3
-      run: aws s3 sync build/ s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
+      run: aws s3 sync build/ s3://tixe.dev --delete
 
     - name: Invalidate CloudFront
       run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
