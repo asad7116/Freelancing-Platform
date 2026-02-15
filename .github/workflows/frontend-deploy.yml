@@ -44,7 +44,9 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy to S3
-      run: aws s3 sync build/ s3://${{ secrets.FRONTEND_S3_BUCKET }} --delete
+      run: aws s3 sync build/ s3://${{ vars.FRONTEND_S3_BUCKET }} --delete
+
+
 
     - name: Invalidate CloudFront
-      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html" "/asset-manifest.json"
+      run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/index.html"
