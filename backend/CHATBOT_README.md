@@ -4,41 +4,6 @@
 
 A production-ready AI chatbot for the Freelancing Platform that answers user questions using **hybrid retrieval** (BM25 + Vector Similarity). The system retrieves relevant content from the platform's knowledge base and generates accurate, contextual responses.
 
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         User Interface                              │
-│                    (ChatbotWidget.jsx)                             │
-└─────────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                         Backend API                                 │
-│                  /api/chatbot/chat                                  │
-└─────────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    Hybrid Retrieval System                          │
-│  ┌─────────────────┐         ┌─────────────────────────────┐       │
-│  │   BM25 Search   │         │   Vector Similarity Search  │       │
-│  │    (60%)        │    +    │        (40%)                │       │
-│  └─────────────────┘         └─────────────────────────────┘       │
-└─────────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                     Context Generation                              │
-│              (Top 5 chunks combined)                                │
-└─────────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                      LLM Response Generation                        │
-│                   (Groq - llama-3.1-8b-instant)                    │
-└─────────────────────────────────────────────────────────────────────┘
-```
 
 ## Key Features
 
