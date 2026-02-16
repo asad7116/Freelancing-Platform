@@ -29,7 +29,7 @@ A production-ready AI chatbot for the Freelancing Platform that answers user que
 
 ### Public Endpoints
 
-#### POST `/api/chatbot/chat`
+
 Send a message and get a response.
 
 #### GET `/api/chatbot/session/:sessionId`
