@@ -57,21 +57,6 @@ frontend/
 #### POST `/api/chatbot/chat`
 Send a message and get a response.
 
-```json
-// Request
-{
-  "message": "How do I create a gig?",
-  "sessionId": "session_123..."  // Optional, for continuing conversation
-}
-
-// Response
-{
-  "success": true,
-  "response": "Creating a gig on the platform...",
-  "sessionId": "session_123..."
-}
-```
-
 #### GET `/api/chatbot/session/:sessionId`
 Retrieve chat history for a session.
 
