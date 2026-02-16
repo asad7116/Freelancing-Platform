@@ -25,31 +25,6 @@ A production-ready AI chatbot for the Freelancing Platform that answers user que
 
 ## File Structure
 
-```
-backend/
-├── src/
-│   ├── services/
-│   │   ├── chatbot.service.js       # Main chatbot logic
-│   │   ├── bm25.service.js          # BM25 ranking algorithm
-│   │   ├── embedding.service.js     # Vector embeddings
-│   │   └── content-processor.service.js  # Content chunking
-│   ├── controllers/
-│   │   └── chatbot.controller.js    # HTTP handlers
-│   ├── routes/
-│   │   └── chatbot.routes.js        # API endpoints
-│   └── db/
-│       └── initializeCollections.js # Database setup
-├── scripts/
-│   └── init-chatbot.js              # Content initialization
-
-frontend/
-├── src/
-│   ├── components/
-│   │   └── ChatbotWidget.jsx        # Chat UI component
-│   └── styles/
-│       └── ChatbotWidget.css        # Styling
-```
-
 ## API Endpoints
 
 ### Public Endpoints
