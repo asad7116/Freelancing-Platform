@@ -45,11 +45,6 @@ Delete a chat session.
 
 ### Admin Endpoints
 
-#### POST `/api/chatbot/admin/process-content`
-Process/re-process platform content for the chatbot index.
-
-#### POST `/api/chatbot/admin/clear-content`
-Clear all processed content.
 
 #### GET `/api/chatbot/admin/stats`
 Get chatbot statistics.
