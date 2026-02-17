@@ -26,6 +26,11 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Close mobile menu when clicking a link
+  const handleLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
+
   const currencies = ["USD", "EUR", "GBP", "PKR", "INR"];
   const languages = ["English", "Spanish", "French", "Arabic", "German"];
 
@@ -42,18 +47,21 @@ const Header = () => {
         <button
           className="mobile-menu-toggle"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <nav className={`nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
+        {/* Desktop Navigation */}
+        <nav className="nav-links desktop-nav">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
           <Link to="/pricing">Pricing</Link>
           <Link to="/contact">Contact</Link>
         </nav>
 
-        <div className="right-side">
+        {/* Desktop Right Side */}
+        <div className="right-side desktop-right">
           {/* Currency Selector */}
           <div className="selector-container" ref={currencyRef}>
             <div
@@ -118,9 +126,53 @@ const Header = () => {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)} />
+
+        {/* Mobile Menu */}
+        <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+          <nav className="mobile-nav-links">
+            <Link to="/" onClick={handleLinkClick}>Home</Link>
+            <Link to="/about" onClick={handleLinkClick}>About</Link>
+            <Link to="/pricing" onClick={handleLinkClick}>Pricing</Link>
+            <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
+          </nav>
+
+          <div className="mobile-selectors">
+            {/* Mobile Currency Selector */}
+            <div className="mobile-selector">
+              <label>Currency</label>
+              <select 
+                value={currency} 
+                onChange={(e) => setCurrency(e.target.value)}
+              >
+                {currencies.map(curr => (
+                  <option key={curr} value={curr}>{curr}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Mobile Language Selector */}
+            <div className="mobile-selector">
+              <label>Language</label>
+              <select 
+                value={language} 
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                {languages.map(lang => (
+                  <option key={lang} value={lang}>{lang}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="mobile-auth-buttons">
+            <Link to="/signin" className="mobile-signin-btn" onClick={handleLinkClick}>Sign In</Link>
+            <Link to="/signup" className="mobile-signup-btn" onClick={handleLinkClick}>Sign Up</Link>
+          </div>
+        </div>
       </div>
-
-
     </header>
   );
 };
