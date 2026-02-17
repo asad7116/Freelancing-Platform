@@ -2,13 +2,15 @@ import React from "react";
 import "../styles/Header.css";
 import { Link } from "react-router-dom";
 import { Globe, DollarSign, Menu, X, ChevronDown } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [currency, setCurrency] = React.useState("USD");
-  const [language, setLanguage] = React.useState("English");
   const [showCurrency, setShowCurrency] = React.useState(false);
   const [showLanguage, setShowLanguage] = React.useState(false);
+
+  const { language, changeLanguage, t, availableLanguages } = useLanguage();
 
   const currencyRef = React.useRef(null);
   const languageRef = React.useRef(null);
@@ -32,7 +34,6 @@ const Header = () => {
   };
 
   const currencies = ["USD", "EUR", "GBP", "PKR", "INR"];
-  const languages = ["English", "Spanish", "French", "Arabic", "German"];
 
   return (
     <header>
@@ -54,10 +55,10 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="nav-links desktop-nav">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/pricing">Pricing</Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/">{t('header.home')}</Link>
+          <Link to="/about">{t('header.about')}</Link>
+          <Link to="/pricing">{t('header.pricing')}</Link>
+          <Link to="/contact">{t('header.contact')}</Link>
         </nav>
 
         {/* Desktop Right Side */}
@@ -110,12 +111,12 @@ const Header = () => {
 
             {showLanguage && (
               <div className="selector-dropdown">
-                {languages.map(lang => (
+                {availableLanguages.map(lang => (
                   <div
                     key={lang}
                     className={`dropdown-item ${language === lang ? 'selected' : ''}`}
                     onClick={() => {
-                      setLanguage(lang);
+                      changeLanguage(lang);
                       setShowLanguage(false);
                     }}
                   >
@@ -133,16 +134,16 @@ const Header = () => {
         {/* Mobile Menu */}
         <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
           <nav className="mobile-nav-links">
-            <Link to="/" onClick={handleLinkClick}>Home</Link>
-            <Link to="/about" onClick={handleLinkClick}>About</Link>
-            <Link to="/pricing" onClick={handleLinkClick}>Pricing</Link>
-            <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
+            <Link to="/" onClick={handleLinkClick}>{t('header.home')}</Link>
+            <Link to="/about" onClick={handleLinkClick}>{t('header.about')}</Link>
+            <Link to="/pricing" onClick={handleLinkClick}>{t('header.pricing')}</Link>
+            <Link to="/contact" onClick={handleLinkClick}>{t('header.contact')}</Link>
           </nav>
 
           <div className="mobile-selectors">
             {/* Mobile Currency Selector */}
             <div className="mobile-selector">
-              <label>Currency</label>
+              <label>{t('header.currency')}</label>
               <select 
                 value={currency} 
                 onChange={(e) => setCurrency(e.target.value)}
@@ -155,12 +156,12 @@ const Header = () => {
 
             {/* Mobile Language Selector */}
             <div className="mobile-selector">
-              <label>Language</label>
+              <label>{t('header.language')}</label>
               <select 
                 value={language} 
-                onChange={(e) => setLanguage(e.target.value)}
+                onChange={(e) => changeLanguage(e.target.value)}
               >
-                {languages.map(lang => (
+                {availableLanguages.map(lang => (
                   <option key={lang} value={lang}>{lang}</option>
                 ))}
               </select>
@@ -168,8 +169,8 @@ const Header = () => {
           </div>
 
           <div className="mobile-auth-buttons">
-            <Link to="/signin" className="mobile-signin-btn" onClick={handleLinkClick}>Sign In</Link>
-            <Link to="/signup" className="mobile-signup-btn" onClick={handleLinkClick}>Sign Up</Link>
+            <Link to="/signin" className="mobile-signin-btn" onClick={handleLinkClick}>{t('header.signIn')}</Link>
+            <Link to="/signup" className="mobile-signup-btn" onClick={handleLinkClick}>{t('header.signUp')}</Link>
           </div>
         </div>
       </div>

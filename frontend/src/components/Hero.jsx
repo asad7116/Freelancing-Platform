@@ -2,8 +2,11 @@ import React from "react";
 import "../styles/Hero.css";
 import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="hero-one">
       <div className="hero-container row">
@@ -16,16 +19,16 @@ export default function Hero() {
             data-aos-duration="1000"
             data-aos-easing="linear"
           >
-            Find Your Perfect <span>Freelancer</span> Quick and Easy
+            {t('hero.title')} <span>{t('hero.titleHighlight')}</span> {t('hero.titleEnd')}
           </h1>
 
           {/* Auth Buttons */}
           <div className="hero-auth-buttons">
             <Link to="/auth" className="hero-btn hero-login-btn">
-              Login
+              {t('hero.login')}
             </Link>
             <Link to="/auth" className="hero-btn hero-signup-btn">
-              Sign Up
+              {t('hero.signUp')}
             </Link>
           </div>
 
@@ -39,7 +42,7 @@ export default function Hero() {
               />
               <div>
                 <h3 className="hero-counter-title">35M+</h3>
-                <p>Happy Customers</p>
+                <p>{t('hero.happyCustomers')}</p>
               </div>
             </div>
 

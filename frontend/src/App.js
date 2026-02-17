@@ -1,5 +1,6 @@
 // src/App.js
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { LanguageProvider } from "./context/LanguageContext";
 
 // ---------- Public pages ----------
 import HomePage from "./pages/HomePage";
@@ -44,20 +45,21 @@ import ChatbotWidget from "./components/ChatbotWidget";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* ===== Public routes ===== */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/auth" element={<AuthChoice />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* ===== Public routes ===== */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/auth" element={<AuthChoice />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
 
-        {/* ===== Client dashboard ===== */}
-        <Route
-          path="/client"
+          {/* ===== Client dashboard ===== */}
+          <Route
+            path="/client"
           element={
             <RequireRole role="client">
               <DashboardLayout role="client" />
@@ -122,5 +124,6 @@ export default function App() {
       {/* Chatbot Widget - appears on all pages */}
       <ChatbotWidget />
     </BrowserRouter>
+    </LanguageProvider>
   );
 }

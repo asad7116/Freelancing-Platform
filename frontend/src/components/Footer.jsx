@@ -12,8 +12,11 @@ import {
   Linkedin,
   ArrowUp,
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -28,26 +31,25 @@ const Footer = () => {
               <img src="/assets/logo/logo.png" alt="logo" />
             </Link>
             <p>
-              Connect with talented freelancers and find the perfect professional
-              for your project. Get your work done efficiently and affordably.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Right: Newsletter */}
           <div className="newsletter-right">
-            <h3>Subscribe to Newsletter</h3>
-            <p className="muted">Get the latest job updates delivered to your inbox.</p>
+            <h3>{t('footer.subscribeNewsletter')}</h3>
+            <p className="muted">{t('footer.newsletterSubtitle')}</p>
             <form
               className="newsletter-form"
               onSubmit={(e) => e.preventDefault()}
             >
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t('footer.enterEmail')}
                 aria-label="Email"
                 required
               />
-              <button type="submit">Subscribe</button>
+              <button type="submit">{t('footer.subscribe')}</button>
             </form>
           </div>
         </div>
@@ -60,7 +62,7 @@ const Footer = () => {
         <div className="container footer-widgets">
           {/* Contact Info */}
           <div className="widget">
-            <h4 className="widget-title">Contact</h4>
+            <h4 className="widget-title">{t('footer.contact')}</h4>
             <ul className="contact-list">
               <li>
                 <Mail size={16} />
@@ -79,69 +81,69 @@ const Footer = () => {
 
           {/* Categories */}
           <div className="widget">
-            <h4 className="widget-title">Categories</h4>
+            <h4 className="widget-title">{t('footer.categories')}</h4>
             <ul className="link-list">
               <li>
-                <Link to="#">Graphics & Design</Link>
+                <Link to="#">{t('footer.graphicsDesign')}</Link>
               </li>
               <li>
-                <Link to="#">Digital Marketing</Link>
+                <Link to="#">{t('footer.digitalMarketing')}</Link>
               </li>
               <li>
-                <Link to="#">Programming & Tech</Link>
+                <Link to="#">{t('footer.programmingTech')}</Link>
               </li>
               <li>
-                <Link to="#">Video & Animation</Link>
+                <Link to="#">{t('footer.videoAnimation')}</Link>
               </li>
               <li>
-                <Link to="#">Photography</Link>
+                <Link to="#">{t('footer.photography')}</Link>
               </li>
               <li>
-                <Link to="#">Writing & Translation</Link>
+                <Link to="#">{t('footer.writingTranslation')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Company */}
           <div className="widget">
-            <h4 className="widget-title">Company</h4>
+            <h4 className="widget-title">{t('footer.company')}</h4>
             <ul className="link-list">
               <li>
-                <Link to="#">About Us</Link>
+                <Link to="#">{t('footer.aboutUs')}</Link>
               </li>
               <li>
-                <Link to="#">Careers</Link>
+                <Link to="#">{t('footer.careers')}</Link>
               </li>
               <li>
-                <Link to="#">Blog</Link>
+                <Link to="#">{t('footer.blog')}</Link>
               </li>
               <li>
-                <Link to="#">Press</Link>
+                <Link to="#">{t('footer.press')}</Link>
               </li>
               <li>
-                <Link to="#">Contact</Link>
+                <Link to="#">{t('footer.contactUs')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Support */}
           <div className="widget">
-            <h4 className="widget-title">Support</h4>
+            <h4 className="widget-title">{t('footer.support')}</h4>
             <ul className="link-list">
               <li>
-                <Link to="#">Help Center</Link>
+                <Link to="#">{t('footer.helpCenter')}</Link>
               </li>
               <li>
-                <Link to="#">Privacy Policy</Link>
+                <Link to="#">{t('footer.privacyPolicy')}</Link>
               </li>
               <li>
-                <Link to="#">Terms of Service</Link>
+                <Link to="#">{t('footer.termsOfService')}</Link>
               </li>
               <li>
-                <Link to="#">FAQ's</Link>
+                <Link to="#">{t('footer.faqs')}</Link>
               </li>
               <li>
-                <Link to="#">Trust & Safety</Link>
+                <Link to="#">{t('footer.trustSafety')}</Link>
               </li>
             </ul>
           </div>
@@ -151,7 +153,7 @@ const Footer = () => {
       {/* Bottom bar */}
       <div className="footer-bottom">
         <div className="container bottom-inner">
-          <p>&copy; 2025 Tixe - Grow with us. All Rights Reserved.</p>
+          <p>{t('footer.copyright')}</p>
           <div className="socials">
             <a
               href="https://facebook.com"

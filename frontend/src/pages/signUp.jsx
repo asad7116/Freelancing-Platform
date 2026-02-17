@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import ToggleButtons from "../components/Login_Toggle";
 import { ArrowLeft } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SignUp() {
+  const { t } = useLanguage();
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -221,7 +223,7 @@ export default function SignUp() {
       {/* Back Button */}
       <Link to="/" className="back-button">
         <ArrowLeft size={20} />
-        <span>Back to Home</span>
+        <span>{t('auth.backToHome')}</span>
       </Link>
 
       {/* Animated gradient background */}
@@ -259,8 +261,8 @@ export default function SignUp() {
           <Link to="/">
             <img src="/assets/logo/logo.png" alt="Tixe" className="auth-logo" />
           </Link>
-          <h1 className="auth-title">Create Account</h1>
-          <p className="auth-subtitle">Join our platform to get started</p>
+          <h1 className="auth-title">{t('auth.createAccount')}</h1>
+          <p className="auth-subtitle">{t('auth.joinPlatform')}</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
@@ -277,7 +279,7 @@ export default function SignUp() {
               <div className="form-group">
                 <input
                   type="text"
-                  placeholder="Full Name"
+                  placeholder={t('auth.fullName')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -289,7 +291,7 @@ export default function SignUp() {
               <div className="form-group">
                 <input
                   type="email"
-                  placeholder="Email address"
+                  placeholder={t('auth.emailAddress')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -301,7 +303,7 @@ export default function SignUp() {
               <div className="form-group">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -313,7 +315,7 @@ export default function SignUp() {
               <div className="form-group">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Confirm Password"
+                  placeholder={t('auth.confirmPassword')}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
@@ -329,21 +331,21 @@ export default function SignUp() {
                     checked={showPassword}
                     onChange={(e) => setShowPassword(e.target.checked)}
                   />
-                  <span>Show Password</span>
+                  <span>{t('auth.showPassword')}</span>
                 </label>
               </div>
             </>
           )}
 
           <button type="submit" disabled={loading} className="auth-submit-btn">
-            {loading ? "Creating account..." : isGoogleMode ? "Continue" : "Sign Up"}
+            {loading ? t('auth.creatingAccount') : isGoogleMode ? t('auth.continue') : t('auth.signUp')}
           </button>
         </form>
 
         {!isGoogleMode && (
           <>
             <div className="divider">
-              <span>OR</span>
+              <span>{t('auth.or')}</span>
             </div>
 
             <div className="social-signin">
@@ -354,9 +356,9 @@ export default function SignUp() {
 
         <div className="auth-footer">
           <p>
-            Already have an account?{" "}
+            {t('auth.alreadyHaveAccount')}{" "}
             <Link to="/signin" className="auth-link">
-              Sign In
+              {t('auth.signIn')}
             </Link>
           </p>
         </div>

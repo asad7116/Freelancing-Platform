@@ -3,8 +3,10 @@ import "../styles/Signin.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { api } from "../lib/api";
 import { ArrowLeft } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SignIn() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -171,7 +173,7 @@ export default function SignIn() {
       {/* Back Button */}
       <Link to="/" className="back-button">
         <ArrowLeft size={20} />
-        <span>Back to Home</span>
+        <span>{t('auth.backToHome')}</span>
       </Link>
 
       {/* Animated gradient background */}
@@ -209,8 +211,8 @@ export default function SignIn() {
           <Link to="/">
             <img src="/assets/logo/logo.png" alt="Tixe" className="auth-logo" />
           </Link>
-          <h1 className="auth-title">Welcome Back</h1>
-          <p className="auth-subtitle">Sign in to continue to your account</p>
+          <h1 className="auth-title">{t('auth.welcomeBack')}</h1>
+          <p className="auth-subtitle">{t('auth.signInSubtitle')}</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
@@ -220,7 +222,7 @@ export default function SignIn() {
             <input
               type="email"
               id="email"
-              placeholder="Email address"
+              placeholder={t('auth.email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -233,7 +235,7 @@ export default function SignIn() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              placeholder="Password"
+              placeholder={t('auth.password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -249,27 +251,27 @@ export default function SignIn() {
                 checked={showPassword}
                 onChange={(e) => setShowPassword(e.target.checked)}
               />
-              <span>Show Password</span>
+              <span>{t('auth.showPassword')}</span>
             </label>
           </div>
 
           <div className="form-options">
             <label className="remember-me">
               <input type="checkbox" />
-              <span>Remember me</span>
+              <span>{t('auth.rememberMe')}</span>
             </label>
             <Link to="/forgot-password" className="forgot-link">
-              Forgot password?
+              {t('auth.forgotPassword')}
             </Link>
           </div>
 
           <button type="submit" disabled={loading} className="auth-submit-btn">
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? t('auth.signingIn') : t('auth.signIn')}
           </button>
         </form>
 
         <div className="divider">
-          <span>OR</span>
+          <span>{t('auth.or')}</span>
         </div>
 
         <div className="social-signin">
@@ -278,9 +280,9 @@ export default function SignIn() {
 
         <div className="auth-footer">
           <p>
-            Don't have an account?{" "}
+            {t('auth.noAccount')}{" "}
             <Link to="/signup" className="auth-link">
-              Create Account
+              {t('auth.createAccount')}
             </Link>
           </p>
         </div>
