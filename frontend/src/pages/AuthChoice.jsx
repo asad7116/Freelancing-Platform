@@ -1,10 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/AuthChoice.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function AuthChoice() {
   return (
     <div className="auth-choice-wrapper">
+      {/* Back Button */}
+      <Link to="/" className="back-button">
+        <ArrowLeft size={20} />
+        <span>Back to Home</span>
+      </Link>
+
       <div className="auth-choice-container">
         {/* Background Gradient */}
         <div className="gradient-bg"></div>
