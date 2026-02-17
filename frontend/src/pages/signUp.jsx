@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "../styles/Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import ToggleButtons from "../components/Login_Toggle";
+import { ArrowLeft } from "lucide-react";
 
 export default function SignUp() {
   const [role, setRole] = useState("");
@@ -15,8 +16,16 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [isGoogleMode, setIsGoogleMode] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [googleLoaded, setGoogleLoaded] = useState(false);
 
   const navigate = useNavigate();
+  
+  // Use ref to store the latest navigate for the callback
+  const navigateRef = useRef(navigate);
+  
+  useEffect(() => {
+    navigateRef.current = navigate;
+  }, [navigate]);
 
   // Mouse tracking for animated shapes
   useEffect(() => {
@@ -42,58 +51,11 @@ export default function SignUp() {
     }
   }, []);
 
-  // Load Google Identity Services script
-  useEffect(() => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      console.warn('REACT_APP_GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
-      return;
-    }
-
-    const existing = document.getElementById('google-identity-script');
-    if (!existing) {
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.id = 'google-identity-script';
-      script.onload = () => {
-        if (window.google && window.google.accounts && window.google.accounts.id) {
-          window.google.accounts.id.initialize({
-            client_id: clientId,
-            callback: handleGoogleResponse,
-            use_fedcm_for_prompt: false,
-          });
-          const btn = document.getElementById('google-button-signup');
-          if (btn) {
-            window.google.accounts.id.renderButton(btn, {
-              theme: 'outline',
-              size: 'large',
-              width: '100%'
-            });
-          }
-        }
-      };
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  const handleGoogleManualClick = () => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      setError('Google Sign-In not configured. Please contact support.');
-      return;
-    }
-    if (window.google && window.google.accounts && window.google.accounts.id) {
-      window.google.accounts.id.prompt();
-    } else {
-      setError('Google Sign-In library not loaded. Please refresh and try again.');
-    }
-  };
-
-  async function handleGoogleResponse(response) {
+  // Google response handler using refs to avoid stale closure
+  const handleGoogleResponse = useCallback(async (response) => {
     try {
       setLoading(true);
+      setError("");
       const id_token = response?.credential;
       if (!id_token) throw new Error('No id_token received from Google');
 
@@ -109,16 +71,89 @@ export default function SignUp() {
         } else {
           localStorage.setItem('role', user.role);
           const dest = user.role === 'client' ? '/client/overview' : '/freelancer/overview';
-          navigate(dest, { replace: true });
+          navigateRef.current(dest, { replace: true });
         }
       } else {
-        throw new Error('Google sign-in failed');
+        throw new Error('Google sign-up failed');
       }
     } catch (err) {
-      setError(err.message || 'Google sign-in failed');
+      console.error('Google sign-up error:', err);
+      setError(err.message || 'Google sign-up failed');
       setLoading(false);
     }
-  }
+  }, []);
+
+  // Initialize Google button when library is loaded
+  const initializeGoogleButton = useCallback(() => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    if (!clientId || !window.google?.accounts?.id) return;
+
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback: handleGoogleResponse,
+      use_fedcm_for_prompt: false,
+    });
+
+    const btn = document.getElementById('google-button-signup');
+    if (btn) {
+      // Clear any existing button content
+      btn.innerHTML = '';
+      window.google.accounts.id.renderButton(btn, {
+        theme: 'outline',
+        size: 'large',
+        width: 280,
+        text: 'signup_with',
+      });
+    }
+  }, [handleGoogleResponse]);
+
+  // Load Google Identity Services script
+  useEffect(() => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      console.warn('REACT_APP_GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
+      return;
+    }
+
+    const loadGoogleScript = () => {
+      const existing = document.getElementById('google-identity-script');
+      if (existing) {
+        // Script already exists, check if Google is loaded
+        if (window.google?.accounts?.id) {
+          setGoogleLoaded(true);
+        }
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.id = 'google-identity-script';
+      script.onload = () => {
+        setGoogleLoaded(true);
+      };
+      document.body.appendChild(script);
+    };
+
+    loadGoogleScript();
+  }, []);
+
+  // Initialize button when Google is loaded or component mounts
+  useEffect(() => {
+    if (googleLoaded && !isGoogleMode) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(initializeGoogleButton, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [googleLoaded, isGoogleMode, initializeGoogleButton]);
+
+  // Re-initialize if script was already loaded (e.g., navigation from another page)
+  useEffect(() => {
+    if (window.google?.accounts?.id) {
+      setGoogleLoaded(true);
+    }
+  }, []);
 
   function normalizeRole(label) {
     const v = String(label || "").trim().toLowerCase();
@@ -183,6 +218,12 @@ export default function SignUp() {
 
   return (
     <div className="auth-page">
+      {/* Back Button */}
+      <Link to="/" className="back-button">
+        <ArrowLeft size={20} />
+        <span>Back to Home</span>
+      </Link>
+
       {/* Animated gradient background */}
       <div className="gradient-bg"></div>
 
