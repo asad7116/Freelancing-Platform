@@ -71,7 +71,7 @@ export default function SignIn() {
 
   // Initialize Google button when library is loaded
   const initializeGoogleButton = useCallback(() => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId || !window.google?.accounts?.id) return;
 
     window.google.accounts.id.initialize({
@@ -95,7 +95,7 @@ export default function SignIn() {
 
   // Load Google Identity Services script
   useEffect(() => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
       console.warn('REACT_APP_GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
       return;
