@@ -9,12 +9,14 @@
   justify-content: center;
   margin-top: 0;
   padding-top: 80px;
+  overflow-x: hidden;
 }
 
 .hero-container {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .row {

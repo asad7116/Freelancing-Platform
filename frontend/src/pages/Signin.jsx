@@ -1,18 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "../styles/Signin.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { api } from "../lib/api";
+import { ArrowLeft } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SignIn() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [googleLoaded, setGoogleLoaded] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Use ref to store the latest navigate and location for the callback
+  const navigateRef = useRef(navigate);
+  const locationRef = useRef(location);
+  
+  useEffect(() => {
+    navigateRef.current = navigate;
+    locationRef.current = location;
+  }, [navigate, location]);
 
   // Mouse tracking for animated shapes
   useEffect(() => {
@@ -27,58 +40,11 @@ export default function SignIn() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Load Google Identity Services script
-  useEffect(() => {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      console.warn('GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
-      return;
-    }
-
-    const existing = document.getElementById('google-identity-script');
-    if (!existing) {
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.id = 'google-identity-script';
-      script.onload = () => {
-        if (window.google && window.google.accounts && window.google.accounts.id) {
-          window.google.accounts.id.initialize({
-            client_id: clientId,
-            callback: handleGoogleResponse,
-            use_fedcm_for_prompt: false,
-          });
-          const btn = document.getElementById('google-button-signin');
-          if (btn) {
-            window.google.accounts.id.renderButton(btn, {
-              theme: 'outline',
-              size: 'large',
-              width: '100%'
-            });
-          }
-        }
-      };
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  const handleGoogleManualClickSignin = () => {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      setError('Google Sign-In not configured. Please contact support.');
-      return;
-    }
-    if (window.google && window.google.accounts && window.google.accounts.id) {
-      window.google.accounts.id.prompt();
-    } else {
-      setError('Google Sign-In library not loaded. Please refresh and try again.');
-    }
-  };
-
-  async function handleGoogleResponse(response) {
+  // Google response handler using refs to avoid stale closure
+  const handleGoogleResponse = useCallback(async (response) => {
     try {
       setLoading(true);
+      setError("");
       const id_token = response?.credential;
       if (!id_token) throw new Error('No id_token received from Google');
 
@@ -87,20 +53,93 @@ export default function SignIn() {
       if (user) {
         if (user.isNewUser && !user.role) {
           localStorage.setItem('googleAuthNewUser', 'true');
-          navigate('/signUp', { replace: true });
+          navigateRef.current('/signUp', { replace: true });
         } else {
           localStorage.setItem('role', user.role);
-          const backTo = location.state?.from?.pathname || (user.role === 'client' ? '/client/overview' : '/freelancer/overview');
-          navigate(backTo, { replace: true });
+          const backTo = locationRef.current.state?.from?.pathname || (user.role === 'client' ? '/client/overview' : '/freelancer/overview');
+          navigateRef.current(backTo, { replace: true });
         }
       } else {
         throw new Error('Google sign-in failed');
       }
     } catch (err) {
+      console.error('Google sign-in error:', err);
       setError(err.message || 'Google sign-in failed');
       setLoading(false);
     }
-  }
+  }, []);
+
+  // Initialize Google button when library is loaded
+  const initializeGoogleButton = useCallback(() => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    if (!clientId || !window.google?.accounts?.id) return;
+
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback: handleGoogleResponse,
+      use_fedcm_for_prompt: false,
+    });
+
+    const btn = document.getElementById('google-button-signin');
+    if (btn) {
+      // Clear any existing button content
+      btn.innerHTML = '';
+      window.google.accounts.id.renderButton(btn, {
+        theme: 'outline',
+        size: 'large',
+        width: 280,
+        text: 'signin_with',
+      });
+    }
+  }, [handleGoogleResponse]);
+
+  // Load Google Identity Services script
+  useEffect(() => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      console.warn('REACT_APP_GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
+      return;
+    }
+
+    const loadGoogleScript = () => {
+      const existing = document.getElementById('google-identity-script');
+      if (existing) {
+        // Script already exists, check if Google is loaded
+        if (window.google?.accounts?.id) {
+          setGoogleLoaded(true);
+        }
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.id = 'google-identity-script';
+      script.onload = () => {
+        setGoogleLoaded(true);
+      };
+      document.body.appendChild(script);
+    };
+
+    loadGoogleScript();
+  }, []);
+
+  // Initialize button when Google is loaded or component mounts
+  useEffect(() => {
+    if (googleLoaded) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(initializeGoogleButton, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [googleLoaded, initializeGoogleButton]);
+
+  // Re-initialize if script was already loaded (e.g., navigation from another page)
+  useEffect(() => {
+    if (window.google?.accounts?.id) {
+      setGoogleLoaded(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -131,6 +170,12 @@ export default function SignIn() {
 
   return (
     <div className="auth-page">
+      {/* Back Button */}
+      <Link to="/" className="back-button">
+        <ArrowLeft size={20} />
+        <span>{t('auth.backToHome')}</span>
+      </Link>
+
       {/* Animated gradient background */}
       <div className="gradient-bg"></div>
 
@@ -166,8 +211,8 @@ export default function SignIn() {
           <Link to="/">
             <img src="/assets/logo/logo.png" alt="Tixe" className="auth-logo" />
           </Link>
-          <h1 className="auth-title">Welcome Back</h1>
-          <p className="auth-subtitle">Sign in to continue to your account</p>
+          <h1 className="auth-title">{t('auth.welcomeBack')}</h1>
+          <p className="auth-subtitle">{t('auth.signInSubtitle')}</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
@@ -177,7 +222,7 @@ export default function SignIn() {
             <input
               type="email"
               id="email"
-              placeholder="Email address"
+              placeholder={t('auth.email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -190,7 +235,7 @@ export default function SignIn() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              placeholder="Password"
+              placeholder={t('auth.password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -206,27 +251,27 @@ export default function SignIn() {
                 checked={showPassword}
                 onChange={(e) => setShowPassword(e.target.checked)}
               />
-              <span>Show Password</span>
+              <span>{t('auth.showPassword')}</span>
             </label>
           </div>
 
           <div className="form-options">
             <label className="remember-me">
               <input type="checkbox" />
-              <span>Remember me</span>
+              <span>{t('auth.rememberMe')}</span>
             </label>
             <Link to="/forgot-password" className="forgot-link">
-              Forgot password?
+              {t('auth.forgotPassword')}
             </Link>
           </div>
 
           <button type="submit" disabled={loading} className="auth-submit-btn">
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? t('auth.signingIn') : t('auth.signIn')}
           </button>
         </form>
 
         <div className="divider">
-          <span>OR</span>
+          <span>{t('auth.or')}</span>
         </div>
 
         <div className="social-signin">
@@ -235,9 +280,9 @@ export default function SignIn() {
 
         <div className="auth-footer">
           <p>
-            Don't have an account?{" "}
+            {t('auth.noAccount')}{" "}
             <Link to="/signup" className="auth-link">
-              Create Account
+              {t('auth.createAccount')}
             </Link>
           </p>
         </div>
