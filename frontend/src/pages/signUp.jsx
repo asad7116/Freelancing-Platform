@@ -44,9 +44,9 @@ export default function SignUp() {
 
   // Load Google Identity Services script
   useEffect(() => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
-      console.warn('REACT_APP_GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
+      console.warn('GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
       return;
     }
 
@@ -79,7 +79,7 @@ export default function SignUp() {
   }, []);
 
   const handleGoogleManualClick = () => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
       setError('Google Sign-In not configured. Please contact support.');
       return;
