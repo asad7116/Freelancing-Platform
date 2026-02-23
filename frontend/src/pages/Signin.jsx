@@ -97,7 +97,7 @@ export default function SignIn() {
   useEffect(() => {
     const clientId = process.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
-      console.warn('REACT_APP_GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
+      console.warn('GOOGLE_CLIENT_ID not set - Google Sign-In disabled');
       return;
     }
 
