@@ -8,7 +8,7 @@ import { ObjectId } from "mongodb"
 
 const router = Router()
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+const googleClient = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID)
 
 // POST /api/auth/signup
 router.post("/signup", async (req, res) => {
@@ -128,10 +128,10 @@ router.post("/google", async (req, res) => {
     }
 
     console.log("[Google Auth] Verifying token with Google...")
-    console.log("[Google Auth] Client ID:", process.env.GOOGLE_CLIENT_ID)
+    console.log("[Google Auth] Client ID:", process.env.REACT_APP_GOOGLE_CLIENT_ID)
     
     // Verify the token with Google's library
-    const ticket = await googleClient.verifyIdToken({ idToken: id_token, audience: process.env.GOOGLE_CLIENT_ID })
+    const ticket = await googleClient.verifyIdToken({ idToken: id_token, audience: process.env.REACT_APP_GOOGLE_CLIENT_ID })
     const payload = ticket.getPayload()
     console.log("[Google Auth] Token verified. Payload:", { sub: payload.sub, email: payload.email })
     

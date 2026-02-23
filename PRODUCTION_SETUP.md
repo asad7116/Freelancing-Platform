@@ -97,7 +97,7 @@ MONGODB_URI=<your_mongodb_connection_string>
 JWT_SECRET=<your_jwt_secret>
 FRONTEND_ORIGIN=https://tixe.dev
 PORT=4000
-GOOGLE_CLIENT_ID=<if_using_google_oauth>
+REACT_APP_GOOGLE_CLIENT_ID=<if_using_google_oauth>
 GROQ_API_KEY=<if_using_groq>
 OPENAI_API_KEY=<if_using_openai>
 ```
