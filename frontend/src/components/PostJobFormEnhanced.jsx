@@ -1,5 +1,4 @@
-// frontend/src/components/PostJobFormEnhanced.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/post_job_enhanced.css';
 import { emit } from '../lib/eventBus'; // ✅ to refresh dashboard after success
@@ -30,6 +29,11 @@ const PostJobFormEnhanced = () => {
   const [categories, setCategories] = useState([]);
   const [specialties, setSpecialties] = useState([]);
   const [skills, setSkills] = useState([]);
+
+  // AI auto-detect category & specialty from title
+  const [aiSuggesting, setAiSuggesting] = useState(false);
+  const aiDebounceRef = useRef(null);
+  const lastAiTitleRef = useRef('');
 
   // Form data
   const [formData, setFormData] = useState({
@@ -122,17 +126,60 @@ const PostJobFormEnhanced = () => {
     }
   };
 
-  const fetchSpecialties = async (categoryId) => {
+  // AI-powered: auto-detect category & specialty from job title
+  const autoDetectCategoryFromTitle = useCallback(async (title) => {
+    if (!title || title.trim().length < 3) return;
+    if (title.trim() === lastAiTitleRef.current) return; // skip duplicate calls
+    lastAiTitleRef.current = title.trim();
+
+    setAiSuggesting(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/specialties?category_id=${categoryId}`);
+      const response = await fetch(`${API_BASE_URL}/api/ai/suggest-category`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ jobTitle: title }),
+      });
       const data = await response.json();
-      if (data.success) setSpecialties(data.data);
-      else setSpecialties([]);
+
+      if (response.ok && data.success && data.data) {
+        const { category_id, suggested_specialty, specialties: aiSpecialties } = data.data;
+
+        // Only auto-set if user hasn't already picked a category manually
+        setFormData((prev) => {
+          const update = {};
+          if (!prev.category_id && category_id) update.category_id = category_id;
+          if (!prev.specialty && suggested_specialty) update.specialty = suggested_specialty;
+          return { ...prev, ...update };
+        });
+
+        // Always populate specialty dropdown with AI-generated options
+        if (aiSpecialties && aiSpecialties.length > 0) {
+          setSpecialties(aiSpecialties);
+        }
+      }
     } catch (error) {
-      console.error('Error fetching specialties:', error);
-      setSpecialties([]);
+      console.error('Error auto-detecting category:', error);
+    } finally {
+      setAiSuggesting(false);
     }
-  };
+  }, []);
+
+  // Debounced title watcher — triggers AI auto-detect when title changes
+  useEffect(() => {
+    if (isEditMode) return; // don't auto-detect for edit mode
+    const title = formData.title;
+    if (!title || title.trim().length < 3) return;
+
+    if (aiDebounceRef.current) clearTimeout(aiDebounceRef.current);
+    aiDebounceRef.current = setTimeout(() => {
+      autoDetectCategoryFromTitle(title);
+    }, 1000);
+
+    return () => {
+      if (aiDebounceRef.current) clearTimeout(aiDebounceRef.current);
+    };
+  }, [formData.title, isEditMode, autoDetectCategoryFromTitle]);
 
   const fetchJobData = async (jid) => {
     try {
@@ -168,7 +215,10 @@ const PostJobFormEnhanced = () => {
           freelancers_needed: job.freelancers_needed || 1,
         });
 
-        if (job.category_id) fetchSpecialties(job.category_id);
+        // For edit mode: auto-detect specialties from the existing title
+        if (job.title && job.title.trim().length >= 3) {
+          autoDetectCategoryFromTitle(job.title);
+        }
         if (job.thumb_image) setThumbnailPreview(`/uploads/job-thumbnails/${job.thumb_image}`);
       } else {
         setSubmitError('Failed to load job data');
@@ -189,11 +239,9 @@ const PostJobFormEnhanced = () => {
     // clear error on type
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
 
-    // when category changes, refresh specialties
+    // when category changes manually, reset specialty
     if (name === 'category_id' && value) {
-      setSpecialties([]);
       setFormData((prev) => ({ ...prev, specialty: '' }));
-      fetchSpecialties(value);
     }
   };
 
@@ -437,11 +485,11 @@ const PostJobFormEnhanced = () => {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Job Category *</label>
+                <label>Job Category *{aiSuggesting && <span className="ai-detecting-label"> — AI detecting...</span>}</label>
                 <select
                   value={formData.category_id}
                   onChange={(e) => handleInputChange('category_id', e.target.value)}
-                  className={errors.category_id ? 'error' : ''}
+                  className={`${errors.category_id ? 'error' : ''} ${aiSuggesting ? 'ai-loading-select' : ''}`}
                 >
                   <option value="">Select a category</option>
                   {categories.map((category) => (
@@ -454,17 +502,18 @@ const PostJobFormEnhanced = () => {
               </div>
 
               <div className="form-group">
-                <label>Specialty</label>
+                <label>Specialty{aiSuggesting && <span className="ai-detecting-label"> — AI detecting...</span>}</label>
                 <select
                   value={formData.specialty}
                   onChange={(e) => handleInputChange('specialty', e.target.value)}
-                  disabled={!formData.category_id || specialties.length === 0}
+                  disabled={specialties.length === 0 && !aiSuggesting}
+                  className={aiSuggesting ? 'ai-loading-select' : ''}
                 >
-                  <option value="" disabled>
-                    {!formData.category_id
-                      ? 'Select a category first'
+                  <option value="">
+                    {aiSuggesting
+                      ? 'AI detecting specialty...'
                       : specialties.length === 0
-                      ? 'Loading specialties...'
+                      ? 'Type a title to auto-detect'
                       : 'Select a specialty'}
                   </option>
                   {specialties.map((specialty) => (
@@ -473,14 +522,6 @@ const PostJobFormEnhanced = () => {
                     </option>
                   ))}
                 </select>
-                {formData.category_id && specialties.length === 0 && (
-                  <span
-                    className="info-message"
-                    style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}
-                  >
-                    No specialties available for this category
-                  </span>
-                )}
               </div>
             </div>
 

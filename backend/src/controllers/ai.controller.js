@@ -325,3 +325,61 @@ export const generateMilestonesController = async (req, res) => {
     });
   }
 };
+
+/**
+ * POST /api/ai/suggest-category
+ * Suggest the best category and AI-generated specialties for a job title
+ */
+export const suggestCategoryController = async (req, res) => {
+  try {
+    const { jobTitle } = req.body;
+
+    if (!jobTitle || jobTitle.trim().length === 0) {
+      return res.status(400).json({
+        error: "Job title is required",
+      });
+    }
+
+    // Fetch available categories from DB
+    const { getDatabase } = await import("../db/mongodb.js");
+    const db = await getDatabase();
+    const categoriesCol = db.collection("categories");
+
+    const categories = await categoriesCol
+      .find({ status: "active" })
+      .sort({ name: 1 })
+      .toArray();
+
+    const availableCategories = categories.map((c) => ({
+      id: c._id.toString(),
+      name: c.name,
+      slug: c.slug,
+    }));
+
+    const result = await aiService.suggestCategory(jobTitle, availableCategories);
+
+    // Resolve the category to its actual DB id
+    const matchedCategory = categories.find(
+      (c) => c.name.toLowerCase() === result.category_name?.toLowerCase()
+    );
+
+    // Build AI-generated specialty list with simple IDs
+    const aiSpecialties = (result.specialties || []).map((name, idx) => ({
+      id: `ai-spec-${idx}`,
+      name,
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        category_id: matchedCategory ? matchedCategory._id.toString() : null,
+        category_name: result.category_name,
+        suggested_specialty: result.suggested_specialty || "",
+        specialties: aiSpecialties,
+        reasoning: result.reasoning,
+      },
+    });
+  } catch (error) {
+    handleAIError(error, res, "Failed to suggest category. Please try again.");
+  }
+};
