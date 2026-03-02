@@ -672,7 +672,7 @@ export const suggestCategory = async (jobTitle, availableCategories = []) => {
   try {
     const categoryList = availableCategories.map(c => c.name).join(", ");
 
-    const prompt = `You are an expert freelancing platform consultant. Given the following job title, suggest the most appropriate category and generate relevant specialties.
+    const prompt = `You are an expert freelancing platform consultant. Given the following job title, suggest the most appropriate category, generate relevant specialties, and recommend skills & tools needed.
 
 Job Title: "${jobTitle}"
 
@@ -680,14 +680,18 @@ Available Categories: ${categoryList}
 
 Instructions:
 1. Pick the SINGLE best matching category from the available list above (use the exact name).
-2. Generate 6-10 relevant specialties/sub-categories that are appropriate for this job title within the chosen category. These should be specific areas of expertise a freelancer might have.
+2. Generate 6-10 relevant specialties/sub-categories that are appropriate for this job title within the chosen category.
 3. Pick the single best specialty from your generated list that matches this specific job title.
+4. Generate 8-15 relevant SKILLS (technologies, programming languages, frameworks, methodologies) a freelancer would need for this job.
+5. Generate 5-10 relevant TOOLS (software, platforms, IDEs, project management tools) a freelancer would use for this job.
 
 Format your response as JSON:
 {
   "category_name": "exact name from the available list",
-  "specialties": ["specialty 1", "specialty 2", "specialty 3", "specialty 4", "specialty 5", "specialty 6"],
+  "specialties": ["specialty 1", "specialty 2", ...],
   "suggested_specialty": "the single best specialty for this job title",
+  "skills": ["JavaScript", "React", "Node.js", ...],
+  "tools": ["Git", "VS Code", "Figma", ...],
   "reasoning": "1 sentence explaining why"
 }`;
 
@@ -695,7 +699,7 @@ Format your response as JSON:
       messages: [{ role: "user", content: prompt }],
       model: MODEL,
       temperature: 0.3,
-      max_tokens: 400,
+      max_tokens: 600,
       response_format: { type: "json_object" }
     });
 

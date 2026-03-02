@@ -369,6 +369,20 @@ export const suggestCategoryController = async (req, res) => {
       name,
     }));
 
+    // Build AI-generated skills list with simple IDs
+    const aiSkills = (result.skills || []).map((name, idx) => ({
+      id: `ai-skill-${idx}`,
+      name,
+      type: "skill",
+    }));
+
+    // Build AI-generated tools list with simple IDs
+    const aiTools = (result.tools || []).map((name, idx) => ({
+      id: `ai-tool-${idx}`,
+      name,
+      type: "tool",
+    }));
+
     res.status(200).json({
       success: true,
       data: {
@@ -376,6 +390,8 @@ export const suggestCategoryController = async (req, res) => {
         category_name: result.category_name,
         suggested_specialty: result.suggested_specialty || "",
         specialties: aiSpecialties,
+        skills: aiSkills,
+        tools: aiTools,
         reasoning: result.reasoning,
       },
     });

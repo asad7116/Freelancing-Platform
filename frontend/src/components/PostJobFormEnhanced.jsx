@@ -28,7 +28,9 @@ const PostJobFormEnhanced = () => {
   // Data for dropdowns
   const [categories, setCategories] = useState([]);
   const [specialties, setSpecialties] = useState([]);
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState([]);       // DB-seeded skills (fallback)
+  const [aiSkills, setAiSkills] = useState([]);    // AI-generated skills for this job
+  const [aiTools, setAiTools] = useState([]);      // AI-generated tools for this job
 
   // AI auto-detect category & specialty from title
   const [aiSuggesting, setAiSuggesting] = useState(false);
@@ -143,7 +145,13 @@ const PostJobFormEnhanced = () => {
       const data = await response.json();
 
       if (response.ok && data.success && data.data) {
-        const { category_id, suggested_specialty, specialties: aiSpecialties } = data.data;
+        const {
+          category_id,
+          suggested_specialty,
+          specialties: aiSpecialtiesData,
+          skills: aiSkillsData,
+          tools: aiToolsData,
+        } = data.data;
 
         // Only auto-set if user hasn't already picked a category manually
         setFormData((prev) => {
@@ -153,9 +161,19 @@ const PostJobFormEnhanced = () => {
           return { ...prev, ...update };
         });
 
-        // Always populate specialty dropdown with AI-generated options
-        if (aiSpecialties && aiSpecialties.length > 0) {
-          setSpecialties(aiSpecialties);
+        // Populate specialty dropdown with AI-generated options
+        if (aiSpecialtiesData && aiSpecialtiesData.length > 0) {
+          setSpecialties(aiSpecialtiesData);
+        }
+
+        // Populate skills dropdown with AI-generated options
+        if (aiSkillsData && aiSkillsData.length > 0) {
+          setAiSkills(aiSkillsData);
+        }
+
+        // Populate tools dropdown with AI-generated options
+        if (aiToolsData && aiToolsData.length > 0) {
+          setAiTools(aiToolsData);
         }
       }
     } catch (error) {
@@ -563,9 +581,10 @@ const PostJobFormEnhanced = () => {
               description={formData.description}
               category={categories.find(c => c.id === formData.category_id)?.name}
               onApply={(suggestedSkills) => {
-                // Convert suggested skill names to skill objects from available skills
+                // Convert suggested skill names to skill objects from combined skills
+                const allSkills = [...aiSkills, ...skills.filter(s => s.type === 'skill')];
                 const skillsToAdd = suggestedSkills
-                  .map(skillName => skills.find(s => s.name.toLowerCase() === skillName.toLowerCase()))
+                  .map(skillName => allSkills.find(s => s.name.toLowerCase() === skillName.toLowerCase()))
                   .filter(Boolean);
                 
                 // Add to mandatory skills (avoiding duplicates)
@@ -578,101 +597,153 @@ const PostJobFormEnhanced = () => {
               }}
             />
 
-            <div className="skills-section">
-              <h3>Mandatory Skills *</h3>
-              <div className="selected-skills">
-                {formData.mandatory_skills.map((skill) => (
-                  <span key={skill.id} className="skill-tag">
-                    {skill.name}
-                    <button type="button" onClick={() => removeSkill('mandatory_skills', skill.id)}>
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <select
-                onChange={(e) => {
-                  // skill ids from the API are strings (mapped from _id),
-                  // so compare as strings instead of parsing to number
-                  const val = e.target.value;
-                  const skill = skills.find((s) => s.id === val);
-                  if (skill) addSkill('mandatory_skills', skill);
-                  e.target.value = '';
-                }}
-              >
-                <option value="">Add skills</option>
-                {skills
-                  .filter((skill) => skill.type === 'skill')
-                  .map((skill) => (
-                    <option key={skill.id} value={skill.id}>
-                      {skill.name}
-                    </option>
-                  ))}
-              </select>
-              {errors.mandatory_skills && <span className="error-message">{errors.mandatory_skills}</span>}
-            </div>
+            {/* Merge AI-generated skills with DB skills (AI first, then DB as "More skills") */}
+            {(() => {
+              const dbSkillsFiltered = skills.filter(s => s.type === 'skill');
+              // Deduplicate: remove DB skills that AI already returned (by name, case-insensitive)
+              const aiSkillNames = new Set(aiSkills.map(s => s.name.toLowerCase()));
+              const extraDbSkills = dbSkillsFiltered.filter(s => !aiSkillNames.has(s.name.toLowerCase()));
+              const hasAiSkills = aiSkills.length > 0;
 
-            <div className="skills-section">
-              <h3>Nice-to-have Skills</h3>
-              <div className="selected-skills">
-                {formData.nice_to_have_skills.map((skill) => (
-                  <span key={skill.id} className="skill-tag">
-                    {skill.name}
-                    <button type="button" onClick={() => removeSkill('nice_to_have_skills', skill.id)}>
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <select
-                onChange={(e) => {
-                  const val = e.target.value;
-                  const skill = skills.find((s) => s.id === val);
-                  if (skill) addSkill('nice_to_have_skills', skill);
-                  e.target.value = '';
-                }}
-              >
-                <option value="">Add skills</option>
-                {skills
-                  .filter((skill) => skill.type === 'skill')
-                  .map((skill) => (
-                    <option key={skill.id} value={skill.id}>
-                      {skill.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              const dbToolsFiltered = skills.filter(s => s.type === 'tool');
+              const aiToolNames = new Set(aiTools.map(t => t.name.toLowerCase()));
+              const extraDbTools = dbToolsFiltered.filter(t => !aiToolNames.has(t.name.toLowerCase()));
+              const hasAiTools = aiTools.length > 0;
 
-            <div className="skills-section">
-              <h3>Tools (optional)</h3>
-              <div className="selected-skills">
-                {formData.tools.map((tool) => (
-                  <span key={tool.id} className="skill-tag">
-                    {tool.name}
-                    <button type="button" onClick={() => removeSkill('tools', tool.id)}>
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <select
-                onChange={(e) => {
-                  const val = e.target.value;
-                  const tool = skills.find((s) => s.id === val);
-                  if (tool) addSkill('tools', tool);
-                  e.target.value = '';
-                }}
-              >
-                <option value="">Add tools</option>
-                {skills
-                  .filter((s) => s.type === 'tool')
-                  .map((tool) => (
-                    <option key={tool.id} value={tool.id}>
-                      {tool.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              return (
+                <>
+                  <div className="skills-section">
+                    <h3>Mandatory Skills *</h3>
+                    <div className="selected-skills">
+                      {formData.mandatory_skills.map((skill) => (
+                        <span key={skill.id} className="skill-tag">
+                          {skill.name}
+                          <button type="button" onClick={() => removeSkill('mandatory_skills', skill.id)}>
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <select
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const allSkills = [...aiSkills, ...dbSkillsFiltered];
+                        const skill = allSkills.find((s) => s.id === val);
+                        if (skill) addSkill('mandatory_skills', skill);
+                        e.target.value = '';
+                      }}
+                    >
+                      <option value="">Add skills</option>
+                      {hasAiSkills && (
+                        <optgroup label="Recommended for this job">
+                          {aiSkills.map((skill) => (
+                            <option key={skill.id} value={skill.id}>
+                              {skill.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {extraDbSkills.length > 0 && (
+                        <optgroup label={hasAiSkills ? "More skills" : "All skills"}>
+                          {extraDbSkills.map((skill) => (
+                            <option key={skill.id} value={skill.id}>
+                              {skill.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </select>
+                    {errors.mandatory_skills && <span className="error-message">{errors.mandatory_skills}</span>}
+                  </div>
+
+                  <div className="skills-section">
+                    <h3>Nice-to-have Skills</h3>
+                    <div className="selected-skills">
+                      {formData.nice_to_have_skills.map((skill) => (
+                        <span key={skill.id} className="skill-tag">
+                          {skill.name}
+                          <button type="button" onClick={() => removeSkill('nice_to_have_skills', skill.id)}>
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <select
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const allSkills = [...aiSkills, ...dbSkillsFiltered];
+                        const skill = allSkills.find((s) => s.id === val);
+                        if (skill) addSkill('nice_to_have_skills', skill);
+                        e.target.value = '';
+                      }}
+                    >
+                      <option value="">Add skills</option>
+                      {hasAiSkills && (
+                        <optgroup label="Recommended for this job">
+                          {aiSkills.map((skill) => (
+                            <option key={skill.id} value={skill.id}>
+                              {skill.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {extraDbSkills.length > 0 && (
+                        <optgroup label={hasAiSkills ? "More skills" : "All skills"}>
+                          {extraDbSkills.map((skill) => (
+                            <option key={skill.id} value={skill.id}>
+                              {skill.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </select>
+                  </div>
+
+                  <div className="skills-section">
+                    <h3>Tools (optional)</h3>
+                    <div className="selected-skills">
+                      {formData.tools.map((tool) => (
+                        <span key={tool.id} className="skill-tag">
+                          {tool.name}
+                          <button type="button" onClick={() => removeSkill('tools', tool.id)}>
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <select
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const allTools = [...aiTools, ...dbToolsFiltered];
+                        const tool = allTools.find((s) => s.id === val);
+                        if (tool) addSkill('tools', tool);
+                        e.target.value = '';
+                      }}
+                    >
+                      <option value="">Add tools</option>
+                      {hasAiTools && (
+                        <optgroup label="Recommended for this job">
+                          {aiTools.map((tool) => (
+                            <option key={tool.id} value={tool.id}>
+                              {tool.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {extraDbTools.length > 0 && (
+                        <optgroup label={hasAiTools ? "More tools" : "All tools"}>
+                          {extraDbTools.map((tool) => (
+                            <option key={tool.id} value={tool.id}>
+                              {tool.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </select>
+                  </div>
+                </>
+              );
+            })()}
 
             <div className="experience-section">
               <h3>Experience Level</h3>
