@@ -9,6 +9,7 @@ import JobBudgetRecommender from './AI/JobBudgetRecommender';
 import JobSkillsSuggester from './AI/JobSkillsSuggester';
 import JobTimelineEstimator from './AI/JobTimelineEstimator';
 import { API_BASE_URL } from "../lib/api";
+import { CheckCircle, AlertCircle, Loader } from 'lucide-react';
 
 const PostJobFormEnhanced = () => {
   const { jobId } = useParams();
@@ -22,6 +23,8 @@ const PostJobFormEnhanced = () => {
   // Loading states
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   // Data for dropdowns
   const [categories, setCategories] = useState([]);
@@ -168,12 +171,12 @@ const PostJobFormEnhanced = () => {
         if (job.category_id) fetchSpecialties(job.category_id);
         if (job.thumb_image) setThumbnailPreview(`/uploads/job-thumbnails/${job.thumb_image}`);
       } else {
-        alert('Failed to load job data');
+        setSubmitError('Failed to load job data');
         navigate('/client/Orders');
       }
     } catch (error) {
       console.error('Error fetching job data:', error);
-      alert('Error loading job data');
+      setSubmitError('Error loading job data');
       navigate('/client/Orders');
     } finally {
       setFetchingData(false);
@@ -247,11 +250,11 @@ const PostJobFormEnhanced = () => {
 
     const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowed.includes(file.type)) {
-      alert('Please select a valid image file (JPEG, PNG, GIF, WebP)');
+      setSubmitError('Please select a valid image file (JPEG, PNG, GIF, WebP)');
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      alert('Please select an image smaller than 5MB');
+      setSubmitError('Please select an image smaller than 5MB');
       return;
     }
 
@@ -270,6 +273,7 @@ const PostJobFormEnhanced = () => {
     if (!validateStep(currentStep)) return;
 
     setLoading(true);
+    setSubmitError("");
     try {
       const formDataObj = new FormData();
 
@@ -299,20 +303,21 @@ const PostJobFormEnhanced = () => {
       const result = await response.json();
 
       if (response.ok) {
-        alert(isEditMode ? 'Job updated successfully!' : 'Job posted successfully!');
-
         // 🔔 Tell the app to refresh dashboard tiles immediately
         const id = (result && result.data && result.data.id) || jobId;
         emit('job:mutated', { type: isEditMode ? 'updated' : 'created', jobId: id });
 
-        navigate('/client/Orders');
+        setSuccess(true);
+        setTimeout(() => {
+          navigate('/client/Orders');
+        }, 2500);
       } else {
         if (result.errors) setErrors(result.errors);
-        else alert(result.message || 'Error saving job post');
+        else setSubmitError(result.message || 'Error saving job post');
       }
     } catch (error) {
       console.error('Error submitting job post:', error);
-      alert('Error submitting job post: ' + error.message);
+      setSubmitError('Error submitting job post: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -323,6 +328,19 @@ const PostJobFormEnhanced = () => {
       <div className="job-form-container">
         <div className="loading-state">
           <h3>Loading job data...</h3>
+        </div>
+      </div>
+    );
+  }
+
+  if (success) {
+    return (
+      <div className="job-form-container">
+        <div className="job-success-message">
+          <CheckCircle size={64} className="job-success-icon" />
+          <h2>{isEditMode ? "Job Updated Successfully!" : "Job Posted Successfully! 🚀"}</h2>
+          <p>{isEditMode ? "Your changes have been saved." : "Your job is now live and visible to freelancers."}</p>
+          <p className="job-redirect-text">Redirecting to My Jobs...</p>
         </div>
       </div>
     );
@@ -826,10 +844,22 @@ const PostJobFormEnhanced = () => {
             </button>
           ) : (
             <button type="button" className="btn-primary" onClick={handleSubmit} disabled={loading}>
-              {loading ? (isEditMode ? 'Updating...' : 'Posting...') : isEditMode ? 'Update Job' : 'Post Job'}
+              {loading ? (
+                <>
+                  <Loader size={18} className="spin-icon" />
+                  {isEditMode ? 'Updating...' : 'Posting...'}
+                </>
+              ) : isEditMode ? 'Update Job' : 'Post Job'}
             </button>
           )}
         </div>
+
+        {submitError && (
+          <div className="job-error-banner">
+            <AlertCircle size={18} />
+            {submitError}
+          </div>
+        )}
       </div>
     </div>
   );

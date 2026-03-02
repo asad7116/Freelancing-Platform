@@ -10,7 +10,7 @@ export default function AuthChoice() {
   return (
     <div className="auth-choice-wrapper">
       {/* Back Button */}
-      <Link to="/" className="back-button">
+      <Link to="/" className="auth-back-button">
         <ArrowLeft size={20} />
         <span>{t('auth.backToHome')}</span>
       </Link>

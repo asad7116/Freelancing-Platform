@@ -156,7 +156,7 @@ export default function VerifyEmail() {
         <div className="decorative-circle circle-1"></div>
         <div className="decorative-circle circle-2"></div>
         <div className="decorative-circle circle-3"></div>
-        <Link to="/" className="back-button">
+        <Link to="/" className="auth-back-button">
           <ArrowLeft size={20} />
           <span>Back to Home</span>
         </Link>
@@ -182,7 +182,7 @@ export default function VerifyEmail() {
       <div className="decorative-circle circle-2"></div>
       <div className="decorative-circle circle-3"></div>
 
-      <Link to="/" className="back-button">
+      <Link to="/" className="auth-back-button">
         <ArrowLeft size={20} />
         <span>Back to Home</span>
       </Link>

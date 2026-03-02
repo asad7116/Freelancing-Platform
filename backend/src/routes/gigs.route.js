@@ -7,6 +7,7 @@ import { authMiddleware } from "../middleware/authMiddleware.js"
 import { ObjectId } from "mongodb"
 import fs from "fs"
 import { sendGigCreatedEmail } from "../services/email.service.js"
+import NotificationModel from "../models/Notification.js"
 
 const router = express.Router()
 
@@ -68,6 +69,15 @@ router.post(
           console.error("[Gig Email] Failed to send gig created email:", err.message)
         })
       }
+
+      // Create in-app notification
+      NotificationModel.create(db, {
+        userId: req.user.id,
+        type: "gig_created",
+        title: "Gig Created Successfully",
+        message: `Your gig "${gigTitle}" is now live and visible to clients.`,
+        link: `/freelancer/Gigs`,
+      }).catch((err) => console.error("[Notification] Failed to create:", err.message))
 
       res.status(201).json({
         message: "Gig created successfully!",

@@ -216,13 +216,13 @@ const MyProposalsFreelancer = () => {
               <div className="proposal-header-row">
                 <div className="proposal-title-section">
                   <h3>{proposal.job?.title || 'Job Title'}</h3>
-                  {getStatusBadge(proposal.status)}
+                  <div className="proposal-meta">
+                    <span className="meta-date">
+                      Submitted {formatDate(proposal.created_at)}
+                    </span>
+                  </div>
                 </div>
-                <div className="proposal-meta">
-                  <span className="meta-date">
-                    Submitted {formatDate(proposal.created_at)}
-                  </span>
-                </div>
+                {getStatusBadge(proposal.status)}
               </div>
 
               <div className="proposal-details">

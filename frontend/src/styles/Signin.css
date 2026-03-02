@@ -10,7 +10,7 @@
 }
 
 /* Back Button */
-.back-button {
+.auth-back-button {
   position: fixed;
   top: 20px;
   left: 20px;
@@ -30,33 +30,33 @@
   transition: all 0.3s ease;
 }
 
-.back-button:hover {
+.auth-back-button:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateX(-3px);
   color: #ffffff;
 }
 
-.back-button svg {
+.auth-back-button svg {
   transition: transform 0.3s ease;
 }
 
-.back-button:hover svg {
+.auth-back-button:hover svg {
   transform: translateX(-3px);
 }
 
 @media (max-width: 480px) {
-  .back-button {
+  .auth-back-button {
     top: 15px;
     left: 15px;
     padding: 8px 12px;
     font-size: 13px;
   }
   
-  .back-button span {
+  .auth-back-button span {
     display: none;
   }
   
-  .back-button svg {
+  .auth-back-button svg {
     width: 18px;
     height: 18px;
   }

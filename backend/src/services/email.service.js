@@ -135,8 +135,27 @@ export async function sendProposalNotificationEmail(to, clientName, freelancerNa
   return send(to, `New proposal for "${jobTitle}"`, body)
 }
 
+// ─── Email: Job Posted (to Client) ───────────────────────────────────────────
+export async function sendJobPostedEmail(to, name, jobTitle) {
+  const dashboardUrl = `${process.env.FRONTEND_ORIGIN || "http://localhost:3000"}/client/Orders`
+  const body = `
+    <h2>Your Job is Live! 🚀</h2>
+    <p>Hi <strong>${name}</strong>,</p>
+    <p>Your job has been successfully posted and is now visible to freelancers on Tixe:</p>
+    <div class="info-box">
+      <strong>${jobTitle}</strong>
+    </div>
+    <p>Freelancers can now discover your job and submit proposals. You'll be notified when new proposals arrive!</p>
+    <p style="text-align:center;">
+      <a class="btn" href="${dashboardUrl}">View My Jobs</a>
+    </p>
+  `
+  return send(to, `Your job "${jobTitle}" is live on Tixe!`, body)
+}
+
 export default {
   sendVerificationOTP,
   sendGigCreatedEmail,
   sendProposalNotificationEmail,
+  sendJobPostedEmail,
 }

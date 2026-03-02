@@ -173,7 +173,7 @@ const SubmitProposal = () => {
         <div className="success-message">
           <CheckCircle size={64} className="success-icon" />
           <h2>Proposal Submitted Successfully!</h2>
-          <p>Redirecting to My Orders...</p>
+          <p>Redirecting to My Proposals...</p>
         </div>
       </div>
     );
