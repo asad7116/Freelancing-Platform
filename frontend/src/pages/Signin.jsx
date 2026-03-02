@@ -176,7 +176,7 @@ export default function SignIn() {
   return (
     <div className="auth-page">
       {/* Back Button */}
-      <Link to="/" className="back-button">
+      <Link to="/" className="auth-back-button">
         <ArrowLeft size={20} />
         <span>{t('auth.backToHome')}</span>
       </Link>

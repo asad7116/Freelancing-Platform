@@ -727,3 +727,95 @@
 .remove-thumbnail:hover {
   background: rgba(239, 68, 68, 1);
 }
+
+/* ── Success State ────────────────────────────── */
+.job-success-message {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 48px 32px;
+}
+
+.job-success-icon {
+  color: #10b981;
+  margin-bottom: 16px;
+}
+
+.job-success-message h2 {
+  color: #ffffff;
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+.job-success-message p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.job-redirect-text {
+  margin-top: 16px !important;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ── Error Banner ─────────────────────────────── */
+.job-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 0.875rem;
+}
+
+/* ── Loading Spinner ──────────────────────────── */
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── AI Auto-detect Loading Indicator ──────────────────── */
+.ai-detecting-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #c4b5fd;
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-style: italic;
+  animation: aiPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes aiPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.ai-loading-select {
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(168, 85, 247, 0.08) 50%,
+    transparent 100%
+  ) !important;
+  background-size: 200% 100%;
+  animation: aiShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes aiShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

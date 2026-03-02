@@ -8,6 +8,32 @@
   padding: 20px;
 }
 
+/* Auth Back Button (scoped for verify page) */
+.verify-email-page .auth-back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.verify-email-page .auth-back-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
 .verify-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);

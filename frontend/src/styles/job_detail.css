@@ -69,7 +69,12 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .back-button:hover {
@@ -420,6 +425,21 @@
 
 .view-applications-btn {
   width: 100%;
+}
+
+.apply-now-btn {
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apply-now-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 168, 107, 0.4);
 }
 
 /* Responsive Design */

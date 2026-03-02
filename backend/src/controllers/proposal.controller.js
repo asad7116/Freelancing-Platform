@@ -3,6 +3,8 @@ import { ObjectId } from "mongodb"
 import JobApplicationModel from "../models/JobApplication.js"
 import JobPostModel from "../models/JobPost.js"
 import { sendProposalNotificationEmail } from "../services/email.service.js"
+import NotificationModel from "../models/Notification.js"
+import { ConversationModel, MessageModel } from "../models/Conversation.js"
 // import Stripe from "stripe"
 // 
 // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -174,6 +176,15 @@ export const submitProposal = async (req, res) => {
           console.error("[Proposal Email] Failed to send notification:", err.message)
         })
       }
+
+      // Create in-app notification for the client
+      NotificationModel.create(db, {
+        userId: job.buyer_id,
+        type: "proposal_received",
+        title: "New Proposal Received",
+        message: `${user?.name || "A freelancer"} submitted a proposal for "${job.title || "your job"}"`,
+        link: `/client/proposals/${proposalId}`,
+      }).catch((err) => console.error("[Notification] Failed to create:", err.message))
     } catch (emailErr) {
       console.error("[Proposal Email] Error fetching client for notification:", emailErr.message)
     }
@@ -506,6 +517,61 @@ export const updateProposalStatus = async (req, res) => {
     // Update status
     const updatedProposal = await JobApplicationModel.updateStatus(db, proposalId, status)
 
+    // Create in-app notification for the freelancer
+    try {
+      const job = await JobPostModel.findById(db, proposal.job_post_id)
+      const statusLabel = status === "approved" ? "accepted" : "rejected"
+
+      // If approved, auto-create a conversation so client & freelancer can chat
+      if (status === "approved" && job) {
+        try {
+          // Check if conversation already exists for this job
+          const existing = await ConversationModel.findByParticipantsAndJob(
+            db,
+            clientId,
+            proposal.freelancer_id,
+            proposal.job_post_id
+          )
+
+          if (!existing) {
+            const conversation = await ConversationModel.create(db, {
+              participants: [clientId, proposal.freelancer_id],
+              jobId: proposal.job_post_id,
+              jobTitle: job.title || "Project",
+              proposalId: proposalId,
+            })
+
+            // Send an automatic first message from the client
+            const clientUser = await db.collection("users").findOne({ _id: new ObjectId(clientId) })
+            await MessageModel.create(db, {
+              conversationId: conversation._id.toString(),
+              senderId: clientId,
+              text: `Hi! I've accepted your proposal for "${job.title}". Let's discuss the project details.`,
+            })
+            await ConversationModel.updateLastMessage(
+              db,
+              conversation._id.toString(),
+              `Hi! I've accepted your proposal for "${job.title}". Let's discuss the project details.`
+            )
+          }
+        } catch (convErr) {
+          console.error("[Conversation] Error creating conversation on accept:", convErr.message)
+        }
+      }
+
+      NotificationModel.create(db, {
+        userId: proposal.freelancer_id,
+        type: status === "approved" ? "proposal_accepted" : "proposal_rejected",
+        title: `Proposal ${statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}`,
+        message: status === "approved"
+          ? `Your proposal for "${job?.title || "a job"}" has been accepted! You can now message the client.`
+          : `Your proposal for "${job?.title || "a job"}" has been rejected.`,
+        link: status === "approved" ? `/freelancer/Messages` : `/freelancer/MyProposals`,
+      }).catch((err) => console.error("[Notification] Failed to create:", err.message))
+    } catch (notifErr) {
+      console.error("[Notification] Error creating proposal status notification:", notifErr.message)
+    }
+
     res.json({
       success: true,
       message: `Proposal ${status} successfully`,
@@ -585,6 +651,20 @@ export async function submitWorkForProposal(req, res) {
       deliverable_links,
     })
 
+    // Create in-app notification for the client
+    try {
+      const job = await JobPostModel.findById(db, proposal.job_post_id)
+      NotificationModel.create(db, {
+        userId: proposal.client_id,
+        type: "work_submitted",
+        title: "Work Submitted",
+        message: `${req.user.name || "A freelancer"} submitted work for "${job?.title || "a project"}"`,
+        link: `/client/proposals/${proposalId}`,
+      }).catch((err) => console.error("[Notification] Failed to create:", err.message))
+    } catch (notifErr) {
+      console.error("[Notification] Error creating work-submitted notification:", notifErr.message)
+    }
+
     res.json({
       success: true,
       message: "Work submitted successfully",
@@ -651,6 +731,20 @@ export async function reviewSubmission(req, res) {
       // Mark job as completed
       await JobPostModel.updateJobStatus(db, proposal.job_post_id, "completed")
 
+      // Notify freelancer that work was accepted
+      try {
+        const job = await JobPostModel.findById(db, proposal.job_post_id)
+        NotificationModel.create(db, {
+          userId: proposal.freelancer_id,
+          type: "work_accepted",
+          title: "Work Accepted! 🎉",
+          message: `Your work for "${job?.title || "a project"}" has been accepted.`,
+          link: `/freelancer/MyProposals`,
+        }).catch((err) => console.error("[Notification] Failed to create:", err.message))
+      } catch (notifErr) {
+        console.error("[Notification] Error creating work-accepted notification:", notifErr.message)
+      }
+
       res.json({
         success: true,
         message: "Work accepted. Please proceed to payment.",
@@ -659,6 +753,20 @@ export async function reviewSubmission(req, res) {
     } else if (action === "revision") {
       // Request revision
       const updatedProposal = await JobApplicationModel.requestRevision(db, proposalId)
+
+      // Notify freelancer about revision request
+      try {
+        const job = await JobPostModel.findById(db, proposal.job_post_id)
+        NotificationModel.create(db, {
+          userId: proposal.freelancer_id,
+          type: "revision_requested",
+          title: "Revision Requested",
+          message: `A revision has been requested for "${job?.title || "a project"}".`,
+          link: `/freelancer/MyProposals`,
+        }).catch((err) => console.error("[Notification] Failed to create:", err.message))
+      } catch (notifErr) {
+        console.error("[Notification] Error creating revision notification:", notifErr.message)
+      }
 
       res.json({
         success: true,

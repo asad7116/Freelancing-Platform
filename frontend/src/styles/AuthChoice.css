@@ -12,7 +12,7 @@
 }
 
 /* Back Button */
-.auth-choice-wrapper .back-button {
+.auth-choice-wrapper .auth-back-button {
   position: fixed;
   top: 20px;
   left: 20px;
@@ -32,33 +32,33 @@
   transition: all 0.3s ease;
 }
 
-.auth-choice-wrapper .back-button:hover {
+.auth-choice-wrapper .auth-back-button:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateX(-3px);
   color: #ffffff;
 }
 
-.auth-choice-wrapper .back-button svg {
+.auth-choice-wrapper .auth-back-button svg {
   transition: transform 0.3s ease;
 }
 
-.auth-choice-wrapper .back-button:hover svg {
+.auth-choice-wrapper .auth-back-button:hover svg {
   transform: translateX(-3px);
 }
 
 @media (max-width: 480px) {
-  .auth-choice-wrapper .back-button {
+  .auth-choice-wrapper .auth-back-button {
     top: 15px;
     left: 15px;
     padding: 8px 12px;
     font-size: 13px;
   }
   
-  .auth-choice-wrapper .back-button span {
+  .auth-choice-wrapper .auth-back-button span {
     display: none;
   }
   
-  .auth-choice-wrapper .back-button svg {
+  .auth-choice-wrapper .auth-back-button svg {
     width: 18px;
     height: 18px;
   }

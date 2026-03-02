@@ -308,3 +308,74 @@
     padding: 1rem;
   }
 }
+
+/* ── Success State ────────────────────────────── */
+.gig-success-message {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 48px 32px;
+}
+
+.gig-success-icon {
+  color: #10b981;
+  margin-bottom: 16px;
+}
+
+.gig-success-message h2 {
+  color: #ffffff;
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+.gig-success-message p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.gig-redirect-text {
+  margin-top: 16px !important;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ── Error Banner ─────────────────────────────── */
+.gig-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 0.875rem;
+}
+
+/* ── Field Validation ─────────────────────────── */
+.field-error {
+  display: block;
+  color: #fca5a5;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* ── Loading Spinner ──────────────────────────── */
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

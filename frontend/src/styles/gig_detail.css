@@ -28,10 +28,12 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-bottom: 2rem;
-  display: flex;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  position: relative;
+  z-index: 2;
 }
 
 .back-button:hover {

@@ -3,6 +3,8 @@ import path from "path"
 import fs from "fs/promises"
 import { getDatabase } from "../db/mongodb.js"
 import { ObjectId } from "mongodb"
+import { sendJobPostedEmail } from "../services/email.service.js"
+import NotificationModel from "../models/Notification.js"
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -178,6 +180,22 @@ class JobPostController {
         category_id: category_id,
         city_id: city_id,
       }
+
+      // Send email notification to client (non-blocking)
+      if (req.user.email) {
+        sendJobPostedEmail(req.user.email, req.user.name || "Client", title).catch((err) => {
+          console.error("[Job Email] Failed to send job posted email:", err.message)
+        })
+      }
+
+      // Create in-app notification
+      NotificationModel.create(db, {
+        userId: userId,
+        type: "job_posted",
+        title: "Job Posted Successfully",
+        message: `Your job "${title}" is now live and visible to freelancers.`,
+        link: `/client/Orders`,
+      }).catch((err) => console.error("[Notification] Failed to create:", err.message))
 
       res.status(201).json({
         success: true,

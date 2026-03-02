@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../lib/api";
 import "../../styles/CreateGig.css";
 import AIAssistant from "../../components/AI/AIAssistant";
 import GigAnalyzer from "../../components/AI/GigAnalyzer";
 import PriceRecommendation from "../../components/AI/PriceRecommendation";
+import { CheckCircle, AlertCircle, Loader } from "lucide-react";
 
 export default function CreateGig() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     gigTitle: "",
     category: "",
@@ -57,7 +64,7 @@ export default function CreateGig() {
   };
 
   const nextStep = () => {
-    if (currentStep < 3) {
+    if (validateStep(currentStep)) {
       setCurrentStep((prev) => prev + 1);
     }
   };
@@ -68,22 +75,29 @@ export default function CreateGig() {
     }
   };
 
-  const handleSubmit = async () => {
-    // Ensure all required fields are filled
-    if (
-      !formData.gigTitle ||
-      !formData.category ||
-      !formData.shortDescription ||
-      !formData.price ||
-      !formData.deliveryTime ||
-      !formData.revisions
-    ) {
-      alert("Please fill all required fields.");
-      return;
+  const validateStep = (step) => {
+    const newErrors = {};
+    if (step === 1) {
+      if (!formData.gigTitle.trim()) newErrors.gigTitle = "Gig title is required";
+      if (!formData.category) newErrors.category = "Category is required";
+      if (!formData.shortDescription.trim()) newErrors.shortDescription = "Description is required";
     }
+    if (step === 2) {
+      if (!formData.price || Number(formData.price) < 5) newErrors.price = "Price must be at least $5";
+    }
+    if (step === 3) {
+      if (!formData.deliveryTime) newErrors.deliveryTime = "Delivery time is required";
+      if (!formData.revisions) newErrors.revisions = "Number of revisions is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-    // Debug: log cookies
-    console.log("Document cookies:", document.cookie);
+  const handleSubmit = async () => {
+    if (!validateStep(3)) return;
+
+    setSubmitting(true);
+    setSubmitError("");
 
     const formDataToSend = new FormData();
     formDataToSend.append("gigTitle", formData.gigTitle);
@@ -106,30 +120,30 @@ export default function CreateGig() {
       const res = await fetch(`${API_BASE_URL}/api/gigs`, {
         method: "POST",
         body: formDataToSend,
-        credentials: 'include', // ✅ Include cookies for authentication
+        credentials: 'include',
       });
 
       const data = await res.json();
       
       if (!res.ok) {
-        // Handle error responses
-        alert(data.message || `Error: ${res.status} ${res.statusText}`);
-        console.error("Error response:", data);
+        setSubmitError(data.message || `Error: ${res.status} ${res.statusText}`);
+        setSubmitting(false);
         return;
       }
       
       if (data.gig) {
-        // Assuming the backend sends the 'gig' data
-        alert("Gig created successfully!");
-        console.log("Saved:", data.gig);
-        // Optionally redirect to gigs page
-        // window.location.href = "/freelancer/Gigs";
+        setSuccess(true);
+        setTimeout(() => {
+          navigate("/freelancer/Gigs");
+        }, 2500);
       } else {
-        alert(data.message || "Failed to create gig");
+        setSubmitError(data.message || "Failed to create gig");
       }
     } catch (err) {
       console.error(err);
-      alert("Error submitting gig: " + err.message);
+      setSubmitError("Error submitting gig: " + err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -145,8 +159,10 @@ export default function CreateGig() {
           value={formData.gigTitle}
           onChange={handleInputChange}
           placeholder="Enter your gig title"
+          className={errors.gigTitle ? "input-error" : ""}
           required
         />
+        {errors.gigTitle && <span className="field-error">{errors.gigTitle}</span>}
         <AIAssistant
           type="title"
           value={formData.gigTitle}
@@ -164,6 +180,7 @@ export default function CreateGig() {
           name="category"
           value={formData.category}
           onChange={handleInputChange}
+          className={errors.category ? "input-error" : ""}
           required
         >
           <option value="">Select a category</option>
@@ -173,6 +190,7 @@ export default function CreateGig() {
             </option>
           ))}
         </select>
+        {errors.category && <span className="field-error">{errors.category}</span>}
       </div>
 
       <div className="form-group">
@@ -184,8 +202,10 @@ export default function CreateGig() {
           onChange={handleInputChange}
           placeholder="Describe your gig in a few sentences"
           rows="4"
+          className={errors.shortDescription ? "input-error" : ""}
           required
         />
+        {errors.shortDescription && <span className="field-error">{errors.shortDescription}</span>}
         <AIAssistant
           type="description"
           value={formData.shortDescription}
@@ -256,8 +276,10 @@ export default function CreateGig() {
           onChange={handleInputChange}
           placeholder="Enter your price"
           min="5"
+          className={errors.price ? "input-error" : ""}
           required
         />
+        {errors.price && <span className="field-error">{errors.price}</span>}
         <PriceRecommendation
           gigData={formData}
           onApplyPrice={(recommendedPrice) => {
@@ -278,6 +300,7 @@ export default function CreateGig() {
           name="deliveryTime"
           value={formData.deliveryTime}
           onChange={handleInputChange}
+          className={errors.deliveryTime ? "input-error" : ""}
           required
         >
           <option value="">Select delivery time</option>
@@ -286,6 +309,7 @@ export default function CreateGig() {
           <option value="7">7 Days</option>
           <option value="14">14 Days</option>
         </select>
+        {errors.deliveryTime && <span className="field-error">{errors.deliveryTime}</span>}
       </div>
 
       <div className="form-group">
@@ -295,6 +319,7 @@ export default function CreateGig() {
           name="revisions"
           value={formData.revisions}
           onChange={handleInputChange}
+          className={errors.revisions ? "input-error" : ""}
           required
         >
           <option value="">Select revisions</option>
@@ -303,6 +328,7 @@ export default function CreateGig() {
           <option value="3">3 Revisions</option>
           <option value="unlimited">Unlimited</option>
         </select>
+        {errors.revisions && <span className="field-error">{errors.revisions}</span>}
       </div>
 
       <div className="form-group">
@@ -322,6 +348,14 @@ export default function CreateGig() {
   return (
     <>
       <div className="create-gig-container">
+        {success ? (
+          <div className="gig-success-message">
+            <CheckCircle size={64} className="gig-success-icon" />
+            <h2>Gig Created Successfully! 🎉</h2>
+            <p>Your gig is now live and visible to clients.</p>
+            <p className="gig-redirect-text">Redirecting to My Gigs...</p>
+          </div>
+        ) : (
         <div className="create-gig-wrapper">
           <div className="progress-container">
             <div className="progress-bar">
@@ -375,13 +409,29 @@ export default function CreateGig() {
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSubmit}
+                  disabled={submitting}
                 >
-                  Submit
+                  {submitting ? (
+                    <>
+                      <Loader size={18} className="spin-icon" />
+                      Creating...
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               )}
             </div>
+
+            {submitError && (
+              <div className="gig-error-banner">
+                <AlertCircle size={18} />
+                {submitError}
+              </div>
+            )}
           </div>
         </div>
+        )}
       </div>
     </>
   );

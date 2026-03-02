@@ -1,3 +1,6 @@
+// NOTE: Use scripts/seed.js for full database seeding (categories, specialties, cities, skills).
+// Run:  node scripts/seed.js
+
 const categories = [
   { name: 'Web Development', slug: 'web-development', description: 'Frontend and backend web development services' },
   { name: 'Mobile App Development', slug: 'mobile-app-development', description: 'iOS and Android app development' },
@@ -5,5 +8,23 @@ const categories = [
   { name: 'Graphic Design', slug: 'graphic-design', description: 'Logo design, branding, and visual content' },
   { name: 'Digital Marketing', slug: 'digital-marketing', description: 'SEO, social media marketing, and content marketing' },
   { name: 'Content Writing', slug: 'content-writing', description: 'Blog posts, articles, and copywriting' },
-  { name: 'Data Analysis', slug: 'data-analysis', description: 'Data science and analytics services' }
+  { name: 'Data Science & Analytics', slug: 'data-science-analytics', description: 'Data science, analytics, and machine learning services' },
+  { name: 'Video & Animation', slug: 'video-animation', description: 'Video production, editing, and animation services' },
+  { name: 'Audio & Music', slug: 'audio-music', description: 'Audio production, voice-over, and music services' },
+  { name: 'Translation & Languages', slug: 'translation-languages', description: 'Translation, localization, and interpretation services' },
+  { name: 'Virtual Assistant', slug: 'virtual-assistant', description: 'Administrative support and virtual assistant services' },
+  { name: 'Accounting & Finance', slug: 'accounting-finance', description: 'Accounting, bookkeeping, and financial services' },
+  { name: 'Legal Services', slug: 'legal-services', description: 'Legal consulting, contracts, and compliance services' },
+  { name: 'Engineering & Architecture', slug: 'engineering-architecture', description: 'CAD, structural, and architectural design services' },
+  { name: 'Sales & Business Development', slug: 'sales-business-development', description: 'Lead generation, CRM, and sales strategy services' },
+  { name: 'Photography', slug: 'photography', description: 'Photography, editing, and retouching services' },
+  { name: 'Game Development', slug: 'game-development', description: 'Game design, development, and testing services' },
+  { name: 'Cybersecurity', slug: 'cybersecurity', description: 'Security auditing, penetration testing, and compliance' },
+  { name: 'Cloud & DevOps', slug: 'cloud-devops', description: 'Cloud infrastructure, CI/CD, and DevOps services' },
+  { name: 'AI & Machine Learning', slug: 'ai-machine-learning', description: 'Artificial intelligence and machine learning solutions' },
+  { name: 'Blockchain & Web3', slug: 'blockchain-web3', description: 'Blockchain, smart contracts, and decentralized app development' },
+  { name: 'E-commerce', slug: 'ecommerce', description: 'Online store setup, optimization, and management' },
+  { name: 'Project Management', slug: 'project-management', description: 'Project planning, Agile coaching, and team coordination' },
+  { name: 'Human Resources', slug: 'human-resources', description: 'Recruitment, HR consulting, and training services' },
+  { name: 'Customer Service', slug: 'customer-service', description: 'Customer support, help desk, and community management' },
 ];

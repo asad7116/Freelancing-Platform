@@ -9,7 +9,8 @@ import {
   improveCoverLetterController,
   analyzeProposalController,
   analyzeBidController,
-  generateMilestonesController
+  generateMilestonesController,
+  suggestCategoryController
 } from "../controllers/ai.controller.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -91,5 +92,14 @@ router.post("/analyze-bid", analyzeBidController);
  * Returns: { milestones: Array<{ description, amount, duration }>, tips: string[] }
  */
 router.post("/generate-milestones", generateMilestonesController);
+
+// ==================== JOB POSTING AI ROUTES ====================
+
+/**
+ * POST /api/ai/suggest-category
+ * Body: { jobTitle: string }
+ * Returns: { category_id, category_name, specialty, reasoning, alternativeCategories, availableSpecialties }
+ */
+router.post("/suggest-category", suggestCategoryController);
 
 export default router;

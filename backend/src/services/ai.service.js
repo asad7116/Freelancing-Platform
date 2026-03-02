@@ -660,3 +660,49 @@ IMPORTANT: Return amounts and durations as string numbers (e.g., "50" not 50) fo
     throw new Error("Failed to generate milestones with AI");
   }
 };
+
+/**
+ * Suggest the best category and specialty for a job based on its title.
+ * Returns AI-generated specialties dynamically (not from DB).
+ * @param {string} jobTitle - The job title entered by the user
+ * @param {Array} availableCategories - Array of { id, name, slug } from the DB
+ * @returns {Promise<Object>}
+ */
+export const suggestCategory = async (jobTitle, availableCategories = []) => {
+  try {
+    const categoryList = availableCategories.map(c => c.name).join(", ");
+
+    const prompt = `You are an expert freelancing platform consultant. Given the following job title, suggest the most appropriate category and generate relevant specialties.
+
+Job Title: "${jobTitle}"
+
+Available Categories: ${categoryList}
+
+Instructions:
+1. Pick the SINGLE best matching category from the available list above (use the exact name).
+2. Generate 6-10 relevant specialties/sub-categories that are appropriate for this job title within the chosen category. These should be specific areas of expertise a freelancer might have.
+3. Pick the single best specialty from your generated list that matches this specific job title.
+
+Format your response as JSON:
+{
+  "category_name": "exact name from the available list",
+  "specialties": ["specialty 1", "specialty 2", "specialty 3", "specialty 4", "specialty 5", "specialty 6"],
+  "suggested_specialty": "the single best specialty for this job title",
+  "reasoning": "1 sentence explaining why"
+}`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: MODEL,
+      temperature: 0.3,
+      max_tokens: 400,
+      response_format: { type: "json_object" }
+    });
+
+    const response = JSON.parse(chatCompletion.choices[0].message.content);
+    return response;
+  } catch (error) {
+    console.error("Error suggesting category:", error.message);
+    throw new Error("Failed to suggest category with AI");
+  }
+};

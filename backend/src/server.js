@@ -16,6 +16,8 @@ import freelancerProfileRoutes from "./routes/freelancerProfile.routes.js"
 import profileRoutes from "./routes/profile.routes.js"
 import clientDashboardRoutes from "./routes/clientDashboard.routes.js"
 import proposalRoutes from "./routes/proposal.routes.js"
+import notificationRoutes from "./routes/notification.routes.js"
+import messageRoutes from "./routes/message.routes.js"
 import aiRoutes from "./routes/ai.routes.js"
 import chatbotRoutes from "./routes/chatbot.routes.js"
 
@@ -80,6 +82,8 @@ app.use("/api", skillsRoutes)
 app.use("/api/freelancer/profile", freelancerProfileRoutes)
 app.use("/api/profile", profileRoutes)
 app.use("/api/proposals", proposalRoutes)
+app.use("/api/notifications", notificationRoutes)
+app.use("/api/messages", messageRoutes)
 app.use("/api", clientDashboardRoutes)
 app.use("/api", freelancerDashboardRoutes)
 

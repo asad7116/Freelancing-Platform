@@ -29,7 +29,7 @@ export default function DashboardLayout({ role }) {
       </aside>
       
       <main className="dash-main">
-        <DashboardTopbar onMenuClick={toggleSidebar} />
+        <DashboardTopbar onMenuClick={toggleSidebar} role={role} />
         <div className="dash-content">
           <Outlet />
         </div>
