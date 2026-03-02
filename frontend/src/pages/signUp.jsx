@@ -199,16 +199,25 @@ export default function SignUp() {
         const dest = user.role === 'client' ? '/client/overview' : '/freelancer/overview';
         window.location.href = dest;
       } else {
-        const { user } = await api.post("/api/auth/signup", {
+        const data = await api.post("/api/auth/signup", {
           name,
           email,
           password,
           role: backendRole,
         });
 
-        localStorage.setItem("role", user.role);
-        const dest = user.role === "client" ? "/client/overview" : "/freelancer/overview";
-        navigate(dest, { replace: true });
+        // Backend returns needsVerification — redirect to OTP page
+        if (data.needsVerification) {
+          navigate(`/verify-email?email=${encodeURIComponent(data.email || email)}`, { replace: true });
+          return;
+        }
+
+        // Fallback if response has user (shouldn't happen with new flow)
+        if (data.user) {
+          localStorage.setItem("role", data.user.role);
+          const dest = data.user.role === "client" ? "/client/overview" : "/freelancer/overview";
+          navigate(dest, { replace: true });
+        }
       }
     } catch (err) {
       const errMsg = err.response?.data?.error || err.message || "Sign-up failed. Try again.";

@@ -163,6 +163,11 @@ export default function SignIn() {
       navigate(backTo, { replace: true });
     } catch (err) {
       const msg = err.message || "Sign-in failed. Try again.";
+      // Check if this is an email-not-verified error — redirect to OTP page
+      if (msg.toLowerCase().includes("verify your email")) {
+        navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
       setError(msg);
       setLoading(false);
     }
@@ -215,7 +220,11 @@ export default function SignIn() {
           <p className="auth-subtitle">{t('auth.signInSubtitle')}</p>
         </div>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">

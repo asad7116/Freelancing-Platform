@@ -10,6 +10,7 @@ import SignUp from "./pages/signUp";
 import Contact from "./pages/contact";
 import About from "./pages/About_Page";
 import AuthChoice from "./pages/AuthChoice";
+import VerifyEmail from "./pages/VerifyEmail";
 
 // ---------- Shared dashboard layout & guards ----------
 import DashboardLayout from "./Layouts/DashboardLayout";
@@ -56,6 +57,7 @@ export default function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
 
           {/* ===== Client dashboard ===== */}
           <Route
