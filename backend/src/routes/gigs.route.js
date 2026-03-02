@@ -6,6 +6,7 @@ import { gigSchema } from "../lib/validators.js"
 import { authMiddleware } from "../middleware/authMiddleware.js"
 import { ObjectId } from "mongodb"
 import fs from "fs"
+import { sendGigCreatedEmail } from "../services/email.service.js"
 
 const router = express.Router()
 
@@ -60,6 +61,13 @@ router.post(
         created_at: new Date(),
         updated_at: new Date(),
       })
+
+      // Send gig creation notification email (non-blocking)
+      if (req.user.email) {
+        sendGigCreatedEmail(req.user.email, req.user.name || "Freelancer", gigTitle).catch((err) => {
+          console.error("[Gig Email] Failed to send gig created email:", err.message)
+        })
+      }
 
       res.status(201).json({
         message: "Gig created successfully!",

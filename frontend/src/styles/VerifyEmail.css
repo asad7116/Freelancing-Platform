@@ -1,0 +1,263 @@
+.verify-email-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.verify-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 48px 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.verify-logo {
+  height: 44px;
+  margin-bottom: 24px;
+}
+
+.verify-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.verify-status h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.verify-status p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.verify-icon.success {
+  color: #10b981;
+}
+
+.verify-icon.error {
+  color: #ef4444;
+}
+
+.verify-icon.otp-icon {
+  color: #6c5ce7;
+}
+
+.verify-icon.spinning,
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── OTP Form ───────────────────────────────────────────── */
+.otp-form {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.otp-digit {
+  width: 52px;
+  height: 62px;
+  border: 2px solid #e0e0ef;
+  border-radius: 12px;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  color: #1a1a2e;
+  background: #fafafe;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+  caret-color: #6c5ce7;
+}
+
+.otp-digit:focus {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.otp-digit.filled {
+  border-color: #6c5ce7;
+  background: #f0edff;
+}
+
+.otp-digit.shake {
+  animation: shake 0.4s ease;
+  border-color: #ef4444;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* ── Messages ───────────────────────────────────────────── */
+.otp-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.otp-message.error {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.otp-message.info {
+  color: #6c5ce7;
+  background: #f0edff;
+}
+
+/* ── Verify Button ──────────────────────────────────────── */
+.verify-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #6c5ce7, #a855f7);
+  color: #fff !important;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  width: 100%;
+  max-width: 320px;
+}
+
+.verify-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 92, 231, 0.35);
+}
+
+.verify-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.verify-hint {
+  color: #999 !important;
+  font-size: 13px !important;
+  margin-top: 4px;
+}
+
+/* ── Resend Section ─────────────────────────────────────── */
+.resend-section {
+  width: 100%;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.resend-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+.resend-btn {
+  padding: 10px 24px;
+  background: transparent;
+  color: #6c5ce7;
+  border: 2px solid #6c5ce7;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.resend-btn:hover:not(:disabled) {
+  background: #6c5ce7;
+  color: #fff;
+}
+
+.resend-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #999;
+}
+
+.verify-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: #6c5ce7;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.verify-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .verify-card {
+    padding: 32px 20px;
+  }
+
+  .otp-inputs {
+    gap: 6px;
+  }
+
+  .otp-digit {
+    width: 44px;
+    height: 54px;
+    font-size: 22px;
+    border-radius: 10px;
+  }
+
+  .verify-btn {
+    max-width: 100%;
+  }
+}

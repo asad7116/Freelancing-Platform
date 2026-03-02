@@ -1,10 +1,12 @@
 import { Router } from "express"
 import bcrypt from "bcryptjs"
+import crypto from "crypto"
 import { OAuth2Client } from "google-auth-library"
 import { getDatabase } from "../db/mongodb.js"
 import { signupSchema, signinSchema } from "../lib/validators.js"
 import { signJwt, verifyJwt, authCookieName, authCookieOpts, ensureAuth } from "../lib/jwt.js"
 import { ObjectId } from "mongodb"
+import { sendVerificationOTP } from "../services/email.service.js"
 
 const router = Router()
 
@@ -22,6 +24,10 @@ router.post("/signup", async (req, res) => {
 
     const passwordHash = await bcrypt.hash(body.password, 10)
 
+    // Generate 6-digit OTP
+    const verificationOTP = crypto.randomInt(100000, 999999).toString()
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+
     const result = await users.insertOne({
       _id: new ObjectId(),
       name: body.name,
@@ -30,21 +36,24 @@ router.post("/signup", async (req, res) => {
       role: body.role,
       avatar: null,
       city_id: null,
+      emailVerified: false,
+      verificationOTP,
+      otpExpires,
       createdAt: new Date(),
       updatedAt: new Date(),
     })
 
-    const user = {
-      id: result.insertedId.toString(),
-      name: body.name,
-      email: body.email,
-      role: body.role,
-      createdAt: new Date(),
-    }
+    // Send OTP email (non-blocking — don't fail signup if email fails)
+    sendVerificationOTP(body.email, body.name, verificationOTP).catch((err) => {
+      console.error("[Signup] Failed to send verification OTP:", err.message)
+    })
 
-    const token = signJwt({ sub: user.id, role: user.role })
-    res.cookie(authCookieName, token, authCookieOpts)
-    return res.status(201).json({ user })
+    // Don't set JWT cookie — user must verify email first
+    return res.status(201).json({
+      needsVerification: true,
+      email: body.email,
+      message: "Account created! Please check your email for a 6-digit verification code.",
+    })
   } catch (err) {
     if (err?.issues) return res.status(400).json({ message: "Invalid input", issues: err.issues })
     console.error(err)
@@ -64,6 +73,15 @@ router.post("/signin", async (req, res) => {
 
     const ok = await bcrypt.compare(password, user.passwordHash)
     if (!ok) return res.status(401).json({ message: "Invalid credentials" })
+
+    // Block unverified users (skip for Google users who have no password)
+    if (user.emailVerified === false) {
+      return res.status(403).json({
+        message: "Please verify your email before signing in.",
+        emailNotVerified: true,
+        email: user.email,
+      })
+    }
 
     const publicUser = {
       id: user._id.toString(),
@@ -107,6 +125,7 @@ router.get("/me", async (req, res) => {
         name: 1,
         email: 1,
         role: 1,
+        emailVerified: 1,
         createdAt: 1,
       },
     },
@@ -115,6 +134,88 @@ router.get("/me", async (req, res) => {
   if (!user) return res.status(401).json({ user: null })
 
   return res.json({ user: { ...user, id: user._id.toString() } })
+})
+
+// POST /api/auth/verify-email
+router.post("/verify-email", async (req, res) => {
+  try {
+    const { email, code } = req.body
+    if (!email || !code) return res.status(400).json({ message: "Email and verification code are required" })
+
+    const db = await getDatabase()
+    const users = db.collection("users")
+
+    const user = await users.findOne({
+      email,
+      verificationOTP: code.toString(),
+      otpExpires: { $gt: new Date() },
+    })
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired verification code. Please request a new one." })
+    }
+
+    if (user.emailVerified) {
+      return res.json({ message: "Email is already verified. You can sign in." })
+    }
+
+    await users.updateOne(
+      { _id: user._id },
+      {
+        $set: { emailVerified: true, updatedAt: new Date() },
+        $unset: { verificationOTP: "", otpExpires: "" },
+      }
+    )
+
+    // Now set JWT cookie so the user is logged in after verification
+    const publicUser = {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    }
+    const token = signJwt({ sub: user._id.toString(), role: user.role })
+    res.cookie(authCookieName, token, authCookieOpts)
+
+    return res.json({ message: "Email verified successfully!", user: publicUser })
+  } catch (err) {
+    console.error("[Verify Email] Error:", err)
+    return res.status(500).json({ message: "Internal error" })
+  }
+})
+
+// POST /api/auth/resend-verification
+router.post("/resend-verification", async (req, res) => {
+  try {
+    const { email } = req.body
+    if (!email) return res.status(400).json({ message: "Email is required" })
+
+    const db = await getDatabase()
+    const users = db.collection("users")
+
+    const user = await users.findOne({ email })
+    if (!user) return res.status(404).json({ message: "No account found with this email" })
+
+    if (user.emailVerified) {
+      return res.json({ message: "Email is already verified. You can sign in." })
+    }
+
+    // Generate new 6-digit OTP
+    const verificationOTP = crypto.randomInt(100000, 999999).toString()
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+
+    await users.updateOne(
+      { _id: user._id },
+      { $set: { verificationOTP, otpExpires, updatedAt: new Date() } }
+    )
+
+    await sendVerificationOTP(user.email, user.name, verificationOTP)
+
+    return res.json({ message: "A new verification code has been sent to your email." })
+  } catch (err) {
+    console.error("[Resend Verification] Error:", err)
+    return res.status(500).json({ message: "Failed to resend verification code" })
+  }
 })
 
 // POST /api/auth/google - Sign in / up with Google ID token

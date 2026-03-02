@@ -2,6 +2,7 @@ import { getDatabase } from "../db/mongodb.js"
 import { ObjectId } from "mongodb"
 import JobApplicationModel from "../models/JobApplication.js"
 import JobPostModel from "../models/JobPost.js"
+import { sendProposalNotificationEmail } from "../services/email.service.js"
 // import Stripe from "stripe"
 // 
 // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -158,6 +159,24 @@ export const submitProposal = async (req, res) => {
       milestones: milestones || [],
       status: "pending",
     })
+
+    // Send email notification to the client (non-blocking)
+    try {
+      const client = await users.findOne({ _id: new ObjectId(job.buyer_id) })
+      if (client?.email) {
+        sendProposalNotificationEmail(
+          client.email,
+          client.name || "Client",
+          user?.name || "A freelancer",
+          job.title || "your job",
+          proposalId.toString()
+        ).catch((err) => {
+          console.error("[Proposal Email] Failed to send notification:", err.message)
+        })
+      }
+    } catch (emailErr) {
+      console.error("[Proposal Email] Error fetching client for notification:", emailErr.message)
+    }
 
     res.status(201).json({
       success: true,
