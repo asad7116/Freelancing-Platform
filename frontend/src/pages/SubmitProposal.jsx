@@ -132,7 +132,7 @@ const SubmitProposal = () => {
       if (response.ok) {
         setSuccess(true);
         setTimeout(() => {
-          navigate('/freelancer/my-orders');
+          navigate('/freelancer/MyProposals');
         }, 2000);
       } else {
         setError(data.message || 'Failed to submit proposal');

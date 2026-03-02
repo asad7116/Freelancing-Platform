@@ -124,7 +124,7 @@ const JobDetail = () => {
       {/* Header Section */}
       <div className="job-detail-header">
         <button onClick={handleGoBack} className="back-button">
-          ← Back to My Jobs
+          ← {isClient ? 'Back to My Jobs' : 'Back to Jobs'}
         </button>
         
         <div className="job-header-content">
@@ -328,7 +328,7 @@ const JobDetail = () => {
             </div>
           </div>
 
-          {job._count?.applications > 0 && (
+          {job._count?.applications > 0 && isClient && (
             <div className="sidebar-card">
               <h3>Applications</h3>
               <div className="applications-summary">
@@ -336,10 +336,29 @@ const JobDetail = () => {
                   <strong>{job._count.applications}</strong>
                   <span>Total Applications</span>
                 </div>
-                <button className="btn-secondary view-applications-btn">
+                <button
+                  className="btn-secondary view-applications-btn"
+                  onClick={() => navigate(`/client/proposals/job/${jobId}`)}
+                >
                   View Applications
                 </button>
               </div>
+            </div>
+          )}
+
+          {!isClient && (
+            <div className="sidebar-card">
+              <h3>Interested?</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', marginBottom: '1rem' }}>
+                Submit a proposal and let the client know why you're the best fit for this project.
+              </p>
+              <button
+                className="btn-primary apply-now-btn"
+                onClick={() => navigate(`/freelancer/apply/${jobId}`)}
+                style={{ width: '100%' }}
+              >
+                🚀 Apply Now
+              </button>
             </div>
           )}
         </div>
