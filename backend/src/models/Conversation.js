@@ -81,6 +81,7 @@ export class ConversationModel {
 export class MessageModel {
   /**
    * Create a new message
+   * Supports both plaintext (legacy) and E2E encrypted messages.
    */
   static async create(db, data) {
     const messages = db.collection("messages")
@@ -89,7 +90,10 @@ export class MessageModel {
       _id: new ObjectId(),
       conversation_id: data.conversationId,
       sender_id: data.senderId,
-      text: data.text,
+      // Plaintext fallback (for legacy / unencrypted messages)
+      text: data.text || null,
+      // E2E encrypted fields
+      encrypted: data.encrypted || null, // { ciphertext, iv, encryptedKeys: { userId: base64 } }
       created_at: new Date(),
     }
 

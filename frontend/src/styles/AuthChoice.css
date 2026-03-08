@@ -134,9 +134,8 @@
 .circle-3 {
   width: 200px;
   height: 200px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: -80px;
+  right: 20%;
   animation-delay: 10s;
 }
 

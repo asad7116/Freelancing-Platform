@@ -168,7 +168,7 @@ export default function VerifyEmail() {
             <XCircle size={48} className="verify-icon error" />
             <h2>Missing Email</h2>
             <p>No email address provided. Please sign up or try signing in again.</p>
-            <Link to="/signup" className="verify-btn">Sign Up</Link>
+            <Link to="/auth?mode=signup" className="verify-btn">Sign Up</Link>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function VerifyEmail() {
               <p className="verify-hint">Check your spam folder if you don't see the email.</p>
             </div>
 
-            <Link to="/signin" className="verify-link">
+            <Link to="/auth" className="verify-link">
               Back to Sign In
             </Link>
           </>

@@ -169,8 +169,8 @@ const Header = () => {
           </div>
 
           <div className="mobile-auth-buttons">
-            <Link to="/signin" className="mobile-signin-btn" onClick={handleLinkClick}>{t('header.signIn')}</Link>
-            <Link to="/signup" className="mobile-signup-btn" onClick={handleLinkClick}>{t('header.signUp')}</Link>
+            <Link to="/auth" className="mobile-signin-btn" onClick={handleLinkClick}>{t('header.signIn')}</Link>
+            <Link to="/auth?mode=signup" className="mobile-signup-btn" onClick={handleLinkClick}>{t('header.signUp')}</Link>
           </div>
         </div>
       </div>

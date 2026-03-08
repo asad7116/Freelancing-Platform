@@ -5,11 +5,9 @@ import { LanguageProvider } from "./context/LanguageContext";
 // ---------- Public pages ----------
 import HomePage from "./pages/HomePage";
 import PricingPage from "./pages/Pricing_page";
-import SignIn from "./pages/Signin";
-import SignUp from "./pages/signUp";
 import Contact from "./pages/contact";
 import About from "./pages/About_Page";
-import AuthChoice from "./pages/AuthChoice";
+import AuthPage from "./pages/AuthPage";
 import VerifyEmail from "./pages/VerifyEmail";
 
 // ---------- Shared dashboard layout & guards ----------
@@ -51,10 +49,10 @@ export default function App() {
         <Routes>
           {/* ===== Public routes ===== */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/auth" element={<AuthChoice />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<Navigate to="/auth" replace />} />
+          <Route path="/signup" element={<Navigate to="/auth?mode=signup" replace />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/verify-email" element={<VerifyEmail />} />

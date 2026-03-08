@@ -17,7 +17,7 @@ export default function DashboardTopbar({ onMenuClick, role }) {
       const data = await api.get("/api/notifications/unread-count");
       setUnreadCount(data.count || 0);
     } catch {
-      // silently fail
+      // handled globally by api.js (401 → redirect to /auth)
     }
   }, []);
 
@@ -46,7 +46,7 @@ export default function DashboardTopbar({ onMenuClick, role }) {
       // ignore errors; we'll still redirect
     }
     localStorage.removeItem("role");
-    navigate("/signin", { replace: true });
+    navigate("/auth", { replace: true });
   }
 
   return (

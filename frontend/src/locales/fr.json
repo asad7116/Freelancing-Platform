@@ -19,7 +19,8 @@
     "allCategories": "Toutes les Catégories",
     "happyCustomers": "Clients Satisfaits",
     "login": "Connexion",
-    "signUp": "S'inscrire"
+    "signUp": "S'inscrire",
+    "getStarted": "Commencer"
   },
   "auth": {
     "backToHome": "Retour à l'accueil",
