@@ -357,7 +357,7 @@ const PostJobFormEnhanced = () => {
 
       if (thumbnailFile) formDataObj.append('thumb_image', thumbnailFile);
 
-      const url = isEditMode ? `/api/job-posts/${jobId}` : '/api/job-posts';
+      const url = isEditMode ? `${API_BASE_URL}/api/job-posts/${jobId}` : `${API_BASE_URL}/api/job-posts`;
       const method = isEditMode ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
