@@ -19,7 +19,8 @@
     "allCategories": "جميع الفئات",
     "happyCustomers": "عملاء سعداء",
     "login": "تسجيل الدخول",
-    "signUp": "إنشاء حساب"
+    "signUp": "إنشاء حساب",
+    "getStarted": "ابدأ الآن"
   },
   "auth": {
     "backToHome": "العودة للرئيسية",

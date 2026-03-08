@@ -19,7 +19,8 @@
     "allCategories": "All Categories",
     "happyCustomers": "Happy Customers",
     "login": "Login",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "getStarted": "Get Started"
   },
   "auth": {
     "backToHome": "Back to Home",

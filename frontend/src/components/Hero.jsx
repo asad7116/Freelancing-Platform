@@ -22,13 +22,10 @@ export default function Hero() {
             {t('hero.title')} <span>{t('hero.titleHighlight')}</span> {t('hero.titleEnd')}
           </h1>
 
-          {/* Auth Buttons */}
+          {/* Auth Button */}
           <div className="hero-auth-buttons">
-            <Link to="/auth" className="hero-btn hero-login-btn">
-              {t('hero.login')}
-            </Link>
             <Link to="/auth" className="hero-btn hero-signup-btn">
-              {t('hero.signUp')}
+              {t('hero.getStarted') || 'Get Started'}
             </Link>
           </div>
 
