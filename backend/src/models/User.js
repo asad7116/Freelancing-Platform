@@ -51,6 +51,54 @@ export class UserModel {
     })
     return projection
   }
+
+  /**
+   * Store (or update) a user's E2E encryption public key (JWK format)
+   */
+  static async setPublicKey(db, userId, publicKeyJwk) {
+    const users = db.collection("users")
+    await users.updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { publicKey: publicKeyJwk, publicKeyUpdatedAt: new Date() } }
+    )
+  }
+
+  /**
+   * Retrieve a user's E2E encryption public key
+   */
+  static async getPublicKey(db, userId) {
+    const users = db.collection("users")
+    try {
+      const user = await users.findOne(
+        { _id: new ObjectId(userId) },
+        { projection: { publicKey: 1 } }
+      )
+      return user?.publicKey || null
+    } catch {
+      return null
+    }
+  }
+
+  /**
+   * Retrieve public keys for multiple users at once
+   */
+  static async getPublicKeys(db, userIds) {
+    const users = db.collection("users")
+    const objectIds = userIds.map((id) => {
+      try { return new ObjectId(id) } catch { return null }
+    }).filter(Boolean)
+
+    const docs = await users
+      .find({ _id: { $in: objectIds }, publicKey: { $ne: null } })
+      .project({ publicKey: 1 })
+      .toArray()
+
+    const map = {}
+    docs.forEach((doc) => {
+      map[doc._id.toString()] = doc.publicKey
+    })
+    return map
+  }
 }
 
 export const User = UserModel

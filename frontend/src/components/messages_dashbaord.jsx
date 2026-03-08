@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { api } from "../lib/api";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Lock } from "lucide-react";
 import "../styles/messages_dashboard.css";
+import {
+  initializeKeys,
+  encryptMessage,
+  decryptMessage,
+  isE2ESupported,
+} from "../lib/crypto";
 
 function timeAgo(dateStr) {
   if (!dateStr) return "";
@@ -17,6 +24,7 @@ function timeAgo(dateStr) {
 }
 
 export default function MessagesDashboard() {
+  const location = useLocation();
   const [conversations, setConversations] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -27,12 +35,64 @@ export default function MessagesDashboard() {
   const threadRef = useRef(null);
   const pollRef = useRef(null);
 
+  // ─── E2E Encryption state ──────────────────────────────────
+  const [e2eReady, setE2eReady] = useState(false);
+  const privateKeyRef = useRef(null);
+  const publicKeyJwkRef = useRef(null);
+  const userIdRef = useRef(null);
+  // Cache of recipient public keys: { recipientId: publicKeyJwk }
+  const recipientKeysCache = useRef({});
+
+  // If navigated here with a specific conversationId (e.g. from "Contact Seller"), pre-select it
+  const incomingConvId = location.state?.conversationId;
+
+  // ─── E2E Key Initialization ──────────────────────────────────
+  useEffect(() => {
+    async function setupE2E() {
+      if (!isE2ESupported()) {
+        console.warn("[E2E] Browser does not support Web Crypto / IndexedDB");
+        return;
+      }
+      try {
+        // Get current user ID from a lightweight endpoint
+        const meData = await api.get("/api/auth/me");
+        const userId = meData.user?.id || meData.user?._id;
+        if (!userId) {
+          console.warn("[E2E] Could not determine current user ID");
+          return;
+        }
+        userIdRef.current = userId;
+
+        // Initialize (load or generate) RSA key pair
+        const { privateKey, publicKeyJwk, isNew } = await initializeKeys();
+        privateKeyRef.current = privateKey;
+        publicKeyJwkRef.current = publicKeyJwk;
+
+        // If keys are newly generated, upload the public key to the server
+        if (isNew) {
+          await api.put("/api/keys/public", { publicKey: publicKeyJwk });
+          console.log("[E2E] New key pair generated and public key uploaded");
+        }
+
+        setE2eReady(true);
+        console.log("[E2E] Encryption ready");
+      } catch (err) {
+        console.error("[E2E] Initialization failed:", err);
+      }
+    }
+    setupE2E();
+  }, []);
+
   // Fetch conversations
   const fetchConversations = useCallback(async (selectFirst = false) => {
     try {
       const data = await api.get("/api/messages/conversations");
       setConversations(data.conversations || []);
-      if (selectFirst && data.conversations?.length > 0 && !activeId) {
+
+      // If we have an incoming conversationId from navigation, select it
+      if (incomingConvId && data.conversations?.some((c) => c._id === incomingConvId)) {
+        setActiveId(incomingConvId);
+      } else if (selectFirst && data.conversations?.length > 0 && !activeId) {
         setActiveId(data.conversations[0]._id);
       }
     } catch (err) {
@@ -40,18 +100,38 @@ export default function MessagesDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [activeId]);
+  }, [activeId, incomingConvId]);
 
-  // Fetch messages for active conversation
+  // Fetch messages for active conversation (and decrypt if E2E)
   const fetchMessages = useCallback(async () => {
     if (!activeId) return;
     try {
       const data = await api.get(`/api/messages/conversations/${activeId}/messages`);
-      setMessages(data.messages || []);
+      const rawMessages = data.messages || [];
+
+      // Decrypt encrypted messages if E2E is ready
+      if (e2eReady && privateKeyRef.current && userIdRef.current) {
+        const decrypted = await Promise.all(
+          rawMessages.map(async (m) => {
+            if (m.encrypted && m.encrypted.ciphertext) {
+              const plaintext = await decryptMessage(
+                m.encrypted,
+                privateKeyRef.current,
+                userIdRef.current
+              );
+              return { ...m, text: plaintext, _isEncrypted: true };
+            }
+            return { ...m, _isEncrypted: false };
+          })
+        );
+        setMessages(decrypted);
+      } else {
+        setMessages(rawMessages);
+      }
     } catch (err) {
       console.error("Failed to fetch messages:", err);
     }
-  }, [activeId]);
+  }, [activeId, e2eReady]);
 
   // Initial load
   useEffect(() => {
@@ -88,6 +168,29 @@ export default function MessagesDashboard() {
     c.otherUser?.name?.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Helper: get the other participant's public key for a conversation
+  const getRecipientPublicKeys = useCallback(async (conv) => {
+    if (!conv || !userIdRef.current) return {};
+    const otherId = conv.otherUser?.id;
+    if (!otherId) return {};
+
+    // Check cache first
+    if (recipientKeysCache.current[otherId]) {
+      return { [otherId]: recipientKeysCache.current[otherId] };
+    }
+
+    try {
+      const data = await api.get(`/api/keys/public/${otherId}`);
+      if (data.publicKey) {
+        recipientKeysCache.current[otherId] = data.publicKey;
+        return { [otherId]: data.publicKey };
+      }
+    } catch {
+      // Recipient has no public key — fall back to plaintext
+    }
+    return {};
+  }, []);
+
   const sendMessage = async () => {
     if (!draft.trim() || !activeId || sendingMsg) return;
     const text = draft.trim();
@@ -99,23 +202,60 @@ export default function MessagesDashboard() {
       _id: `temp-${Date.now()}`,
       from: "me",
       text,
+      _isEncrypted: e2eReady,
       created_at: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, optimisticMsg]);
 
     try {
-      const data = await api.post(`/api/messages/conversations/${activeId}/messages`, { text });
+      let payload;
 
-      // Replace optimistic message with real one
+      // Attempt E2E encryption if ready
+      if (e2eReady && activeConv) {
+        const recipientKeys = await getRecipientPublicKeys(activeConv);
+        const hasRecipientKey = Object.keys(recipientKeys).length > 0;
+
+        if (hasRecipientKey && publicKeyJwkRef.current && userIdRef.current) {
+          const encrypted = await encryptMessage(
+            text,
+            recipientKeys,
+            publicKeyJwkRef.current,
+            userIdRef.current
+          );
+          payload = { encrypted };
+        } else {
+          // Recipient hasn't set up E2E yet — send plaintext
+          payload = { text };
+        }
+      } else {
+        payload = { text };
+      }
+
+      const data = await api.post(
+        `/api/messages/conversations/${activeId}/messages`,
+        payload
+      );
+
+      // Replace optimistic message with real one (decrypt it for display)
+      let displayMsg = data.message;
+      if (displayMsg.encrypted && e2eReady && privateKeyRef.current && userIdRef.current) {
+        const plaintext = await decryptMessage(
+          displayMsg.encrypted,
+          privateKeyRef.current,
+          userIdRef.current
+        );
+        displayMsg = { ...displayMsg, text: plaintext, _isEncrypted: true };
+      }
+
       setMessages((prev) =>
-        prev.map((m) => (m._id === optimisticMsg._id ? data.message : m))
+        prev.map((m) => (m._id === optimisticMsg._id ? displayMsg : m))
       );
 
       // Update conversation list preview
       setConversations((prev) =>
         prev.map((c) =>
           c._id === activeId
-            ? { ...c, last_message: text, last_message_at: new Date().toISOString() }
+            ? { ...c, last_message: payload.encrypted ? "🔒 Encrypted message" : text, last_message_at: new Date().toISOString() }
             : c
         )
       );
@@ -221,6 +361,12 @@ export default function MessagesDashboard() {
                       )}
                     </div>
                   </div>
+                  {e2eReady && (
+                    <div className="mg-e2e-badge" title="Messages are end-to-end encrypted">
+                      <Lock size={14} />
+                      <span>Encrypted</span>
+                    </div>
+                  )}
                 </header>
 
                 <div className="mg-thread" ref={threadRef}>
@@ -236,7 +382,12 @@ export default function MessagesDashboard() {
                           m.from === "me" ? "mg-msg--me" : "mg-msg--them"
                         }`}
                       >
-                        <div className="mg-bubble">{m.text}</div>
+                        <div className="mg-bubble">
+                          {m.text}
+                          {m._isEncrypted && (
+                            <Lock size={12} className="mg-lock-icon" title="End-to-end encrypted" />
+                          )}
+                        </div>
                         <div className="mg-time">{timeAgo(m.created_at)}</div>
                       </div>
                     ))
