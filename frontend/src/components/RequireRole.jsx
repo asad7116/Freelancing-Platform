@@ -14,7 +14,7 @@ export default function RequireRole({ role, children }) {
 
   // If no role set, user is not authenticated - redirect to signin
   if (!userRole) {
-    return <Navigate to="/signin" replace state={{ from: location }} />;
+    return <Navigate to="/auth" replace state={{ from: location }} />;
   }
 
   // Allow admin to view both spaces (optional)
