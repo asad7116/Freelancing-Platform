@@ -3,7 +3,7 @@
   min-height: 100vh;
 }
 
-/* Animated Dark Green Gradient Background */
+/* Light Gradient Background */
 .homepage-gradient-bg {
   position: fixed;
   top: 0;
@@ -11,11 +11,11 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, 
-    #0a3d2e 0%, 
-    #0f4a33 25%, 
-    #1a5c42 50%, 
-    #0b5345 75%, 
-    #0d3d2a 100%
+    #f8fafc 0%, 
+    #f1f5f9 25%, 
+    #e2e8f0 50%, 
+    #f1f5f9 75%, 
+    #f8fafc 100%
   );
   background-size: 400% 400%;
   animation: gradientShiftHomepage 15s ease infinite;
@@ -32,8 +32,7 @@
 .homepage-decorative-circle {
   position: fixed;
   border-radius: 50%;
-  background: rgba(34, 190, 13, 0.05);
-  backdrop-filter: blur(5px);
+  background: rgba(16, 185, 129, 0.05);
   animation: floatHomepage 6s ease-in-out infinite;
   pointer-events: none;
   transition: transform 0.3s ease-out;
@@ -125,7 +124,7 @@
 }
 
 .search-box button {
-  background: #00a86b;
+  background: #10b981;
   color: white;
   border: none;
   padding: 12px 25px;
@@ -135,5 +134,5 @@
 }
 
 .search-box button:hover {
-  background: #007a52;
+  background: #059669;
 }

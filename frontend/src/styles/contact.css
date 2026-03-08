@@ -37,14 +37,14 @@
 .info-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-  border-color: #22be0d;
+  border-color: #10b981;
 }
 
 .icon-wrapper {
   width: 56px;
   height: 56px;
   background: rgba(34, 190, 13, 0.08);
-  color: #22be0d;
+  color: #10b981;
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -85,8 +85,8 @@
 }
 
 .social-link:hover {
-  background: #22be0d;
-  color: #fff;
+  background: #10b981;
+  color: #ffffff;
   transform: translateY(-3px);
 }
 
@@ -158,7 +158,7 @@
 .input-field input:focus,
 .input-field textarea:focus {
   outline: none;
-  border-color: #22be0d;
+  border-color: #10b981;
   background: #fff;
   box-shadow: 0 0 0 4px rgba(34, 190, 13, 0.06);
 }
@@ -171,8 +171,8 @@
 .submit-now-btn {
   align-self: flex-start;
   padding: 18px 40px;
-  background: #22be0d;
-  color: #fff;
+  background: #10b981;
+  color: #ffffff;
   border: none;
   border-radius: 14px;
   font-size: 1.1rem;
@@ -183,7 +183,7 @@
 }
 
 .submit-now-btn:hover {
-  background: #1a9b0a;
+  background: #059669;
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(34, 190, 13, 0.2);
 }

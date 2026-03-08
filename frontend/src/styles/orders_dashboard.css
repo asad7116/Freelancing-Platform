@@ -1,7 +1,7 @@
 /* Orders Dashboard - Matching Dashboard Theme */
 :root {
-  --orders-primary: #00a86b;
-  --orders-primary-hover: #007a52;
+  --orders-primary: #10b981;
+  --orders-primary-hover: #059669;
 }
 
 /* Header layout with Post Job Button */
@@ -16,7 +16,7 @@
   align-items: center;
   gap: 8px;
   background: var(--orders-primary);
-  color: #fff;
+  color: #0f172a;
   border: 0;
   padding: 10px 18px;
   border-radius: 8px;
@@ -29,7 +29,7 @@
 .post-job-btn:hover {
   background: var(--orders-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
 }
 
 .post-job-btn svg {
@@ -38,12 +38,11 @@
 
 /* Card container for the table */
 .orders-container {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
@@ -54,20 +53,20 @@
 }
 
 .orders-table thead th {
-  background: rgba(0, 168, 107, 0.2);
-  color: #ffffff;
+  background: rgba(16, 185, 129, 0.2);
+  color: #0f172a;
   padding: 14px 16px;
   font-weight: 700;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .orders-table tbody td {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e2e8f0;
   vertical-align: middle;
   background: transparent;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 /* Product cell */
@@ -82,8 +81,8 @@
   height: 52px;
   border-radius: 10px;
   object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #e2e8f0;
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .product-name {
@@ -111,9 +110,9 @@
 }
 
 .status.completed {
-  background: rgba(0, 230, 138, 0.2);
-  color: #00e68a;
-  border: 1px solid rgba(0, 230, 138, 0.3);
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .status.revision {
@@ -124,7 +123,7 @@
 
 /* Applications count */
 .applications-count {
-  background: rgba(0, 168, 107, 0.1);
+  background: rgba(16, 185, 129, 0.1);
   color: var(--orders-primary);
   padding: 4px 8px;
   border-radius: 12px;
@@ -141,8 +140,8 @@
 .view-btn,
 .check-btn,
 .edit-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #e2e8f0;
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
   width: 36px;
   height: 36px;
@@ -151,13 +150,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .view-btn:hover,
 .check-btn:hover,
 .edit-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #e2e8f0;
   transform: translateY(-1px);
 }
 

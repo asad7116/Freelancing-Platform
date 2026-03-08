@@ -1,12 +1,12 @@
 /* Browse Components Styles - Matching Dashboard Theme */
 :root {
-  --browse-primary: #00e68a;
-  --browse-primary-hover: #00c77a;
+  --browse-primary: #10b981;
+  --browse-primary-hover: #059669;
   --browse-bg: transparent;
-  --browse-card-border: rgba(255, 255, 255, 0.15);
-  --browse-text-strong: #ffffff;
-  --browse-text-muted: rgba(255, 255, 255, 0.7);
-  --browse-accent-bg: rgba(0, 0, 0, 0.2);
+  --browse-card-border: #e2e8f0;
+  --browse-text-strong: #0f172a;
+  --browse-text-muted: #475569;
+  --browse-accent-bg: #ffffff;
 }
 
 .browse-container {
@@ -24,9 +24,8 @@
   align-items: flex-end;
   margin-bottom: 30px;
   padding: 18px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
 }
 
@@ -34,17 +33,17 @@
   margin: 0 0 8px 0;
   font-size: 2.5rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .browse-title p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   font-size: 1.1rem;
 }
 
 .browse-stats {
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -78,22 +77,22 @@
 .search-input {
   width: 100%;
   padding: 12px 15px 12px 45px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
-  background: rgba(0, 0, 0, 0.2);
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f172a;
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: #64748b;
 }
 
 .search-input:focus {
   outline: none;
   border-color: var(--browse-primary);
-  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 .filter-toggle {
@@ -101,17 +100,17 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #ffffff;
+  color: #334155;
 }
 
 .filter-toggle:hover {
-  background: rgba(0, 168, 107, 0.3);
+  background: rgba(16, 185, 129, 0.3);
   border-color: var(--browse-primary);
   transform: translateY(-1px);
 }
@@ -122,12 +121,11 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .filter-group {
@@ -138,29 +136,29 @@
 
 .filter-group label {
   font-weight: 600;
-  color: #ffffff;
+  color: #334155;
   font-size: 0.9rem;
 }
 
 .filter-group select {
   padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.04);
   font-size: 0.9rem;
   cursor: pointer;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .filter-group select option {
-  background: #0a3d2e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f172a;
 }
 
 .filter-group select:focus {
   outline: none;
   border-color: var(--browse-primary);
-  box-shadow: 0 0 0 2px rgba(0, 230, 138, 0.2);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 /* Loading and Error States */
@@ -172,7 +170,7 @@
   justify-content: center;
   padding: 60px 20px;
   text-align: center;
-  color: #ffffff;
+  color: #475569;
 }
 
 /* Loading State - Match Proposals/Gigs Style */
@@ -184,8 +182,8 @@
 .spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #00e68a;
+  border: 4px solid #cbd5e1;
+  border-top-color: #10b981;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 0 auto 20px;
@@ -198,7 +196,7 @@
 }
 
 .loading-state p {
-  color: rgba(255, 255, 255, 0.8);
+  color: #334155;
   font-size: 15px;
 }
 
@@ -223,8 +221,7 @@
 .no-results {
   text-align: center;
   padding: 60px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+  background: #ffffff;
   border-radius: 12px;
   border: 1px solid var(--browse-card-border);
 }
@@ -261,7 +258,7 @@
 .clear-filters-btn:hover {
   background-color: var(--browse-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
 }
 
 /* Gigs Grid */
@@ -463,7 +460,6 @@
   top: 0;
   right: 0;
   box-shadow: rgba(100, 100, 111, 0.2) -10px 10px 20px 0px;
-  backdrop-filter: blur(5px);
   background: rgba(0, 249, 203, 0.2);
   transition: all 0.5s ease-in-out;
 }
@@ -480,7 +476,6 @@
   transform: translate3d(0, 0, 40px);
   top: 10px;
   right: 10px;
-  backdrop-filter: blur(1px);
   transition-delay: 0.2s;
 }
 
@@ -664,11 +659,12 @@
 
 .job-date {
   font-size: 12px;
-  color: rgba(0, 137, 78, 0.7);
+  color: #0f172a;
   padding: 5px 12px;
-  background: rgba(150, 25, 140, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
-  box-shadow: rgba(5, 71, 17, 0.2) 0px 3px 8px 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 8px 0px;
+  font-weight: 600;
 }
 
 .job-actions {
@@ -728,7 +724,6 @@
   top: 0;
   right: 0;
   box-shadow: rgba(100, 100, 111, 0.2) -10px 10px 20px 0px;
-  backdrop-filter: blur(5px);
   background: rgba(0, 249, 203, 0.2);
   transition: all 0.5s ease-in-out;
 }
@@ -745,7 +740,6 @@
   transform: translate3d(0, 0, 40px);
   top: 10px;
   right: 10px;
-  backdrop-filter: blur(1px);
   transition-delay: 0.2s;
 }
 
@@ -838,7 +832,7 @@
 
 .job-type {
   color: var(--browse-primary);
-  background-color: rgba(0, 168, 107, 0.1);
+  background-color: rgba(16, 185, 129, 0.1);
   padding: 4px 10px;
   border-radius: 4px;
   font-weight: 600;
@@ -846,7 +840,7 @@
 
 .job-category {
   color: #f59e0b;
-  background-color: rgba(0, 168, 107, 0.1);
+  background-color: rgba(16, 185, 129, 0.1);
   padding: 4px 10px;
   border-radius: 4px;
   font-weight: 500;
@@ -907,12 +901,12 @@
 
 .skill-tag {
   padding: 4px 10px;
-  background-color: rgba(0, 168, 107, 0.1);
+  background-color: rgba(16, 185, 129, 0.1);
   color: var(--browse-accent-bg);
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  border: 1px solid rgba(0, 168, 107, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .skill-tag.more {
@@ -951,7 +945,7 @@
 .apply-btn:hover {
   background-color: var(--browse-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 168, 107, 0.2);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
 }
 
 .apply-btn svg {

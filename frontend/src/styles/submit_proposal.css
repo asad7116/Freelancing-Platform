@@ -32,18 +32,18 @@
 
 .proposal-header h1 {
   font-size: 32px;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 8px;
 }
 
 .proposal-header .subtitle {
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   font-size: 16px;
 }
 
 /* Job Details Card */
 .job-details-card {
-  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #10b981 100%) !important;
   color: white;
   padding: 30px;
   border-radius: 12px;
@@ -79,12 +79,11 @@
 
 /* Proposal Form */
 .proposal-form {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .form-section {
@@ -96,21 +95,21 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 8px;
   font-size: 15px;
 }
 
 .form-description {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   margin-bottom: 15px;
 }
 
 .form-textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
@@ -122,8 +121,8 @@
 
 .form-textarea:focus {
   outline: none;
-  border-color: #00e68a;
-  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 .char-count {
@@ -148,23 +147,23 @@
 .form-input {
   width: 100%;
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.2s;
-  background: rgba(0, 0, 0, 0.3);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.04);
+  color: #0f172a;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #00e68a;
-  box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.2);
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 .form-hint {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #64748b;
   margin-top: 4px;
 }
 
@@ -178,8 +177,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 15px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #0f172a;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   margin-bottom: 8px;
 }
@@ -192,12 +191,12 @@
 
 .milestone-content strong {
   font-size: 14px;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .milestone-content span {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
 }
 
 .btn-remove {
@@ -239,7 +238,7 @@
 }
 
 .btn-add-milestone:hover:not(:disabled) {
-  background-color: #00a86b !important;
+  background-color: #10b981 !important;
 }
 
 .btn-add-milestone:disabled {
@@ -254,7 +253,7 @@
   justify-content: flex-end;
   margin-top: 30px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid #e2e8f0;
 }
 
 .btn-cancel {
@@ -278,7 +277,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #10b981 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;

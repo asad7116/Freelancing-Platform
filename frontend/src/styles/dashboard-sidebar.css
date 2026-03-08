@@ -1,20 +1,18 @@
 /* --- Theme tokens (tweak if needed) --- */
 :root {
-  --wz-green: #00e68a;
-  /* activated green */
-  --wz-green-dark: #0a3d2e;
-  --wz-bg: linear-gradient(180deg, #062119 0%, #0a3d2e 50%, #0f4a33 100%);
-  --wz-text: #ffffff;
-  --wz-muted: rgba(255, 255, 255, 0.7);
-  --wz-border: rgba(255, 255, 255, 0.1);
+  --wz-green: #10b981;
+  --wz-green-dark: #0f172a;
+  --wz-bg: #0f172a;
+  --wz-text: #f1f5f9;
+  --wz-muted: #94a3b8;
+  --wz-border: rgba(255, 255, 255, 0.08);
 }
 
 /* The aside container created in DashboardLayout */
 .dash-aside {
   background: var(--wz-bg);
   border-right: 1px solid var(--wz-border);
-  width: 260px;
-  /* fixed like the screenshot */
+  width: 220px;
 }
 
 /* Sidebar root */
@@ -24,7 +22,7 @@
   height: 100vh;
   padding: 16px;
   gap: 16px;
-  color: #ffffff;
+  color: var(--wz-text);
 }
 
 /* Brand */
@@ -39,15 +37,15 @@
   width: 70px;
   height: 52px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ffffff 0%, #e0ffe8 100%);
-  color: #0a3d2e;
+  background: #ffffff;
+  color: var(--wz-green-dark);
   display: grid;
   place-items: center;
   font-size: 22px;
   font-weight: 900;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 230, 138, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(0, 230, 138, 0.5);
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0,0,0,0.1));
+  border: 2px solid rgba(16, 185, 129, 0.3);
 }
 
 /* Wider logo without text */
@@ -72,7 +70,6 @@
   font-weight: 800;
   font-size: 26px;
   color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(0, 230, 138, 0.5);
   letter-spacing: 1px;
   white-space: nowrap;
 }
@@ -81,8 +78,7 @@
   display: block;
   font-weight: 600;
   font-size: 14px;
-  color: #ffffff !important;
-  opacity: 0.8;
+  color: var(--wz-muted) !important;
 }
 
 /* Menu */
@@ -99,7 +95,7 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: 10px;
-  color: #ffffff !important;
+  color: var(--wz-muted) !important;
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;
@@ -107,28 +103,27 @@
 }
 
 .wz-link span {
-  color: #ffffff !important;
+  color: inherit !important;
 }
 
 .wz-link .wz-ic {
   width: 20px;
   text-align: center;
-  color: #ffffff !important;
-  opacity: 0.8;
+  color: inherit !important;
   font-size: 16px;
 }
 
 /* Hover */
 .wz-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  /* light hover */
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff !important;
 }
 
-/* Active state: bright green pill + white text */
+/* Active state */
 .wz-link.is-active {
-  background: linear-gradient(135deg, #00a86b 0%, #00c77a 100%);
+  background: var(--accent, #10b981);
   color: #ffffff !important;
-  box-shadow: 0 4px 15px rgba(0, 168, 107, 0.4);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .wz-link.is-active span {
@@ -137,20 +132,22 @@
 
 .wz-link.is-active .wz-ic {
   color: #ffffff !important;
-  opacity: 1;
 }
 
 /* Make anchor defaults neutral in the sidebar */
 .wz-sidebar a {
-  color: #ffffff !important;
+  color: var(--wz-muted) !important;
   text-decoration: none;
+}
+
+.wz-sidebar a:hover {
+  color: #ffffff !important;
 }
 
 /* icon sizing (applies to lucide <svg>) */
 .wz-link .wz-ic {
   width: 18px;
   height: 18px;
-  color: rgba(255, 255, 255, 0.8);
   flex-shrink: 0;
 }
 
@@ -164,7 +161,7 @@
 /* Tablets (1024px and below) */
 @media (max-width: 1024px) {
   .dash-aside {
-    width: 220px;
+    width: 200px;
   }
 
   .wz-sidebar {

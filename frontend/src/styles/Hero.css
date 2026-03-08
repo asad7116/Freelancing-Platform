@@ -2,7 +2,7 @@
   position: relative;
   background: transparent;
   padding: 80px 0;
-  color: #fff;
+  color: #0f172a;
   min-height: 600px;
   display: flex;
   align-items: center;
@@ -39,11 +39,11 @@
   font-weight: 700;
   line-height: 1.2;
   margin: 0 0 20px 0;
-  color: #fff;
+  color: #0f172a;
 }
 
 .left-col h1 span {
-  color: #22be0d;
+  color: #10b981;
   margin-top: 10px;
 }
 
@@ -55,7 +55,7 @@
   margin-top: 30px;
   border-radius: 50px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .form {
@@ -100,7 +100,7 @@
 
 .form-select:hover {
   background-color: #f9f9f9;
-  color: #00a86b;
+  color: #10b981;
 }
 
 .form-select:focus {
@@ -138,7 +138,7 @@
 
 /* Search button */
 .hero-form-btn {
-  background: #22be0d;
+  background: #10b981;
   color: #fff;
   border: none;
   padding: 0 28px;
@@ -158,7 +158,7 @@
 }
 
 .hero-form-btn:hover {
-  background: #1a9b0a;
+  background: #059669;
   box-shadow: 0 4px 12px rgba(34, 190, 13, 0.4);
   transform: translateY(-2px);
 }
@@ -203,25 +203,25 @@
 
 .hero-login-btn {
   background: transparent;
-  color: #fff;
-  border-color: #fff;
+  color: #0f172a;
+  border-color: #cbd5e1;
 }
 
 .hero-login-btn:hover {
-  background: #fff;
-  color: #0b5345;
+  background: #0f172a;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
 }
 
 .hero-signup-btn {
-  background: #22be0d;
+  background: #10b981;
   color: #fff;
   box-shadow: 0 4px 12px rgba(34, 190, 13, 0.3);
 }
 
 .hero-signup-btn:hover {
-  background: #1a9b0a;
+  background: #059669;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(34, 190, 13, 0.4);
 }
@@ -254,18 +254,18 @@
   font-weight: 700;
   font-size: 36px;
   margin: 0;
-  color: #fff;
+  color: #0f172a;
 }
 
 .stats p {
   margin: 5px 0 0 0;
   font-size: 14px;
-  color: #ddd;
+  color: #64748b;
 }
 
 .rating {
   padding-left: 40px;
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -275,7 +275,7 @@
   font-weight: 700;
   font-size: 24px;
   margin: 0;
-  color: #fff;
+  color: #0f172a;
 }
 
 .rating svg {

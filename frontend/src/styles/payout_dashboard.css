@@ -2,22 +2,21 @@
 
 /* Balance + Form */
 .payout-balance {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 .payout-balance h2 {
   font-size: 22px;
   margin-bottom: 15px;
-  color: #ffffff;
+  color: #0f172a;
 }
 .payout-balance span {
   font-weight: bold;
-  color: #00e68a;
+  color: #10b981;
 }
 .payout-form {
   display: flex;
@@ -26,18 +25,18 @@
 }
 .payout-form input {
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
   font-size: 15px;
-  background: rgba(0, 0, 0, 0.2);
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f172a;
 }
 .payout-form input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: #64748b;
 }
 .payout-btn {
-  background: linear-gradient(135deg, #00a86b 0%, #00c77a 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
   border: none;
   padding: 14px;
   font-size: 16px;
@@ -47,40 +46,39 @@
   transition: all .2s;
 }
 .payout-btn:hover {
-  box-shadow: 0 4px 15px rgba(0, 168, 107, 0.4);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
   transform: translateY(-2px);
 }
 
 /* Table */
 .payout-history {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 .payout-history h3 {
   margin-bottom: 14px;
   font-size: 18px;
   font-weight: bold;
-  color: #ffffff;
+  color: #0f172a;
 }
 .payout-table {
   width: 100%;
   border-collapse: collapse;
 }
 .payout-table thead th {
-  background: rgba(0, 168, 107, 0.3);
+  background: rgba(16, 185, 129, 0.3);
   padding: 12px;
   text-align: left;
   font-weight: bold;
-  color: #ffffff;
+  color: #0f172a;
 }
 .payout-table tbody td {
   padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  color: #0f172a;
 }
 
 /* Status labels */
@@ -91,8 +89,8 @@
   font-weight: 700;
 }
 .payout-status.completed {
-  background: rgba(0, 230, 138, 0.2);
-  color: #00e68a;
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
 }
 .payout-status.declined {
   background: rgba(220, 38, 38, 0.2);

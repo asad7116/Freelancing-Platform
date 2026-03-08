@@ -14,8 +14,8 @@
     --chatbot-text: #1e293b;
     --chatbot-text-secondary: #64748b;
     --chatbot-border: #e2e8f0;
-    --chatbot-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    --chatbot-shadow-hover: 0 25px 70px rgba(0, 0, 0, 0.2);
+    --chatbot-shadow: 0 20px 60px rgba(0, 0, 0, 0.03);
+    --chatbot-shadow-hover: 0 25px 70px rgba(0, 0, 0, 0.12);
     --chatbot-success: #10b981;
     --chatbot-error: #ef4444;
     --chatbot-radius: 20px;
@@ -144,7 +144,7 @@
 .chatbot-avatar {
     width: 40px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.2);
+    background: #e2e8f0;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -198,7 +198,7 @@
     width: 32px;
     height: 32px;
     border: none;
-    background: rgba(255, 255, 255, 0.15);
+    background: #e2e8f0;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
