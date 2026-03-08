@@ -30,12 +30,12 @@
 
 .page-header h1 {
   font-size: 32px;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 8px;
 }
 
 .subtitle {
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   font-size: 15px;
 }
 
@@ -48,14 +48,13 @@
 }
 
 .quick-stat {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border-left: 4px solid #00e68a;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #10b981;
 }
 
 .quick-stat.pending {
@@ -63,7 +62,7 @@
 }
 
 .quick-stat.approved {
-  border-left-color: #00e68a;
+  border-left-color: #10b981;
 }
 
 .quick-stat.rejected {
@@ -74,14 +73,14 @@
   display: block;
   font-size: 32px;
   font-weight: 700;
-  color: #ffffff;
+  color: #0f172a;
   line-height: 1;
   margin-bottom: 6px;
 }
 
 .stat-label {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
 }
 
 /* Proposals List */
@@ -93,11 +92,10 @@
 
 .proposal-card-detailed {
   background: linear-gradient(135deg, rgba(10, 61, 46, 0.6) 0%, rgba(15, 74, 51, 0.6) 100%);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 230, 138, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -114,7 +112,7 @@
   align-items: flex-start;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .freelancer-info {
@@ -127,7 +125,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #10b981 100%) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,13 +142,13 @@
 
 .freelancer-details h3 {
   font-size: 18px;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 4px 0;
 }
 
 .freelancer-title {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   margin: 0 0 8px 0;
 }
 
@@ -165,7 +163,7 @@
   align-items: center;
   gap: 4px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #64748b;
 }
 
 .proposal-status-section {
@@ -193,9 +191,9 @@
 }
 
 .badge-approved {
-  background-color: rgba(0, 230, 138, 0.2);
-  color: #00e68a;
-  border: 1px solid rgba(0, 230, 138, 0.3);
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .badge-rejected {
@@ -239,8 +237,8 @@
   gap: 15px;
   margin-bottom: 20px;
   padding: 16px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
 }
 
@@ -252,13 +250,13 @@
 
 .bid-label {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #64748b;
   font-weight: 500;
 }
 
 .bid-value {
   font-size: 18px;
-  color: #ffffff;
+  color: #0f172a;
   font-weight: 700;
 }
 
@@ -269,14 +267,14 @@
 
 .proposal-cover-section h4 {
   font-size: 14px;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 10px 0;
   font-weight: 600;
 }
 
 .cover-letter-preview {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #334155;
   line-height: 1.7;
   margin: 0;
 }
@@ -288,7 +286,7 @@
 
 .skills-section h4 {
   font-size: 14px;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 10px 0;
   font-weight: 600;
 }
@@ -301,18 +299,18 @@
 
 .skill-tag {
   padding: 6px 12px;
-  background-color: rgba(0, 230, 138, 0.2);
-  color: #00e68a;
-  border: 1px solid rgba(0, 230, 138, 0.3);
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 16px;
   font-size: 12px;
   font-weight: 500;
 }
 
 .skill-tag.more {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #e2e8f0;
+  color: #475569;
+  border: 1px solid #e2e8f0;
 }
 
 /* Proposal Actions */
@@ -326,7 +324,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #0f4a33 0%, #00a86b 100%) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #10b981 100%) !important;
   color: white;
   border: none;
   border-radius: 8px;
@@ -345,25 +343,24 @@
 .empty-state {
   text-align: center;
   padding: 100px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
 }
 
 .empty-icon {
-  color: rgba(255, 255, 255, 0.3);
+  color: #cbd5e1;
   margin-bottom: 24px;
 }
 
 .empty-state h3 {
   font-size: 24px;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 12px;
 }
 
 .empty-state p {
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   font-size: 16px;
   max-width: 500px;
   margin-left: auto;
@@ -394,7 +391,7 @@
 }
 
 .loading-state p {
-  color: rgba(255, 255, 255, 0.7);
+  color: #475569;
   font-size: 16px;
 }
 

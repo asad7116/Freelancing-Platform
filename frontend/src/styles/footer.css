@@ -1,11 +1,11 @@
 /* Base */
 .footer {
-  --bg-900: #0c1216;
-  --bg-800: #0f171c;
-  --line: #21313b;
-  --text: #d6e0e7;
-  --muted: #98a6b3;
-  --green: #19c37d;
+  --bg-900: #0f172a;
+  --bg-800: #1e293b;
+  --line: #334155;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --green: #10b981;
   background: var(--bg-900);
   color: var(--text);
   position: relative;
@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  background: #0b1419;
+  background: #1e293b;
   border: 1px solid var(--line);
   border-radius: 999px;
   overflow: hidden;
@@ -104,7 +104,7 @@
 
 .newsletter-form button {
   background: var(--green);
-  color: #04210f;
+  color: #ffffff;
   border: 0;
   padding: 10px 24px;
   font-weight: 700;
@@ -224,7 +224,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #0b1419;
+  background: #1e293b;
   color: var(--muted);
   border: 1px solid var(--line);
   text-decoration: none;
@@ -233,7 +233,7 @@
 
 .socials a:hover {
   background: var(--green);
-  color: #03170c;
+  color: #ffffff;
   border-color: var(--green);
   transform: translateY(-2px);
 }
@@ -259,7 +259,7 @@
 
 .scrolltop:hover {
   background: var(--green);
-  color: #03170c;
+  color: #ffffff;
   transform: translateY(-3px) scale(1.05);
 }
 

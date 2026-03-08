@@ -1,25 +1,78 @@
-/* defaults (used everywhere unless overridden) */
-:root {
-  --accent: #22c55e;          /* current green */
-  --accent-600: #16a34a;
-  --accent-700: #15803d;
+/* ═══════════════════════════════════════════════════════════
+   TIXE — Global Design Tokens
+   Professional light theme with emerald accent.
+   High-contrast, accessible, clean.
+   ═══════════════════════════════════════════════════════════ */
 
-  --text: #0f172a;            /* slate-900-ish */
-  --muted: #64748b;           /* slate-500-ish */
-  --bg: #0b1320;              /* your sidebar dark bg if used */
-  --panel: #ffffff;
-  --border: #e5e7eb;
+:root {
+  /* ── Brand / Accent ─────────────────────────────── */
+  --accent: #10b981;            /* emerald-500 */
+  --accent-hover: #059669;      /* emerald-600 */
+  --accent-dark: #047857;       /* emerald-700 */
+  --accent-light: #d1fae5;      /* emerald-100 */
+  --accent-surface: #ecfdf5;    /* emerald-50  */
+
+  /* ── Neutrals (light base) ─────────────────────── */
+  --bg-body: #f8fafc;           /* slate-50 — page bg */
+  --bg-white: #ffffff;          /* card / panel bg */
+  --bg-subtle: #f1f5f9;        /* slate-100 — secondary bg */
+  --bg-muted: #e2e8f0;         /* slate-200 — hover states */
+
+  /* ── Text ───────────────────────────────────────── */
+  --text-primary: #0f172a;      /* slate-900 — main body */
+  --text-secondary: #475569;    /* slate-600 — secondary */
+  --text-muted: #94a3b8;        /* slate-400 — placeholders */
+  --text-inverse: #ffffff;      /* white text on dark bg */
+
+  /* ── Borders ────────────────────────────────────── */
+  --border: #e2e8f0;            /* slate-200 */
+  --border-light: #f1f5f9;      /* slate-100 */
+  --border-dark: #cbd5e1;       /* slate-300 */
+
+  /* ── Shadows ────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+
+  /* ── Status / Semantic ─────────────────────────── */
+  --success: #10b981;
+  --success-bg: #ecfdf5;
+  --warning: #f59e0b;
+  --warning-bg: #fffbeb;
+  --danger: #ef4444;
+  --danger-bg: #fef2f2;
+  --info: #3b82f6;
+  --info-bg: #eff6ff;
+
+  /* ── Radius ─────────────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* ── Dark panels (sidebar, header, footer) ─────── */
+  --dark-bg: #0f172a;           /* slate-900 */
+  --dark-bg-secondary: #1e293b; /* slate-800 */
+  --dark-bg-tertiary: #334155;  /* slate-700 */
+  --dark-border: rgba(255,255,255,0.1);
+  --dark-text: #f1f5f9;         /* slate-100 */
+  --dark-muted: #94a3b8;        /* slate-400 */
 }
 
-/* role-based overrides (optional, see §4) */
+/* Role-based accent overrides */
 .dashboard.client {
-  --accent: #2563eb;          /* blue */
-  --accent-600: #1d4ed8;
-  --accent-700: #1e40af;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-dark: #1d4ed8;
+  --accent-light: #dbeafe;
+  --accent-surface: #eff6ff;
 }
 
 .dashboard.freelancer {
-  --accent: #22c55e;          /* green */
-  --accent-600: #16a34a;
-  --accent-700: #15803d;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --accent-dark: #047857;
+  --accent-light: #d1fae5;
+  --accent-surface: #ecfdf5;
 }

@@ -23,7 +23,7 @@
   display: inline-block;
   padding: 6px 14px;
   background: rgba(34, 190, 13, 0.1);
-  color: #22be0d;
+  color: #10b981;
   border-radius: 30px;
   font-weight: 700;
   font-size: 0.85rem;
@@ -61,8 +61,8 @@
 }
 
 .pricing-toggle-group .discount {
-  background: #22be0d;
-  color: #fff;
+  background: #10b981;
+  color: #ffffff;
   font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 12px;
@@ -82,7 +82,7 @@
 }
 
 .toggle-switch.yearly {
-  background: #22be0d;
+  background: #10b981;
 }
 
 .switch-knob {
@@ -127,7 +127,7 @@
 }
 
 .plan-card-new.highlighted {
-  border: 2px solid #22be0d;
+  border: 2px solid #10b981;
   box-shadow: 0 10px 30px rgba(34, 190, 13, 0.1);
 }
 
@@ -136,8 +136,8 @@
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #22be0d;
-  color: #fff;
+  background: #10b981;
+  color: #ffffff;
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -155,7 +155,7 @@
   width: 50px;
   height: 50px;
   background: rgba(34, 190, 13, 0.1);
-  color: #22be0d;
+  color: #10b981;
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -164,8 +164,8 @@
 }
 
 .highlighted .plan-icon-wrapper {
-  background: #22be0d;
-  color: #fff;
+  background: #10b981;
+  color: #ffffff;
 }
 
 .plan-name {
@@ -234,7 +234,7 @@
 }
 
 .feature-ok .feat-icon {
-  color: #22be0d;
+  color: #10b981;
 }
 
 .feature-no {
@@ -259,15 +259,15 @@
 }
 
 .cta-solid {
-  background: #22be0d;
-  color: #fff;
+  background: #10b981;
+  color: #ffffff;
   border: none;
   text-align: center;
   justify-content: center;
 }
 
 .cta-solid:hover {
-  background: #1a9b0a;
+  background: #059669;
   box-shadow: 0 10px 20px rgba(34, 190, 13, 0.2);
 }
 
@@ -280,8 +280,8 @@
 }
 
 .cta-outline:hover {
-  border-color: #22be0d;
-  color: #fff;
+  border-color: #10b981;
+  color: #0f172a;
 }
 
 /* Responsive */

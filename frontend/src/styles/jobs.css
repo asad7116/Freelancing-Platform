@@ -24,7 +24,7 @@
   flex: 1;
 }
 .jobs-btn {
-  background: #19c37d;
+  background: #10b981;
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
@@ -49,9 +49,9 @@
   border-radius: 4px;
 }
 .jobs-view-btn.active {
-  background: #19c37d;
+  background: #10b981;
   color: #fff;
-  border-color: #19c37d;
+  border-color: #10b981;
 }
 
 /* Grid/List */
@@ -83,7 +83,7 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  background: #19c37d;
+  background: #10b981;
   color: #fff;
   font-size: 12px;
   padding: 4px 8px;
@@ -112,7 +112,7 @@
   margin-bottom: 12px;
 }
 .apply-btn {
-  background: #19c37d;
+  background: #10b981;
   border: none;
   color: #fff;
   padding: 8px 16px;
@@ -139,9 +139,9 @@
   cursor: pointer;
 }
 .jobs-pagination button.active {
-  background: #19c37d;
+  background: #10b981;
   color: #fff;
-  border-color: #19c37d;
+  border-color: #10b981;
 }
 .jobs-pagination button:disabled {
   opacity: 0.5;

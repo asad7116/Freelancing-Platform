@@ -7,12 +7,13 @@
 
 header {
   width: 100%;
-  background: #0c1216;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
   overflow: visible;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 /* Navbar */
@@ -55,7 +56,7 @@ header {
 }
 
 .logo .green {
-  color: #00a86b;
+  color: #10b981;
 }
 
 /* Mobile Menu Toggle */
@@ -64,13 +65,13 @@ header {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #ffffff;
+  color: #0f172a;
   padding: 8px;
   z-index: 1001;
 }
 
 .mobile-menu-toggle:hover {
-  color: #00a86b;
+  color: #10b981;
 }
 
 .nav-links {
@@ -85,7 +86,7 @@ header {
 
 .nav-links a {
   text-decoration: none;
-  color: #ffffff;
+  color: #334155;
   font-weight: 500;
   transition: color 0.3s;
   white-space: nowrap;
@@ -93,7 +94,7 @@ header {
 }
 
 .nav-links a:hover {
-  color: #00a86b;
+  color: #10b981;
 }
 
 .right-side {
@@ -119,7 +120,7 @@ header {
   align-items: center;
   gap: 6px;
   font-size: 0.95rem;
-  color: #ffffff;
+  color: #334155;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -133,13 +134,13 @@ header {
 .language-selector:hover,
 .currency-selector.active,
 .language-selector.active {
-  background: rgba(255, 255, 255, 0.05);
-  color: #22be0d;
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
 }
 
 .currency-selector.active,
 .language-selector.active {
-  border-color: rgba(34, 190, 13, 0.3);
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .currency-selector svg,
@@ -161,16 +162,15 @@ header {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: #0c1216;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   min-width: 120px;
   max-height: none;
   overflow: visible;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   padding: 6px;
   animation: fadeInDown 0.2s ease-out;
-  backdrop-filter: blur(10px);
   z-index: 1000;
 }
 
@@ -188,7 +188,7 @@ header {
 
 .dropdown-item {
   padding: 10px 14px;
-  color: #e2e8f0;
+  color: #334155;
   font-size: 0.9rem;
   border-radius: 6px;
   cursor: pointer;
@@ -197,18 +197,18 @@ header {
 }
 
 .dropdown-item:hover {
-  background: rgba(34, 190, 13, 0.15);
-  color: #22be0d;
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
 }
 
 .dropdown-item.selected {
-  background: rgba(34, 190, 13, 0.1);
-  color: #22be0d;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
   font-weight: 700;
 }
 
 .signin-btn {
-  background: #22be0d;
+  background: #10b981;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -219,13 +219,13 @@ header {
   text-decoration: none;
   display: inline-block;
   white-space: nowrap;
-  box-shadow: 0 4px 15px rgba(34, 190, 13, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .signin-btn:hover {
-  background: #1a9b0a;
+  background: #059669;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(34, 190, 13, 0.4);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 
@@ -240,7 +240,7 @@ header {
   border: 0;
   cursor: pointer;
   font: inherit;
-  color: #ffffff;
+  color: #334155;
   font-weight: 500;
   transition: color 0.3s;
   display: flex;
@@ -251,7 +251,7 @@ header {
 }
 
 .pages-trigger:hover {
-  color: #00a86b;
+  color: #10b981;
 }
 
 .pages-trigger svg {
@@ -285,7 +285,7 @@ header {
 
 .pages-menu a:hover {
   background: #f5f7fa;
-  color: #00a86b;
+  color: #10b981;
 }
 
 .pages-dropdown:hover .pages-menu {
@@ -427,7 +427,7 @@ header {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #ffffff;
+  color: #0f172a;
   padding: 8px;
   z-index: 1001;
 }
@@ -441,7 +441,7 @@ header {
 }
 
 .mobile-menu-toggle:hover {
-  color: #00a86b;
+  color: #10b981;
 }
 
 /* Mobile Menu Overlay */
@@ -471,8 +471,8 @@ header {
   width: 280px;
   max-width: 85vw;
   height: 100vh;
-  background: #0c1216;
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+  background: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
   z-index: 999;
   transition: right 0.3s ease;
   display: flex;
@@ -494,7 +494,7 @@ header {
 }
 
 .mobile-nav-links a {
-  color: #ffffff;
+  color: #334155;
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 500;
@@ -504,8 +504,8 @@ header {
 }
 
 .mobile-nav-links a:hover {
-  background: rgba(34, 190, 13, 0.15);
-  color: #22be0d;
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
 }
 
 /* Mobile Selectors */
@@ -524,21 +524,21 @@ header {
 }
 
 .mobile-selector label {
-  color: #888;
+  color: #64748b;
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .mobile-selector select {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 10px 14px;
-  color: #ffffff;
+  color: #0f172a;
   font-size: 0.95rem;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
@@ -546,12 +546,12 @@ header {
 
 .mobile-selector select:focus {
   outline: none;
-  border-color: #22be0d;
+  border-color: #10b981;
 }
 
 .mobile-selector select option {
-  background: #0c1216;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f172a;
 }
 
 /* Mobile Auth Buttons */
@@ -567,9 +567,9 @@ header {
   display: block;
   text-align: center;
   padding: 12px 20px;
-  border: 2px solid #22be0d;
+  border: 2px solid #10b981;
   border-radius: 25px;
-  color: #22be0d;
+  color: #10b981;
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
@@ -577,24 +577,24 @@ header {
 }
 
 .mobile-signin-btn:hover {
-  background: rgba(34, 190, 13, 0.1);
+  background: rgba(16, 185, 129, 0.08);
 }
 
 .mobile-signup-btn {
   display: block;
   text-align: center;
   padding: 12px 20px;
-  background: #22be0d;
+  background: #10b981;
   border-radius: 25px;
   color: #ffffff;
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(34, 190, 13, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .mobile-signup-btn:hover {
-  background: #1a9b0a;
+  background: #059669;
   transform: translateY(-2px);
 }
