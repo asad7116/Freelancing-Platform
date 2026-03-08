@@ -23,7 +23,7 @@ export const authCookieOpts = {
   secure: process.env.NODE_ENV === "production",
   domain: process.env.NODE_ENV === "production" ? ".tixe.dev" : undefined,
   path: "/",
-  maxAge: 60 * 60 * 24 * 7, // 7 days
+  maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
 };
 
 // ✅ Middleware to protect routes

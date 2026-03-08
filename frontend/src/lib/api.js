@@ -41,6 +41,17 @@ async function request(path, { method = "GET", body } = {}) {
   const data = isJson ? await res.json() : null;
 
   if (!res.ok) {
+    // If session expired (401), clear stale role and redirect to auth page
+    if (res.status === 401) {
+      // Avoid redirect loops — only redirect if we're on a protected page
+      const isProtectedPage = window.location.pathname.startsWith("/client") ||
+        window.location.pathname.startsWith("/freelancer");
+      if (isProtectedPage) {
+        localStorage.removeItem("role");
+        window.location.href = "/auth";
+        return; // stop execution
+      }
+    }
     const message = data?.message || `Request failed (${res.status})`;
     throw new Error(message);
   }
