@@ -153,9 +153,62 @@ export async function sendJobPostedEmail(to, name, jobTitle) {
   return send(to, `Your job "${jobTitle}" is live on Tixe!`, body)
 }
 
+// ─── Email: AI Recommendation — Top Freelancers for Client ──────────────────
+export async function sendClientRecommendationEmail(to, clientName, job, htmlBody) {
+  const jobTitle = job.title || job.gigTitle || "your job"
+  const body = `
+    <h2>Top Freelancer Matches for Your Job 🎯</h2>
+    <p>Hi <strong>${clientName}</strong>,</p>
+    <p>Our AI has found the best freelancer matches for <strong>${jobTitle}</strong>:</p>
+    <div style="margin:16px 0;">
+      ${htmlBody}
+    </div>
+    <p style="text-align:center;">
+      <a class="btn" href="${process.env.FRONTEND_ORIGIN || "http://localhost:3000"}/client/Orders">View on Dashboard</a>
+    </p>
+  `
+  return send(to, `Top freelancer matches for "${jobTitle}" on Tixe`, body)
+}
+
+// ─── Email: AI Recommendation — Job Match for Freelancer ────────────────────
+export async function sendFreelancerJobMatchEmail(to, freelancerName, job, htmlBody) {
+  const jobTitle = job.title || job.gigTitle || "a new job"
+  const body = `
+    <h2>New Job Match for You! 💼</h2>
+    <p>Hi <strong>${freelancerName}</strong>,</p>
+    <p>Our AI found a job that's a great match for your skills:</p>
+    <div style="margin:16px 0;">
+      ${htmlBody}
+    </div>
+    <p style="text-align:center;">
+      <a class="btn" href="${process.env.FRONTEND_ORIGIN || "http://localhost:3000"}/job/${job.id || job._id || ""}">View &amp; Apply</a>
+    </p>
+  `
+  return send(to, `New job match: "${jobTitle}" on Tixe`, body)
+}
+
+// ─── Email: AI Recommendation — Jobs List for Freelancer ────────────────────
+export async function sendFreelancerJobsListEmail(to, freelancerName, htmlBody) {
+  const body = `
+    <h2>Your Personalised Job Matches 🚀</h2>
+    <p>Hi <strong>${freelancerName}</strong>,</p>
+    <p>Our AI has found top job matches based on your skills and profile:</p>
+    <div style="margin:16px 0;">
+      ${htmlBody}
+    </div>
+    <p style="text-align:center;">
+      <a class="btn" href="${process.env.FRONTEND_ORIGIN || "http://localhost:3000"}/freelancer/BrowseJobs">Browse All Jobs</a>
+    </p>
+  `
+  return send(to, "Your top job matches on Tixe", body)
+}
+
 export default {
   sendVerificationOTP,
   sendGigCreatedEmail,
   sendProposalNotificationEmail,
   sendJobPostedEmail,
+  sendClientRecommendationEmail,
+  sendFreelancerJobMatchEmail,
+  sendFreelancerJobsListEmail,
 }

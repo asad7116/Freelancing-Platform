@@ -132,7 +132,7 @@ const PostJobForm = () => {
         else if (key !== 'thumb_image') submitData.append(key, formData[key]);
       });
 
-      const url = isEditMode ? `/api/job-posts/${jobId}` : '/api/job-posts';
+      const url = isEditMode ? `${API_BASE_URL}/api/job-posts/${jobId}` : `${API_BASE_URL}/api/job-posts`;
       const method = isEditMode ? 'PUT' : 'POST';
 
       const response = await fetch(url, { method, credentials: 'include', body: submitData });

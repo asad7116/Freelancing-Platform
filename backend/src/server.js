@@ -21,6 +21,7 @@ import messageRoutes from "./routes/message.routes.js"
 import aiRoutes from "./routes/ai.routes.js"
 import chatbotRoutes from "./routes/chatbot.routes.js"
 import keysRoutes from "./routes/keys.routes.js"
+import recommendationRoutes from "./routes/recommendation.routes.js"
 
 
 const app = express()
@@ -86,6 +87,7 @@ app.use("/api/proposals", proposalRoutes)
 app.use("/api/notifications", notificationRoutes)
 app.use("/api/messages", messageRoutes)
 app.use("/api/keys", keysRoutes)
+app.use("/api/recommend", recommendationRoutes)
 app.use("/api", clientDashboardRoutes)
 app.use("/api", freelancerDashboardRoutes)
 

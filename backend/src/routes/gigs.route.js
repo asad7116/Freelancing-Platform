@@ -101,9 +101,23 @@ router.get("/", async (req, res) => {
 
     const allGigs = await gigs.find({}).sort({ created_at: -1 }).toArray()
 
+    // Look up seller names from users collection
+    const creatorIds = [...new Set(allGigs.map((g) => g.createdBy).filter(Boolean))]
+    const users = creatorIds.length
+      ? await db.collection("users").find(
+          { _id: { $in: creatorIds.map((id) => new ObjectId(id)) } },
+          { projection: { name: 1 } }
+        ).toArray()
+      : []
+    const userMap = Object.fromEntries(users.map((u) => [u._id.toString(), u.name]))
+
     res.status(200).json({
       success: true,
-      gigs: allGigs.map((g) => ({ ...g, id: g._id.toString() })),
+      gigs: allGigs.map((g) => ({
+        ...g,
+        id: g._id.toString(),
+        seller: userMap[g.createdBy] || "Anonymous",
+      })),
     })
   } catch (error) {
     console.error("Error fetching gigs:", error)
@@ -121,12 +135,13 @@ router.get("/my-gigs", authMiddleware, async (req, res) => {
     const db = await getDatabase()
     const gigs = db.collection("gigs")
     const userId = req.user.id
+    const userName = req.user.name || "Unknown Seller"
 
     const userGigs = await gigs.find({ createdBy: userId }).sort({ created_at: -1 }).toArray()
 
     res.status(200).json({
       success: true,
-      gigs: userGigs.map((g) => ({ ...g, id: g._id.toString() })),
+      gigs: userGigs.map((g) => ({ ...g, id: g._id.toString(), seller: userName })),
     })
   } catch (error) {
     console.error("Error fetching user gigs:", error)
@@ -154,9 +169,19 @@ router.get("/:id", async (req, res) => {
       })
     }
 
+    // Look up the seller name
+    let sellerName = "Anonymous"
+    if (gig.createdBy) {
+      const seller = await db.collection("users").findOne(
+        { _id: new ObjectId(gig.createdBy) },
+        { projection: { name: 1 } }
+      )
+      if (seller?.name) sellerName = seller.name
+    }
+
     res.status(200).json({
       success: true,
-      gig: { ...gig, id: gig._id.toString() },
+      gig: { ...gig, id: gig._id.toString(), seller: sellerName },
     })
   } catch (error) {
     console.error("Error fetching gig:", error)
