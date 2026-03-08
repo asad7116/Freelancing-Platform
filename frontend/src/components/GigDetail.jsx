@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Clock, RefreshCw, DollarSign, Calendar, Edit } from 'lucide-react';
+import { ArrowLeft, Clock, RefreshCw, DollarSign, Calendar, Edit, MessageSquare } from 'lucide-react';
 import '../styles/gig_detail.css';
-import { API_BASE_URL } from "../lib/api";
+import { API_BASE_URL, api } from "../lib/api";
 
 const GigDetail = () => {
   const { gigId } = useParams();
@@ -12,6 +12,7 @@ const GigDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [contactLoading, setContactLoading] = useState(false);
   
   // Determine user role from route or localStorage
   const userRole = localStorage.getItem("role");
@@ -58,6 +59,32 @@ const GigDetail = () => {
 
   const handleBackClick = () => {
     navigate(-1); // Go back to previous page
+  };
+
+  const handleContactSeller = async () => {
+    if (!gig || !gig.createdBy) return;
+
+    try {
+      setContactLoading(true);
+      const data = await api.post("/api/messages/conversations", {
+        recipientId: gig.createdBy,
+        gigId: gig._id || gig.id,
+        gigTitle: gig.gigTitle,
+      });
+
+      if (data.success && data.conversationId) {
+        // Navigate to the Messages page with the conversation pre-selected
+        const basePath = isFreelancer ? "/freelancer" : "/client";
+        navigate(`${basePath}/Messages`, {
+          state: { conversationId: data.conversationId },
+        });
+      }
+    } catch (err) {
+      console.error("Error starting conversation:", err);
+      alert("Failed to start conversation. Please make sure you are logged in.");
+    } finally {
+      setContactLoading(false);
+    }
   };
 
   const nextImage = () => {
@@ -255,9 +282,16 @@ const GigDetail = () => {
 
           <section className="content-section">
             <div className="gig-actions-section">
-              <button className="btn-primary contact-btn">
-                Contact Seller
-              </button>
+              {!isFreelancer && (
+                <button
+                  className="btn-primary contact-btn"
+                  onClick={handleContactSeller}
+                  disabled={contactLoading}
+                >
+                  <MessageSquare size={16} />
+                  {contactLoading ? "Starting chat..." : "Contact Seller"}
+                </button>
+              )}
               <button className="btn-secondary order-btn">
                 Order Now
               </button>

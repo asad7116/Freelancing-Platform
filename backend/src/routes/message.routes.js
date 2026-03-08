@@ -59,6 +59,63 @@ router.get("/conversations", async (req, res) => {
   }
 })
 
+// ─── POST /api/messages/conversations — create or find an existing conversation ───
+router.post("/conversations", async (req, res) => {
+  try {
+    const db = await getDatabase()
+    const userId = req.user.id
+    const { recipientId, gigId, gigTitle } = req.body
+
+    if (!recipientId) {
+      return res.status(400).json({ success: false, message: "recipientId is required." })
+    }
+
+    if (recipientId === userId) {
+      return res.status(400).json({ success: false, message: "You cannot start a conversation with yourself." })
+    }
+
+    // Check if a conversation already exists between these two users for this gig
+    let conversation = null
+    if (gigId) {
+      const conversations = db.collection("conversations")
+      conversation = await conversations.findOne({
+        participants: { $all: [userId, recipientId] },
+        gig_id: gigId,
+      })
+    }
+
+    // If no gig-specific conversation, check for any existing conversation between the two users
+    if (!conversation) {
+      conversation = await ConversationModel.findByParticipants(db, userId, recipientId)
+    }
+
+    // If still no conversation, create one
+    if (!conversation) {
+      conversation = await ConversationModel.create(db, {
+        participants: [userId, recipientId],
+        jobId: null,
+        jobTitle: gigTitle || null,
+      })
+
+      // Store gig_id directly if provided
+      if (gigId) {
+        await db.collection("conversations").updateOne(
+          { _id: conversation._id },
+          { $set: { gig_id: gigId } }
+        )
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      conversationId: conversation._id.toString(),
+    })
+  } catch (err) {
+    console.error("[Messages] create/find conversation error:", err)
+    res.status(500).json({ success: false, message: "Failed to create conversation." })
+  }
+})
+
 // ─── GET /api/messages/conversations/:id/messages — get messages in a conversation ─
 router.get("/conversations/:id/messages", async (req, res) => {
   try {
@@ -83,6 +140,7 @@ router.get("/conversations/:id/messages", async (req, res) => {
       _id: m._id.toString(),
       sender_id: m.sender_id,
       text: m.text,
+      encrypted: m.encrypted || null,
       from: m.sender_id === userId ? "me" : "them",
       created_at: m.created_at,
     }))
@@ -100,10 +158,11 @@ router.post("/conversations/:id/messages", async (req, res) => {
     const db = await getDatabase()
     const userId = req.user.id
     const convId = req.params.id
-    const { text } = req.body
+    const { text, encrypted } = req.body
 
-    if (!text || !text.trim()) {
-      return res.status(400).json({ success: false, message: "Message text is required." })
+    // Must have either plaintext or encrypted payload
+    if ((!text || !text.trim()) && !encrypted) {
+      return res.status(400).json({ success: false, message: "Message text or encrypted payload is required." })
     }
 
     // Verify user is a participant
@@ -113,14 +172,29 @@ router.post("/conversations/:id/messages", async (req, res) => {
     }
 
     // Create the message
-    const message = await MessageModel.create(db, {
+    const messageData = {
       conversationId: convId,
       senderId: userId,
-      text: text.trim(),
-    })
+    }
 
-    // Update conversation's last message
-    await ConversationModel.updateLastMessage(db, convId, text.trim())
+    if (encrypted && encrypted.ciphertext && encrypted.iv && encrypted.encryptedKeys) {
+      // E2E encrypted message — store only encrypted fields, no plaintext
+      messageData.text = null
+      messageData.encrypted = {
+        ciphertext: encrypted.ciphertext,
+        iv: encrypted.iv,
+        encryptedKeys: encrypted.encryptedKeys,
+      }
+    } else {
+      // Legacy plaintext message
+      messageData.text = text.trim()
+    }
+
+    const message = await MessageModel.create(db, messageData)
+
+    // Update conversation's last message (show "[Encrypted]" for E2E messages)
+    const previewText = messageData.encrypted ? "🔒 Encrypted message" : messageData.text
+    await ConversationModel.updateLastMessage(db, convId, previewText)
 
     res.status(201).json({
       success: true,
@@ -128,6 +202,7 @@ router.post("/conversations/:id/messages", async (req, res) => {
         _id: message._id.toString(),
         sender_id: message.sender_id,
         text: message.text,
+        encrypted: message.encrypted || null,
         from: "me",
         created_at: message.created_at,
       },
