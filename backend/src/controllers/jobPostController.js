@@ -5,6 +5,7 @@ import { getDatabase } from "../db/mongodb.js"
 import { ObjectId } from "mongodb"
 import { sendJobPostedEmail } from "../services/email.service.js"
 import NotificationModel from "../models/Notification.js"
+import { recommendFreelancersForJob } from "../services/recommendationService.js"
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -196,6 +197,24 @@ class JobPostController {
         message: `Your job "${title}" is now live and visible to freelancers.`,
         link: `/client/Orders`,
       }).catch((err) => console.error("[Notification] Failed to create:", err.message))
+
+      // 🤖 Auto-recommend: find matching freelancers and send emails (non-blocking)
+      recommendFreelancersForJob(jobPost).then((result) => {
+        const count = result.recommendations?.length || 0
+        console.log(`[Auto-Recommend] Found ${count} freelancer match(es) for job "${title}"`)
+        if (count > 0) {
+          // Create notification for client about recommendations
+          NotificationModel.create(db, {
+            userId: userId,
+            type: "recommendation",
+            title: "Freelancer Recommendations Ready",
+            message: `We found ${count} freelancer(s) matching your job "${title}". Check your email!`,
+            link: `/client/Orders`,
+          }).catch((err) => console.error("[Notification] Failed:", err.message))
+        }
+      }).catch((err) => {
+        console.error("[Auto-Recommend] Failed for job:", err.message)
+      })
 
       res.status(201).json({
         success: true,
