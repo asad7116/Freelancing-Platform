@@ -115,14 +115,24 @@ Return ONLY valid JSON.`
  * @returns {Promise<Array<{id:string, score:number, reason:string}>>}
  */
 export async function draftRecommendations(normalizedInput, candidates, candidateType) {
+  // Build an explicit list of valid IDs so the LLM can only pick from them
+  const validIds = candidates.map((c) => c.id)
+
   const system = `You are a scoring agent for TIXE, a freelancing platform.
-You receive a normalised search context and a list of ${candidateType} candidates.
+You receive a normalised search context and a list of ${candidateType} candidates FROM OUR DATABASE.
+
+CRITICAL RULES:
+- You MUST ONLY use the exact "id" values from the candidates list below.
+- DO NOT invent, fabricate, or modify any candidate IDs.
+- Every "id" in your output MUST be one of these valid IDs: ${JSON.stringify(validIds)}
+- If a candidate is not a good match, give them a low score — do NOT remove them or change their ID.
+
 Score each candidate from 0.0 to 1.0 and write a short reason (1-2 sentences).
 
 Return JSON:
 {
   "recommendations": [
-    { "id": "<candidate id>", "score": 0.92, "reason": "..." },
+    { "id": "<exact candidate id from the list>", "score": 0.92, "reason": "..." },
     ...
   ]
 }
@@ -152,10 +162,19 @@ Return ONLY valid JSON.`
  * @returns {Promise<Array<{id:string, score:number, reason:string}>>}
  */
 export async function reflectOnRecommendations(normalizedInput, draftList, candidateType) {
+  // Extract valid IDs from the draft so the critic can only use those
+  const validIds = draftList.map((d) => d.id)
+
   const system = `You are a quality-review agent for the TIXE recommendation engine.
 You receive:
   1. The normalised search context.
   2. A draft list of scored ${candidateType} recommendations.
+
+CRITICAL RULES:
+- You MUST ONLY use the exact "id" values from the draft list.
+- DO NOT invent, fabricate, or modify any IDs.
+- Valid IDs are: ${JSON.stringify(validIds)}
+- You can adjust scores and reasons, or drop poor matches, but NEVER change an ID.
 
 Your tasks:
   - Check relevance: do the candidate skills actually match the requirements?

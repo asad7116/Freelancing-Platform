@@ -8,6 +8,7 @@ import { ObjectId } from "mongodb"
 import fs from "fs"
 import { sendGigCreatedEmail } from "../services/email.service.js"
 import NotificationModel from "../models/Notification.js"
+import { recommendJobsForFreelancer } from "../services/recommendationService.js"
 
 const router = express.Router()
 
@@ -78,6 +79,49 @@ router.post(
         message: `Your gig "${gigTitle}" is now live and visible to clients.`,
         link: `/freelancer/Gigs`,
       }).catch((err) => console.error("[Notification] Failed to create:", err.message))
+
+      // 🤖 Auto-recommend: find matching job posts for this freelancer (non-blocking)
+      ;(async () => {
+        try {
+          // Try to load full freelancer profile for better matching
+          const profile = await db.collection("freelancerProfiles").findOne({ user_id: req.user.id })
+          const freelancerInput = profile
+            ? {
+                user_id: req.user.id,
+                title: profile.title || gigTitle,
+                skills: profile.skills || [category],
+                hourlyRate: profile.hourlyRate || price,
+                experience: profile.experience || "",
+                location: profile.location || "",
+                bio: profile.bio || shortDescription,
+              }
+            : {
+                user_id: req.user.id,
+                title: gigTitle,
+                skills: [category],
+                hourlyRate: price,
+                experience: "",
+                location: "",
+                bio: shortDescription,
+              }
+
+          const result = await recommendJobsForFreelancer(freelancerInput)
+          const count = result.recommendations?.length || 0
+          console.log(`[Auto-Recommend] Found ${count} job match(es) for freelancer gig "${gigTitle}"`)
+
+          if (count > 0) {
+            NotificationModel.create(db, {
+              userId: req.user.id,
+              type: "recommendation",
+              title: "Job Recommendations Ready",
+              message: `We found ${count} job(s) matching your gig "${gigTitle}". Check your email!`,
+              link: `/freelancer/Gigs`,
+            }).catch((err) => console.error("[Notification] Failed:", err.message))
+          }
+        } catch (err) {
+          console.error("[Auto-Recommend] Failed for gig:", err.message)
+        }
+      })()
 
       res.status(201).json({
         message: "Gig created successfully!",
