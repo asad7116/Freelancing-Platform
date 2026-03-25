@@ -1,7 +1,20 @@
 // frontend/src/lib/api.js
-// In development, the proxy in package.json handles routing to http://localhost:4000
-// In production, REACT_APP_API_URL should be set to the actual API domain
-const API_BASE = process.env.REACT_APP_API_URL || "";
+// Resolve API base robustly so production never falls back to relative /api on S3/CloudFront.
+const resolveApiBase = () => {
+  const explicit = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE_URL;
+  if (explicit) return explicit;
+
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host === "www.tixe.dev" || host === "tixe.dev") {
+      return "https://api.tixe.dev";
+    }
+  }
+
+  return "";
+};
+
+const API_BASE = resolveApiBase();
 
 // Export the base URL constant for use in fetch calls
 export const API_BASE_URL = API_BASE;
@@ -15,9 +28,7 @@ export const buildApiUrl = (path) => {
 
 // Export the base URL for components that need to construct image URLs
 export const getApiBaseUrl = () => {
-  // For local development, return empty string (relative URLs will use proxy)
-  // For production or when explicitly set, return the full URL
-  return process.env.REACT_APP_API_URL || "";
+  return API_BASE;
 };
 
 // For image URLs, we need the full URL in development
@@ -25,7 +36,7 @@ export const getImageUrl = (path) => {
   if (!path) return null;
   if (path.startsWith('http')) return path;
   // In development, use localhost:4000 for static files (images)
-  const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const baseUrl = API_BASE || 'http://localhost:4000';
   return `${baseUrl}${path}`;
 };
 
