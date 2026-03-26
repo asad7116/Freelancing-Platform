@@ -3,11 +3,13 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Mail, Bell, LogOut, Menu } from "lucide-react";
 import { api } from "../lib/api";
+import { useAuth } from "../context/AuthContext";
 import NotificationDropdown from "./NotificationDropdown";
 import "../styles/DashboardTopbar.css";
 
 export default function DashboardTopbar({ onMenuClick, role }) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [notifOpen, setNotifOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -45,7 +47,7 @@ export default function DashboardTopbar({ onMenuClick, role }) {
     } catch (_) {
       // ignore errors; we'll still redirect
     }
-    localStorage.removeItem("role");
+    logout();
     navigate("/auth", { replace: true });
   }
 

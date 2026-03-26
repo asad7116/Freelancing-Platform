@@ -90,7 +90,6 @@ export async function sendVerificationOTP(to, name, otpCode) {
     <div style="text-align:center;margin:24px 0;">
       ${digitBoxes}
     </div>
-    <p style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:700;color:#6c5ce7;margin:8px 0;">${otpCode}</p>
     <p style="font-size:13px;color:#888;text-align:center;">Enter this code on the verification page to activate your account.</p>
     <p style="font-size:13px;color:#888;text-align:center;">This code will expire in <strong>10 minutes</strong>.</p>
     <p style="font-size:12px;color:#aaa;text-align:center;margin-top:16px;">If you didn't create an account on Tixe, you can safely ignore this email.</p>
