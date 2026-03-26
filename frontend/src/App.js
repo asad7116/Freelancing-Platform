@@ -1,6 +1,7 @@
 // src/App.js
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
+import { AuthProvider } from "./context/AuthContext";
 
 // ---------- Public pages ----------
 import HomePage from "./pages/HomePage";
@@ -45,8 +46,9 @@ import ChatbotWidget from "./components/ChatbotWidget";
 export default function App() {
   return (
     <LanguageProvider>
-      <BrowserRouter>
-        <Routes>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
           {/* ===== Public routes ===== */}
           <Route path="/" element={<HomePage />} />
           <Route path="/auth" element={<AuthPage />} />
@@ -123,7 +125,8 @@ export default function App() {
 
       {/* Chatbot Widget - appears on all pages */}
       <ChatbotWidget />
-    </BrowserRouter>
+        </BrowserRouter>
+      </AuthProvider>
     </LanguageProvider>
   );
 }

@@ -1,5 +1,6 @@
 // src/components/RequireRole.jsx
 import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 /**
  * Role guard that verifies user role.
@@ -8,9 +9,7 @@ import { Navigate, useLocation } from "react-router-dom";
  */
 export default function RequireRole({ role, children }) {
   const location = useLocation();
-
-  // Check role - authentication is handled by httpOnly cookies
-  const userRole = localStorage.getItem("role"); // "client" | "freelancer" | "admin"
+  const { role: userRole } = useAuth();
 
   // If no role set, user is not authenticated - redirect to signin
   if (!userRole) {

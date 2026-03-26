@@ -6,9 +6,11 @@ import ToggleButtons from "../components/Login_Toggle";
 import PasswordStrengthIndicator from "../components/PasswordStrengthIndicator";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function AuthPage() {
   const { t } = useLanguage();
+  const { setRole: setAuthRole, setUser: setAuthUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -102,7 +104,8 @@ export default function AuthPage() {
           setError("Please select your role (Buyer or Freelancer)");
           setLoading(false);
         } else {
-          localStorage.setItem("role", user.role);
+          setAuthRole(user.role);
+          setAuthUser(user);
           const backTo =
             locationRef.current.state?.from?.pathname ||
             (user.role === "client"
@@ -202,7 +205,8 @@ export default function AuthPage() {
       }
 
       const { user } = response;
-      localStorage.setItem("role", user.role);
+      setAuthRole(user.role);
+      setAuthUser(user);
 
       const backTo =
         location.state?.from?.pathname ||
@@ -257,7 +261,8 @@ export default function AuthPage() {
 
         localStorage.removeItem("googleAuthNewUser");
         if (user.role) {
-          localStorage.setItem("role", user.role);
+          setAuthRole(user.role);
+          setAuthUser(user);
         } else {
           throw new Error(
             "Failed to update role - server response missing role field"
@@ -285,7 +290,8 @@ export default function AuthPage() {
         }
 
         if (data.user) {
-          localStorage.setItem("role", data.user.role);
+          setAuthRole(data.user.role);
+          setAuthUser(data.user);
           const dest =
             data.user.role === "client"
               ? "/client/overview"

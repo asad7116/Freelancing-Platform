@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
+import { useAuth } from "../context/AuthContext";
 import { CheckCircle, XCircle, Loader, ArrowLeft, Mail, ShieldCheck } from "lucide-react";
 import "../styles/VerifyEmail.css";
 
@@ -10,6 +11,7 @@ const RESEND_COOLDOWN = 60; // seconds
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { setRole: setAuthRole, setUser: setAuthUser } = useAuth();
   const email = searchParams.get("email") || "";
 
   const [code, setCode] = useState(Array(CODE_LENGTH).fill(""));
@@ -109,7 +111,8 @@ export default function VerifyEmail() {
 
       // User is now logged in (backend set cookie), redirect after short delay
       if (data.user) {
-        localStorage.setItem("role", data.user.role);
+        setAuthRole(data.user.role);
+        setAuthUser(data.user);
         setTimeout(() => {
           const dest = data.user.role === "client" ? "/client/overview" : "/freelancer/overview";
           navigate(dest, { replace: true });
