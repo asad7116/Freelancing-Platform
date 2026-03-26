@@ -3,6 +3,7 @@ import "../styles/AuthPage.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { api } from "../lib/api";
 import ToggleButtons from "../components/Login_Toggle";
+import PasswordStrengthIndicator from "../components/PasswordStrengthIndicator";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -546,6 +547,10 @@ export default function AuthPage() {
                         required
                         disabled={loading}
                         className="form-input"
+                      />
+                      <PasswordStrengthIndicator 
+                        password={suPassword} 
+                        showRequirements={true}
                       />
                     </div>
 
