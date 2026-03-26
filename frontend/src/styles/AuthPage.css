@@ -617,6 +617,7 @@
     width: 100%;
     min-height: auto;
     padding: 40px 20px;
+    display: none;
   }
 
   .auth-left-content {
@@ -660,7 +661,7 @@
 
   .auth-right-panel {
     width: 100%;
-    min-height: auto;
+    min-height: 100vh;
     padding: 30px 20px;
   }
 
