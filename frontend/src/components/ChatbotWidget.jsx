@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Minimize2, Maximize2, Trash2, Bot } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import '../styles/ChatbotWidget.css';
 
 // Use empty string for relative URLs (works with React proxy in dev)
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
 const ChatbotWidget = () => {
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -57,6 +59,12 @@ const ChatbotWidget = () => {
             localStorage.setItem('chatbot_session', sessionId);
         }
     }, [messages, sessionId]);
+
+    // Hide chatbot on auth pages - check AFTER all hooks
+    const isAuthPage = location.pathname === '/auth' || location.pathname.includes('/verify-email');
+    if (isAuthPage) {
+        return null;
+    }
 
     const toggleChat = () => {
         if (isOpen) {
